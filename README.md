@@ -9,9 +9,9 @@ Gusto is an online web platform for food delivery from your favorite restaurant 
 
 2. [Implementation details](#implamentetion-details)
 
-3. [Extensions for frontend development:](#extensions)
+3. [Extensions for development:](#extensions)
 
-4. [Links:](#links)
+4. [Links](#links)
 
 5. [Install:](#install)
     - [Backend:](#install-backend)
@@ -30,7 +30,7 @@ Gusto is an online web platform for food delivery from your favorite restaurant 
    - [Endpoints: deliverydetails](#deliverydetails)
    - [Endpoints: messages](#messages)
 
-7. [DB Schema:](#db-schema)
+8. [DB Schema](#db-schema)
 
 ## Technologies: <a name="technologies"></a>
 
@@ -44,6 +44,8 @@ Backend:
 - Cloud: Azure
 - Other: JWT, Firebase, Docker
 
+[Go Up](#go-up)
+
 ## Implementation details <a name="implamentetion-details"></a>
 
 Base  Backend
@@ -52,7 +54,7 @@ Base  Backend
  http://localhost:5000/api/
 ```
 
-## Extensions for frontend development <a name="extensions"></a>
+## Extensions for development <a name="extensions"></a>
 - ESLint (analysis tool that checks TypeScript\JavaScript code for readability, maintainability, and functionality errors)
 
 ## Links <a name="links"></a>
@@ -82,6 +84,7 @@ npm i
 
 ## Environment variables  <a name="environment-variables"></a>
 
+[Go Up](#go-up)
 
 # Endpoints: <a name="endpoints"></a>
 
@@ -122,6 +125,8 @@ npm i
       userId (string) - The user ID for deleting the account.
 
     - Description: Delete a user account. Only admin users can perform this action.
+
+[Go Up](#go-up)
 
 ## Endpoint `api/notifications`: <a name="notifications"></a>
 
@@ -193,7 +198,7 @@ npm i
       }
     ]
   ```
-
+[Go Up](#go-up)
 
 ## Endpoint `api/restaurants`: <a name="restaurants"></a>
 - Request: `GET api/restaurants`
@@ -252,6 +257,8 @@ npm i
     ]
   ```
 
+  [Go Up](#go-up)
+
 ## Endpoint `api/chats`:  <a name="chats"></a>
 - Request: `GET api/chats`
 
@@ -295,6 +302,8 @@ npm i
       }
     ]
   ```
+
+  [Go Up](#go-up)
 
 ## Endpoint `api/menuitems`:  <a name="menuitems"></a>
 - Request: `GET api/menuitems`
@@ -355,6 +364,8 @@ npm i
       }
     ]
   ```
+
+[Go Up](#go-up)
 
 ## Endpoint `api/couriers`:  <a name="couriers"></a>
 - Request: `GET api/couriers`
@@ -420,6 +431,7 @@ npm i
     ]
   ```
 
+
 ## Endpoint `api/orders`:  <a name="orders"></a>
 - Request: `GET api/orders`
     - Query Parameter:
@@ -480,6 +492,7 @@ npm i
       }
     ]
   ```
+[Go Up](#go-up)
 
 ## Endpoint `api/orderitems`: <a name="orderitems"></a>
 - Request: `GET api/orderitems`
@@ -532,6 +545,8 @@ npm i
       }
     ]
   ```
+
+  [Go Up](#go-up)
 
 ## Endpoint `api/deliverydetails`:  <a name="deliverydetails"></a>
 - Request: `GET api/deliverydetails`
@@ -595,6 +610,8 @@ npm i
       }
     ]
   ```
+
+[Go Up](#go-up)
 
 ## Endpoint `api/messages`:  <a name="messages"></a>
 - Request: `GET api/messages`
@@ -660,6 +677,7 @@ npm i
     ]
   ```
 
+[Go Up](#go-up)
 
 # DB Schema <a name="db-schema"></a>
 
@@ -774,4 +792,4 @@ erDiagram
 
 ```
 
-[⬆ Go Up ⬆](#go-up)
+[Go Up](#go-up)
