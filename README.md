@@ -3,7 +3,7 @@
 ## Description
 Gusto is an online web platform for food delivery from your favorite restaurant or cafe in your city. The site effectively allows you to order from the restaurant, calculate the time and price of delivery, track the courier and contact if necessary.
 
-Content:
+## Content:
 
 
 ## Technologies:
@@ -28,7 +28,6 @@ Base URL
 
 ## Extensions for frontend development
 - ESLint (analysis tool that checks TypeScript\JavaScript code for readability, maintainability, and functionality errors)
-- EditorConfig (helps maintain consistent coding styles for multiple developers working on the same project)
 
 ## Links
 [Trello Board]()
@@ -61,7 +60,8 @@ npm i
 ```mermaid
 erDiagram
   Users ||--|{ Notifications : userId
-  Users }|--|{ Chats : id
+  Users ||--|{ Orders : userId
+  Users ||--|{ Chats : id
 
   Users {
     bigint Id PK
@@ -80,10 +80,14 @@ erDiagram
   Notifications {
     bigint id PK
     bigint userId FK
+    bigint courierId FK
     nvarchar text
     int type
     boolean isRead
   }
+
+  Restaurants ||--|{ MenuItems : restarantId
+  Restaurants ||--|{ Orders : restarantId
 
   Restaurants {
     bigint id PK
@@ -99,6 +103,8 @@ erDiagram
     nvarchar name
   }
   
+  MenuItems }| --|{ OrderItems : menuItemId
+
   MenuItems {
     bigint id PK
     bigint restarantId FK
@@ -108,17 +114,25 @@ erDiagram
     nvarchar imagePath
   }
 
+  Couriers ||--|{ DeliveryDetails : courierId
+  Couriers ||--|{ Chats : id
+  Couriers ||--|{ Notifications : courierId
+
   Couriers {
     bigint id PK
-	nvarchar firstName
+	  nvarchar firstName
     nvarchar lastName
+    nvarchar numberPhone
     nvarchar vehicleNumber
     int availabilityStatus
   }
 
+  Orders }| --|{ OrderItems : orderId
+  Orders || --|| DeliveryDetails : orderId
+
   Orders {
     bigint id PK
-	bigint userId FK
+	  bigint userId FK
     bigint restaurantId FK
     int orderStatus
     datatime orderDate
@@ -127,7 +141,7 @@ erDiagram
 
   OrderItems  {
     bigint id PK
-	bigint orderId FK
+	  bigint orderId FK
     bigint menuItemId FK
     int Quantity
     bigint totalPrice
@@ -135,9 +149,9 @@ erDiagram
 
   DeliveryDetails  {
     bigint id PK
-	bigint orderId FK
-    bigint menuItemId FK
-    int Quantity
+	  bigint orderId FK
+    bigint courierId FK
+    int quantity
     bigint totalPrice
     datatime deliveryDate
     int status
@@ -145,7 +159,7 @@ erDiagram
 
   Messages {
     bigint id PK
-	bigint createdBy
+	  bigint createdBy
     bigint chatId FK
     nvarchar text
     datetime createdAt
