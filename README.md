@@ -9,7 +9,7 @@ Gusto is an online web platform for food delivery from your favorite restaurant 
 
 2. [Implementation details](#implamentetion-details)
 
-3. [Extensions for development:](#extensions)
+3. [Extensions for development](#extensions)
 
 4. [Links](#links)
 
@@ -51,7 +51,7 @@ Backend:
 Base  Backend
 
 ```
- http://localhost:5000/api/
+ http://localhost:5000/api/v1
 ```
 
 ## Extensions for development <a name="extensions"></a>
@@ -88,21 +88,21 @@ npm i
 
 # Endpoints: <a name="endpoints"></a>
 
-## Endpoint `api/users`: <a name="users"></a>
+## Endpoint `/users`: <a name="users"></a>
 
-- Request: `GET api/users`
+- Request: `GET /users`
 
     - Description: Get a list of all users.  Only admin users can perform this action.
 
-- Request: `GET api/users/{userId}`
+- Request: `GET /users/{userId}`
 
     - Description: Get a user by their ID.
 
-- Request: `PUT api/users/{userId}`
+- Request: `PUT /users/{userId}`
 
     - Description: Change properties in a user account based on their ID. This is used to update user information.
 
-- Request: `POST api/users`
+- Request: `POST /users`
     - Query Parameters
 
       | Parameter | Type   | Required | Description               |
@@ -120,7 +120,7 @@ npm i
     - Description: Create a new user.
 
 
-- Request: `DELETE api/users/{userId}`
+- Request: `DELETE /users/{userId}`
     - Query Parameters:
       userId (string) - The user ID for deleting the account.
 
@@ -128,9 +128,9 @@ npm i
 
 [Go Up](#go-up)
 
-## Endpoint `api/notifications`: <a name="notifications"></a>
+## Endpoint `/notifications`: <a name="notifications"></a>
 
-- Request: `GET api/notifications`
+- Request: `GET /notifications`
 
     - Query Parameters
     
@@ -144,15 +144,15 @@ npm i
 
     - Description: Retrieve a list of notifications.
 
-- Request: `GET api/notifications/{id}`
+- Request: `GET /notifications/{id}`
 
     - Description: Retrieve a single notification by its unique identifier.
 
-- Request: `PUT api/notifications/{id}`
+- Request: `PUT /notifications/{id}`
 
     - Description: Update an existing notification by its unique identifier.
 
-- Request: `POST api/notifications`
+- Request: `POST /notifications`
     - Query Parameters
 
       | Parameter | Type   | Required | Description               |
@@ -166,7 +166,7 @@ npm i
     - Description: Create a new notification.
 
 
-- Request: `DELETE api/notifications/{id}`
+- Request: `DELETE /notifications/{id}`
 
     - Description: Delete a notification by its unique identifier.
 
@@ -200,20 +200,20 @@ npm i
   ```
 [Go Up](#go-up)
 
-## Endpoint `api/restaurants`: <a name="restaurants"></a>
-- Request: `GET api/restaurants`
+## Endpoint `/restaurants`: <a name="restaurants"></a>
+- Request: `GET /restaurants`
 
     - Description: Retrieve a list of restaurants. 
 
-- Request: `GET api/restaurants/{id}`
+- Request: `GET /restaurants/{id}`
 
     - Description: Retrieve a single restaurant by its unique identifier.
 
-- Request: `PUT api/restaurants/{id}`
+- Request: `PUT /restaurants/{id}`
 
     - Description: Update an existing restaurant by its unique identifier.  Only admin users can perform this action.
 
-- Request: `POST api/restaurants`
+- Request: `POST /restaurants`
     - Query Parameters
 
       | Parameter | Type   | Required | Description               |
@@ -226,7 +226,7 @@ npm i
     - Description: Create a new restaurant.  Only admin users can perform this action.
 
 
-- Request: `DELETE api/restaurants/{id}`
+- Request: `DELETE /restaurants/{id}`
 
     - Description: Delete a restaurant by its unique identifier.  Only admin users can perform this action.
 
@@ -259,16 +259,16 @@ npm i
 
   [Go Up](#go-up)
 
-## Endpoint `api/chats`:  <a name="chats"></a>
-- Request: `GET api/chats`
+## Endpoint `/chats`:  <a name="chats"></a>
+- Request: `GET /chats`
 
     - Description: Retrieve a list of chat rooms or conversations.
 
-- Request: `GET api/chats/{id}`
+- Request: `GET /chats/{id}`
 
     - Description: Retrieve a specific chat room by its unique identifier.
 
-- Request: `POST api/chats`
+- Request: `POST /chats`
     - Query Parameters
 
       | Parameter | Type   | Required | Description               |
@@ -278,7 +278,7 @@ npm i
     - Description: Create a new restaurant.
 
 
-- Request: `DELETE api/chats/{id}`
+- Request: `DELETE /chats/{id}`
 
     - Description: Delete a chat room or conversation by its unique identifier.
 
@@ -305,20 +305,20 @@ npm i
 
   [Go Up](#go-up)
 
-## Endpoint `api/menuitems`:  <a name="menuitems"></a>
-- Request: `GET api/menuitems`
+## Endpoint `/menuitems`:  <a name="menuitems"></a>
+- Request: `GET /menuitems`
 
     - Description: Retrieve a list of menu items.
 
-- Request: `GET api/menuitems/{id}`
+- Request: `GET /menuitems/{id}`
 
     - Description: Retrieve a specific menu item by its unique identifier.
 
-- Request: `PUT api/menuitems/{id}`
+- Request: `PUT /menuitems/{id}`
 
     - Description: Update an existing menu item by its unique identifier. Only admin users can perform this action.
 
-- Request: `POST api/menuitems`
+- Request: `POST /menuitems`
     - Query Parameters
 
       | Parameter | Type   | Required | Description               |
@@ -332,7 +332,7 @@ npm i
     - Description: Create a new menu item. Only admin users can perform this action.
 
 
-- Request: `DELETE api/menuitems/{id}`
+- Request: `DELETE /menuitems/{id}`
 
     - Description: Delete a menu item by its unique identifier.  Only admin users can perform this action.
 
@@ -367,8 +367,8 @@ npm i
 
 [Go Up](#go-up)
 
-## Endpoint `api/couriers`:  <a name="couriers"></a>
-- Request: `GET api/couriers`
+## Endpoint `/couriers`:  <a name="couriers"></a>
+- Request: `GET /couriers`
     - Query Parameter:
 
     | Parameter | Type    | Required | Description               |
@@ -377,15 +377,15 @@ npm i
 
     - Description: Retrieve a list of couriers.
 
-- Request: `GET api/couriers/{id}`
+- Request: `GET /couriers/{id}`
 
     - Description: Retrieve a specific courier by their unique identifier.
 
-- Request: `PUT api/couriers/{id}`
+- Request: `PUT /couriers/{id}`
 
     - Description: Update an existing courier by their unique identifier.
 
-- Request: `POST api/couriers`
+- Request: `POST /couriers`
     - Query Parameters
 
       | Parameter | Type   | Required | Description               |
@@ -398,7 +398,7 @@ npm i
     - Description: Create a new menu item. Only admin users can perform this action.
 
 
-- Request: `DELETE api/couriers/{id}`
+- Request: `DELETE /couriers/{id}`
 
     - Description: Delete a courier by their unique identifier.  Only admin users can perform this action.
 
@@ -432,8 +432,8 @@ npm i
   ```
 
 
-## Endpoint `api/orders`:  <a name="orders"></a>
-- Request: `GET api/orders`
+## Endpoint `/orders`:  <a name="orders"></a>
+- Request: `GET /orders`
     - Query Parameter:
 
     | Parameter | Type    | Required | Description               |
@@ -444,11 +444,11 @@ npm i
 
     - Description: Retrieve a list of orders.
 
-- Request: `GET api/orders/{id}`
+- Request: `GET /orders/{id}`
 
     - Description: Retrieve a specific order by its unique identifier.
 
-- Request: `POST api/orders`
+- Request: `POST /orders`
     - Query Parameters
 
       | Parameter | Type    | Required | Description               |
@@ -460,7 +460,7 @@ npm i
     - Description: Place a new order.
 
 
-- Request: `DELETE api/orders/{id}`
+- Request: `DELETE /orders/{id}`
 
     - Description: Update an existing order by its unique identifier.
 
@@ -494,15 +494,15 @@ npm i
   ```
 [Go Up](#go-up)
 
-## Endpoint `api/orderitems`: <a name="orderitems"></a>
-- Request: `GET api/orderitems`
+## Endpoint `/orderitems`: <a name="orderitems"></a>
+- Request: `GET /orderitems`
     - Description: Retrieve a list of order items.
 
-- Request: `GET api/orderitems/{id}`
+- Request: `GET /orderitems/{id}`
 
     - Description: Retrieve a specific order item by its unique identifier.
 
-- Request: `POST api/orderitems`
+- Request: `POST /orderitems`
     - Query Parameters
 
       | Parameter | Type    | Required | Description               |
@@ -515,7 +515,7 @@ npm i
     - Description: Add a new item to an existing order.
 
 
-- Request: `DELETE api/orderitems/{id}`
+- Request: `DELETE /orderitems/{id}`
 
     - Description: Delete an order item by its unique identifier.
 
@@ -548,8 +548,8 @@ npm i
 
   [Go Up](#go-up)
 
-## Endpoint `api/deliverydetails`:  <a name="deliverydetails"></a>
-- Request: `GET api/deliverydetails`
+## Endpoint `/deliverydetails`:  <a name="deliverydetails"></a>
+- Request: `GET /deliverydetails`
 
     - Query Parameters
 
@@ -559,11 +559,11 @@ npm i
 
     - Description: Retrieve a list of delivery details.
 
-- Request: `GET api/deliverydetails/{id}`
+- Request: `GET /deliverydetails/{id}`
 
     - Description: Retrieve a specific delivery detail by its unique identifier.
 
-- Request: `POST api/deliverydetails`
+- Request: `POST /deliverydetails`
     - Query Parameters
 
       | Parameter | Type    | Required | Description               |
@@ -576,7 +576,7 @@ npm i
     - Description: Add a new delivery detail to an existing order.
 
 
-- Request: `DELETE api/deliverydetails/{id}`
+- Request: `DELETE /deliverydetails/{id}`
 
     - Description: Delete a delivery detail by its unique identifier.
 
@@ -613,8 +613,8 @@ npm i
 
 [Go Up](#go-up)
 
-## Endpoint `api/messages`:  <a name="messages"></a>
-- Request: `GET api/messages`
+## Endpoint `/messages`:  <a name="messages"></a>
+- Request: `GET /messages`
     - Query Parameter:
 
     | Parameter | Type    | Required | Description               |
@@ -623,15 +623,15 @@ npm i
 
     - Description: Retrieve a list of messages.
 
-- Request: `GET api/messages/{id}`
+- Request: `GET pi/messages/{id}`
 
     - Description: Retrieve a specific message by its unique identifier.
 
-- Request: `PUT api/messages/{id}`
+- Request: `PUT /messages/{id}`
 
     - Description: Update an existing message by its unique identifier.
 
-- Request: `POST api/messages`
+- Request: `POST /messages`
     - Query Parameters
 
       | Parameter | Type   | Required | Description               |
@@ -644,7 +644,7 @@ npm i
     - Description: Create a new message in a chat or conversation.
 
 
-- Request: `DELETE api/messages/{id}`
+- Request: `DELETE /messages/{id}`
 
     - Description: Delete a message by its unique identifier.
 
@@ -683,33 +683,7 @@ npm i
 
 ```mermaid
 erDiagram
-  Users ||--|{ Notifications : userId
-  Users ||--|{ Orders : userId
-  Users ||--|{ Chats : id
-
-  Users {
-    bigint Id PK
-    int city
-    int language
-    nvarchar firstName
-    nvarchar lastName
-    datatime dateOfBirth
-    nvarchar email
-    nvchar numberPhone
-    nvarchar imagePath
-    int sex
-    boolean isAdmin
-  }
-
-  Notifications {
-    bigint id PK
-    bigint userId FK
-    bigint courierId FK
-    nvarchar text
-    int type
-    boolean isRead
-  }
-
+  
   Restaurants ||--|{ MenuItems : restarantId
   Restaurants ||--|{ Orders : restarantId
 
@@ -739,31 +713,6 @@ erDiagram
     nvarchar imagePath
   }
 
-  Couriers ||--|{ DeliveryDetails : courierId
-  Couriers ||--|{ Chats : id
-  Couriers ||--|{ Notifications : courierId
-
-  Couriers {
-    bigint id PK
-	  nvarchar firstName
-    nvarchar lastName
-    nvarchar numberPhone
-    nvarchar vehicleNumber
-    int availabilityStatus
-  }
-
-  Orders }| --|{ OrderItems : orderId
-  Orders || --|| DeliveryDetails : orderId
-
-  Orders {
-    bigint id PK
-	  bigint userId FK
-    bigint restaurantId FK
-    int orderStatus
-    datatime orderDate
-    datatime estimatedDeliveryTime
-  }
-
   OrderItems  {
     bigint id PK
 	  bigint orderId FK
@@ -771,6 +720,35 @@ erDiagram
     int Quantity
     bigint totalPrice
   }
+
+  Users ||--|{ Notifications : userId
+  Users ||--|{ Orders : userId
+  Users ||--|{ Chats : id
+
+  Users {
+    bigint Id PK
+    int city
+    int language
+    nvarchar firstName
+    nvarchar lastName
+    datatime dateOfBirth
+    nvarchar email
+    nvchar numberPhone
+    nvarchar imagePath
+    int sex
+    boolean isAdmin
+  }
+
+  
+  Notifications {
+    bigint id PK
+    bigint userId FK
+    bigint courierId FK
+    nvarchar text
+    int type
+    boolean isRead
+  }
+
 
   DeliveryDetails  {
     bigint id PK
@@ -789,6 +767,34 @@ erDiagram
     nvarchar text
     datetime createdAt
   }
+
+  
+  Orders }| --|{ OrderItems : orderId
+  Orders || --|| DeliveryDetails : orderId
+
+  Orders {
+    bigint id PK
+	  bigint userId FK
+    bigint restaurantId FK
+    int orderStatus
+    datatime orderDate
+    datatime estimatedDeliveryTime
+  }
+
+
+Couriers ||--|{ DeliveryDetails : courierId
+  Couriers ||--|{ Chats : id
+  Couriers ||--|{ Notifications : courierId
+
+  Couriers {
+    bigint id PK
+	  nvarchar firstName
+    nvarchar lastName
+    nvarchar numberPhone
+    nvarchar vehicleNumber
+    int availabilityStatus
+  }
+
 
 ```
 
