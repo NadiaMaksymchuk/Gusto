@@ -1,6 +1,7 @@
 import { query } from "../db/sql.pool";
 import UserDto from "../dtos/user.dto";
 import { arrayToStringWithQuotes } from "../utils/request.util";
+import {dbConn} from '../config/db.config'
 
 export class UserRepository {
   async getAll(): Promise<UserDto[]> {
@@ -52,4 +53,24 @@ export class UserRepository {
     });
   }
 
+  async updateUser(userId: number, updatedUserData: UserDto) {
+    const queryText = `UPDATE users SET city = ${updatedUserData.city}, language = ${updatedUserData.language}, firstName = "${updatedUserData.firstName}", lastName = "${updatedUserData.lastName}",dateOfBirth = "${updatedUserData.dateOfBirth}", email =  "${updatedUserData.email}", numberPhone = "${updatedUserData.numberPhone}", imagePath = "${updatedUserData.imagePath}", sex = ${updatedUserData.sex} WHERE id = ${userId};`;
+
+    return new Promise<void>((resolve, reject) => {
+      query(queryText, function (err: any, res: any) {
+        if (err) {reject(err);}
+        resolve();
+      });
+    });
+  }
+
+  async deleteUser(id: number) {
+    const queryText = `DELETE FROM users WHERE id = ${id};`;
+    return new Promise<void>((resolve, reject) => {
+      query(queryText, function (err: any, res: any) {
+        if (err) {reject(err);}
+        resolve();
+      });
+    });
+  }
 }

@@ -21,8 +21,20 @@ export class ResponseHandler {
     });
   }
 
+  static updated(res: Response, message: string) {
+    res.status(HttpStatusCode.OK).json({
+      message,
+    });
+  }
+
   static error(res: Response, message: string) {
     res.status(HttpStatusCode.InternalServerError).json({
+      message,
+    });
+  }
+
+  static noContent(res: Response, message: string) {
+    res.status(HttpStatusCode.NoContent).json({
       message,
     });
   }

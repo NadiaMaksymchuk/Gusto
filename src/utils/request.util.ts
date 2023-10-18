@@ -10,4 +10,3 @@ export function arrayToStringWithQuotes(arr: (string | number | Date)[]): string
     });
     return resultArray.join(', ');
   }
-  
