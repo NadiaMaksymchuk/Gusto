@@ -15,6 +15,12 @@ export class ResponseHandler {
     });
   }
 
+  static created(res: Response, message: string) {
+    res.status(HttpStatusCode.Created).json({
+      message,
+    });
+  }
+
   static error(res: Response, message: string) {
     res.status(HttpStatusCode.InternalServerError).json({
       message,

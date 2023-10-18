@@ -17,16 +17,10 @@ export class UserController {
     createUser = async (req: Request, res: Response): Promise<void> => {
       const userdto = req.body;
       try {
-        const user = await this.userRepository.addUser(userdto);
-        res.status(201).json({
-          data: user,
-          message: `user created`,
-        });
+        await this.userRepository.addUser(userdto);
+        return ResponseHandler.created(res, 'User created');
       } catch (err) {
-        console.log("Can't create users. Err is ", err);
-        res.status(500).json({
-          message: "Error in creating user",
-        });
+        return ResponseHandler.error(res, `Error in creating user ${err}`)
       }
     };
   };

@@ -1,13 +1,15 @@
 import { query } from "../db/sql.pool";
 import UserDto from "../dtos/user.dto";
+import { arrayToStringWithQuotes } from "../utils/request.util";
 
 export class UserRepository {
   async getAll(): Promise<UserDto[]> {
     return new Promise((resolve, reject) => {
-      query("Select * from users", function (err: any, res: any) {
+      query("Select * from users;", function (err: any, res: any) {
+        if (err) {reject(err);}
         let users = [];
-        if (res.rows) {
-          users = res.rows.map((row: UserDto) => new UserDto(
+        if (res) {
+          users = res.map((row: UserDto) => new UserDto(
             row.id,
             row.city,
             row.language,
@@ -27,9 +29,8 @@ export class UserRepository {
   }
 
 
-  async addUser(newUser: UserDto): Promise<UserDto> {
+  async addUser(newUser: UserDto) {
     const values = [
-      newUser.id,
       newUser.city,
       newUser.language,
       newUser.firstName,
@@ -41,37 +42,14 @@ export class UserRepository {
       newUser.sex
     ];
 
-    const queryText = `INSERT INTO users (id, city, language, firstName, lastName, dateOfBirth, email, numberPhone, imagePath, sex) VALUES (${values});`;
+    const queryText = `INSERT INTO users (city, language, firstName, lastName, dateOfBirth, email, numberPhone, imagePath, sex) VALUES (${arrayToStringWithQuotes(values)});`;
 
-    return new Promise<UserDto>((resolve, reject) => {
-      query(queryText, (err: any, res: any) => {
-        if (err) {
-          console.log("error: ", err);
-          reject(err);
-        } else {
-          if (res.rows && res.rows.length > 0) {
-            const addedUser = res.rows[0];
-            const user = new UserDto(
-              addedUser.id,
-              addedUser.city,
-              addedUser.language,
-              addedUser.firstName,
-              addedUser.lastName,
-              new Date(addedUser.dateOfBirth),
-              addedUser.email,
-              addedUser.numberPhone,
-              addedUser.imagePath,
-              addedUser.sex
-            );
-            console.log('User added: ', user);
-            resolve(user);
-          } else {
-            reject("No user added");
-          }
-        }
+    return new Promise<void>((resolve, reject) => {
+      query(queryText, function (err: any, res: any) {
+        if (err) {reject(err);}
+        resolve();
       });
     });
   }
-  
-}
 
+}

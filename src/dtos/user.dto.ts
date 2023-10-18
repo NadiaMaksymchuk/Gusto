@@ -1,5 +1,5 @@
 class UserDto {
-    id: bigint; // PK
+    id: bigint; 
     city: number;
     language: number;
     firstName: string;
