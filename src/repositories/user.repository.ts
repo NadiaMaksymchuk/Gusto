@@ -1,4 +1,4 @@
-import { query } from "../db/sql.pool";
+import { sqlPool } from "../db/sql.pool";
 import UserDto from "../dtos/user.dto";
 import { arrayToStringWithQuotes } from "../utils/request.util";
 import {dbConn} from '../config/db.config'
@@ -6,7 +6,7 @@ import {dbConn} from '../config/db.config'
 export class UserRepository {
   async getAll(): Promise<UserDto[]> {
     return new Promise((resolve, reject) => {
-      query("Select * from users;", function (err: any, res: any) {
+      sqlPool.query("Select * from users;", function (err: any, res: any) {
         if (err) {reject(err);}
         let users = [];
         if (res) {
@@ -46,7 +46,7 @@ export class UserRepository {
     const queryText = `INSERT INTO users (city, language, firstName, lastName, dateOfBirth, email, numberPhone, imagePath, sex) VALUES (${arrayToStringWithQuotes(values)});`;
 
     return new Promise<void>((resolve, reject) => {
-      query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err: any, res: any) {
         if (err) {reject(err);}
         resolve();
       });
@@ -57,7 +57,7 @@ export class UserRepository {
     const queryText = `UPDATE users SET city = ${updatedUserData.city}, language = ${updatedUserData.language}, firstName = "${updatedUserData.firstName}", lastName = "${updatedUserData.lastName}",dateOfBirth = "${updatedUserData.dateOfBirth}", email =  "${updatedUserData.email}", numberPhone = "${updatedUserData.numberPhone}", imagePath = "${updatedUserData.imagePath}", sex = ${updatedUserData.sex} WHERE id = ${userId};`;
 
     return new Promise<void>((resolve, reject) => {
-      query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err: any, res: any) {
         if (err) {reject(err);}
         resolve();
       });
@@ -67,7 +67,7 @@ export class UserRepository {
   async deleteUser(id: number) {
     const queryText = `DELETE FROM users WHERE id = ${id};`;
     return new Promise<void>((resolve, reject) => {
-      query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err: any, res: any) {
         if (err) {reject(err);}
         resolve();
       });

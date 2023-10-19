@@ -2,19 +2,28 @@ import * as dotenv from "dotenv";
 import express from "express";
 import userRouter from "./routes/user.route";
 import { createDbIfDontExist } from "./db/script";
+import authRoutes from './routes/auth';
+import passport from 'passport';
 
-dotenv.config()
 
-const PORT: number = 5000;
+dotenv.config();
+require('./strategies/google');
+
+const PORT = process.env.PORT;
 
 export const app = express()
 
 app.use(express.json());
+app.use(passport.initialize());
 
 createDbIfDontExist();
-//pool.end()
 
-app.use("/api/v3/users", userRouter)
+app.use("/api/v3/users", userRouter);
+app.use("/api/auth", authRoutes);
+
+app.use(express.urlencoded({
+  extended: true
+}));
 
 const start = async () => {
     try {

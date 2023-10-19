@@ -9,4 +9,4 @@ var pool  = mysql.createPool({
     database        : 'gustodb'
 });
 
-export const query = (text: string, params?: any) => pool.query(text, params);
+export const sqlPool = pool;
