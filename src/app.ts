@@ -4,6 +4,7 @@ import userRouter from "./routes/user.route";
 import { createDbIfDontExist } from "./db/script";
 import authRoutes from './routes/auth';
 import passport from 'passport';
+import { requireJwtMiddleware } from './middwares/authMiddleware'
 
 
 dotenv.config();
@@ -20,6 +21,9 @@ createDbIfDontExist();
 
 app.use("/api/v3/users", userRouter);
 app.use("/api/auth", authRoutes);
+app.use(requireJwtMiddleware);
+
+
 
 app.use(express.urlencoded({
   extended: true
