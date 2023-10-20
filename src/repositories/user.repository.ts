@@ -1,7 +1,8 @@
 import { sqlPool } from "../db/sql.pool";
-import UserDto from "../dtos/user.dto";
 import { arrayToStringWithQuotes } from "../utils/request.util";
 import {dbConn} from '../config/db.config'
+import UserDto from "../dtos/userDtos/user.dto";
+import CreateUserDto from "../dtos/userDtos/createUserDto";
 
 export class UserRepository {
   async getAll(): Promise<UserDto[]> {
@@ -29,18 +30,23 @@ export class UserRepository {
     });
   }
 
+  async getUserByEmail(email: string): Promise<UserDto> {
+    return new Promise((resolve, reject) => { 
+      sqlPool.query(`Select * from users WHERE email = ${email};`, function (err: any, res: any) {
+        if (err) {reject(err);}
+        let user = {} as UserDto;
+        if(res) {
+          user = {...res};
+        }
 
-  async addUser(newUser: UserDto) {
+        resolve(user)
+      })
+    });
+  }
+
+  async addUser(newUser: CreateUserDto) {
     const values = [
-      newUser.city,
-      newUser.language,
-      newUser.firstName,
-      newUser.lastName,
-      newUser.dateOfBirth,
-      newUser.email,
-      newUser.numberPhone,
-      newUser.imagePath,
-      newUser.sex
+      ...Object.values(newUser),
     ];
 
     const queryText = `INSERT INTO users (city, language, firstName, lastName, dateOfBirth, email, numberPhone, imagePath, sex) VALUES (${arrayToStringWithQuotes(values)});`;

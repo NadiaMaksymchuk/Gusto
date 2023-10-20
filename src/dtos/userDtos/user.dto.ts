@@ -1,5 +1,5 @@
 class UserDto {
-    id: bigint; 
+    id: number; 
     city: number;
     language: number;
     firstName: string;
@@ -11,7 +11,7 @@ class UserDto {
     sex: number;
   
     constructor(
-      id: bigint,
+      id: number,
       city: number,
       language: number,
       firstName: string,

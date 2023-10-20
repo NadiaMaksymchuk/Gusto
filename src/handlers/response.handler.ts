@@ -9,6 +9,12 @@ export class ResponseHandler {
     });
   }
 
+  static badRequest(res: Response, message: string) {
+    res.status(HttpStatusCode.BadRequest).json({
+      message,
+    });
+  }
+
   static notFound(res: Response, message: string) {
     res.status(HttpStatusCode.NotFound).json({
       message,

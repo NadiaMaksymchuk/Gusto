@@ -1,7 +1,7 @@
 export interface Session {
     id: number;
     dateCreated: number;
-    username: string;
+    email: string;
     issued: number;
     expires: number;
 }

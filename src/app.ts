@@ -21,7 +21,6 @@ createDbIfDontExist();
 
 app.use("/api/v3/users", userRouter);
 app.use("/api/auth", authRoutes);
-app.use(requireJwtMiddleware);
 
 
 
