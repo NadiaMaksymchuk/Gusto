@@ -1,7 +1,6 @@
 import { Router } from "express";
 import passport from 'passport';
 import { UserController } from "../controllers/user.controller";
-import { AuthController } from "../controllers/auth.controller";
 
 const userController = new UserController();
 const router = Router();
@@ -15,7 +14,7 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) =>
 
 router.post('/register', userController.signUp);
 
-// router.post('/login', authController.login);
+router.post('/login', userController.signIn);
 
 
 export default router;

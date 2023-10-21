@@ -33,7 +33,7 @@ export function decodeSession(secretKey: string, tokenString: string): DecodeRes
     try {
         result = decode(tokenString, secretKey, false, algorithm);
     } catch (_e) {
-        const e: Error = _e;
+        const e: Error = _e as Error;
 
         if (e.message === "No token supplied" || e.message === "Not enough or too many segments") {
             return {
