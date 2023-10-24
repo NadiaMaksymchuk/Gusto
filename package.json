@@ -1,0 +1,40 @@
+{
+  "dependencies": {
+    "@types/bcrypt": "^5.0.1",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "JSON": "^1.0.0",
+    "jwt-simple": "^0.5.6",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.6.2",
+    "passport": "^0.6.0",
+    "passport-google-oauth20": "^2.0.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
+    "token": "^0.1.0",
+    "web": "^0.0.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.19",
+    "@types/express-session": "^1.17.8",
+    "@types/jwt-simple": "^0.5.35",
+    "@types/mysql": "^2.15.22",
+    "@types/passport": "^1.0.14",
+    "@types/passport-google-oauth20": "^2.0.13",
+    "typescript": "^5.2.2"
+  },
+  "name": "gusto",
+  "description": "Gusto is an online web platform for food delivery from your favorite restaurant or cafe in your city. The site effectively allows you to order from the restaurant, calculate the time and price of delivery, track the courier and contact if necessary.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
