@@ -3,10 +3,9 @@ import express from "express";
 import userRouter from "./routes/user.route";
 import { createDbIfDontExist } from "./db/script";
 import authRoutes from './routes/auth';
-import uploadPhotoRoutes from './routes/imageUpload'
 import passport from 'passport';
-import { requireJwtMiddleware } from './middwares/authMiddleware'
 import { v2 as cloudinary } from 'cloudinary';
+import uploadPhotoRoutes from './routes/uploadPhoto.route'
 
 
 dotenv.config();
@@ -29,9 +28,9 @@ app.use(passport.initialize());
 
 createDbIfDontExist();
 
-app.use("/api/v3/users", requireJwtMiddleware, userRouter);
+app.use("/api/v3/users", userRouter);
 app.use("/api/auth", authRoutes);
-app.use("/photo", uploadPhotoRoutes);
+app.use("/api/photo", uploadPhotoRoutes);
 
 
 app.use(express.urlencoded({

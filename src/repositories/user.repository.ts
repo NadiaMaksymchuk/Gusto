@@ -1,5 +1,6 @@
 import { sqlPool } from "../db/sql.pool";
 import { CreateUserDto } from "../dtos/userDtos/createUserDto";
+import { UpdateUserDto } from "../dtos/userDtos/updateUserDto";
 import { UserDto } from "../dtos/userDtos/user.dto";
 import { arrayToStringWithQuotes } from "../utils/request.util";
 
@@ -40,7 +41,7 @@ export class UserRepository {
       ...Object.values(newUser),
     ];
 
-    const queryText = `INSERT INTO users (city, language, firstName, lastName, dateOfBirth, email, numberPhone, imagePath, sex, password, salt) VALUES (${arrayToStringWithQuotes(values)});`;
+    const queryText = `INSERT INTO users (city, language, firstName, lastName, dateOfBirth, email, numberPhone, sex, password, salt) VALUES (${arrayToStringWithQuotes(values)});`;
 
     return new Promise<void>((resolve, reject) => {
       sqlPool.query(queryText, function (err: any, res: any) {
@@ -50,8 +51,8 @@ export class UserRepository {
     });
   }
 
-  async updateUser(userId: number, updatedUserData: UserDto) {
-    const queryText = `UPDATE users SET city = ${updatedUserData.city}, language = ${updatedUserData.language}, firstName = "${updatedUserData.firstName}", lastName = "${updatedUserData.lastName}",dateOfBirth = "${updatedUserData.dateOfBirth}", email =  "${updatedUserData.email}", numberPhone = "${updatedUserData.numberPhone}", imagePath = "${updatedUserData.imagePath}", sex = ${updatedUserData.sex} WHERE id = ${userId};`;
+  async updateUser(userId: number, updatedUserData: UpdateUserDto) {
+    const queryText = `UPDATE users SET city = ${updatedUserData.city}, language = ${updatedUserData.language}, firstName = "${updatedUserData.firstName}", lastName = "${updatedUserData.lastName}",  numberPhone = "${updatedUserData.numberPhone}", imageId = "${updatedUserData.idImage}" WHERE id = ${userId};`;
 
     return new Promise<void>((resolve, reject) => {
       sqlPool.query(queryText, function (err: any, res: any) {

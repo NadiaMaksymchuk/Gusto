@@ -7,6 +7,7 @@ import { encodeSession } from "../utils/jwtUtils/jwt.crafter.util";
 import { CreateUserDto } from "../dtos/userDtos/createUserDto";
 import { UserDto } from "../dtos/userDtos/user.dto";
 import { LoginUserDto } from "../dtos/userDtos/loginUser";
+import { UpdateUserDto } from "../dtos/userDtos/updateUserDto";
 
 export class UserController {
   private userRepository = new UserRepository();
@@ -96,7 +97,7 @@ export class UserController {
   updateUser = async (req: Request, res: Response) => {
     const id = +req.params.id;
     try {
-      await this.userRepository.updateUser(id, req.body);
+      await this.userRepository.updateUser(id, req.body as UpdateUserDto);
       return ResponseHandler.updated(res, `User updated`);
     } catch (err) {
       return ResponseHandler.error(res, `Error in updating user ${err}`);

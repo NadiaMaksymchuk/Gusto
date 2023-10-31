@@ -6,7 +6,6 @@ export interface CreateUserDto {
     dateOfBirth: Date;
     email: string;
     numberPhone: string;
-    imagePath: string;
     sex: number;
     password: string;
     salt: string;
