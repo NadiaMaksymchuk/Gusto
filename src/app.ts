@@ -9,6 +9,8 @@ import uploadPhotoRoutes from './routes/uploadPhoto.route';
 import restaurantsRouter from './routes/restoraunt.route';
 import couriersRouter from './routes/courier.route';
 import menuItemsRouter from './routes/menuItem.route';
+import orderItemsRouter from './routes/orderItems.route';
+import ordersRouter from './routes/orders.route';
 
 dotenv.config();
 require('./strategies/google');
@@ -34,6 +36,8 @@ app.use("/api/v1/photo", uploadPhotoRoutes);
 app.use("/api/v1/restaurants", restaurantsRouter);
 app.use("/api/v1/couriers", couriersRouter);
 app.use("/api/v1/menuitems", menuItemsRouter);
+app.use("/api/v1/orderitems", orderItemsRouter);
+app.use("/api/v1/orders", ordersRouter);
 
 
 app.use(express.urlencoded({
