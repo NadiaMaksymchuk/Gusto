@@ -9,7 +9,7 @@ export interface OrderWithItemsImagesAndRestaurantDto {
     orderItems: OrderItemWithMenuItemImageDto[];
 }
 
-interface OrderItemWithMenuItemImageDto {
+export interface OrderItemWithMenuItemImageDto {
     id: number;
     menuItemId: number;
     quantity: number;
@@ -17,13 +17,13 @@ interface OrderItemWithMenuItemImageDto {
     menuItem: MenuItemWithImageDto;
 }
 
-interface MenuItemWithImageDto {
+export interface MenuItemWithImageDto {
     name: string;
     description: string;
     price: number;
     image: MenuItemImageDto;
 }
 
-interface MenuItemImageDto {
+export interface MenuItemImageDto {
     url: string;
 }

@@ -1,7 +1,6 @@
-interface DeliveryDetailWithCourierAndOrderDto {
+export interface DeliveryDetailWithCourierAndOrderDto {
     id: number;
     orderId: number;
-    courierId: number;
     quantity: number;
     totalPrice: number;
     deliveryDate: Date;

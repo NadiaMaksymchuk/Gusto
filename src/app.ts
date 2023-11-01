@@ -11,6 +11,7 @@ import couriersRouter from './routes/courier.route';
 import menuItemsRouter from './routes/menuItem.route';
 import orderItemsRouter from './routes/orderItems.route';
 import ordersRouter from './routes/orders.route';
+import deliveryDetailsRouter from './routes/deliveryDetail.router';
 
 dotenv.config();
 require('./strategies/google');
@@ -38,6 +39,7 @@ app.use("/api/v1/couriers", couriersRouter);
 app.use("/api/v1/menuitems", menuItemsRouter);
 app.use("/api/v1/orderitems", orderItemsRouter);
 app.use("/api/v1/orders", ordersRouter);
+app.use("/api/v1/deliverydetails", deliveryDetailsRouter);
 
 
 app.use(express.urlencoded({
