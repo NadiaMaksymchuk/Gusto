@@ -5,28 +5,51 @@ import { UpdateMenuItemDto } from "../dtos/restaurantsDtos/menuItemsDtos/updateM
 import { arrayToStringWithQuotes } from "../utils/request.util";
 
 export class MenuItemsRepository {
-  async getAllByRestorauntIdGroupedByType(restotanId: number): Promise<MenuItemsDto[]> {
+  async getAllByRestaurantId(restaurantId: number): Promise<MenuItemsDto[]> {
     return new Promise((resolve, reject) => {
-      sqlPool.query(`SELECT MenuItems.id, MenuItems.name, MenuItems.description, MenuItems.price, Images.url as imageUrl FROM MenuItems JOIN Restaurants ON MenuItems.restaurantId = Restaurants.id LEFT JOIN Images ON MenuItems.imageId = Images.id WHERE Restaurants.id = ${restotanId} GROUP BY MenuItems.type;`, function (err: any, res: any) {
+      const query = `
+        SELECT m.name, 
+               m.description, 
+               m.price, 
+               m.type,
+               i.url as imageUrl
+        FROM (
+          SELECT DISTINCT type
+          FROM MenuItems
+          JOIN Restaurants ON MenuItems.restaurantId = Restaurants.id
+          LEFT JOIN Images ON MenuItems.imageId = Images.id
+          WHERE Restaurants.id = ${restaurantId}
+        ) AS subquery
+        JOIN MenuItems AS m ON subquery.type = m.type
+        JOIN Restaurants ON m.restaurantId = Restaurants.id
+        LEFT JOIN Images AS i ON m.imageId = i.id
+        WHERE Restaurants.id = ${restaurantId};
+      `;
+  
+      sqlPool.query(query, function (err: any, res: any) {
         if (err) {
           reject(err);
         }
-
+  
         let menuItems = [];
         if (res) {
           menuItems = res.map((row: MenuItemsDto) => ({
             ...row,
           }));
         }
-
+  
         resolve(menuItems);
       });
     });
   }
+  
 
   async getMenuById(menuItemId: number): Promise<MenuItemsDto | null> {
     return new Promise((resolve, reject) => {
-      sqlPool.query(`SELECT MenuItems.id, MenuItems.name, MenuItems.description, MenuItems.price, Images.url as imageUrl FROM MenuItems LEFT JOIN Images ON MenuItems.imageId = Images.id WHERE id = ${menuItemId};`, function (err: any, res: any) {
+      sqlPool.query(`SELECT MenuItems.id, MenuItems.name, MenuItems.description, MenuItems.price, Images.url as imageUrl
+      FROM MenuItems
+      LEFT JOIN Images ON MenuItems.imageId = Images.id
+      WHERE MenuItems.id = ${menuItemId};`, function (err: any, res: any) {
         if (err) {
           reject(err);
         }
@@ -46,7 +69,7 @@ export class MenuItemsRepository {
         ...Object.values(newMenuItem),
     ];
 
-    const queryText = `INSERT INTO MenuItems ( name, description, price, imageId, type) VALUES (${arrayToStringWithQuotes(values)});`;
+    const queryText = `INSERT INTO MenuItems (restaurantId, name, description, price, imageId, type) VALUES (${arrayToStringWithQuotes(values)});`;
 
     return new Promise<void>((resolve, reject) => {
       sqlPool.query(queryText, function (err: any, res: any) {

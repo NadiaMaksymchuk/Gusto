@@ -8,6 +8,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import uploadPhotoRoutes from './routes/uploadPhoto.route';
 import restaurantsRouter from './routes/restoraunt.route';
 import couriersRouter from './routes/courier.route';
+import menuItemsRouter from './routes/menuItem.route';
 
 dotenv.config();
 require('./strategies/google');
@@ -17,8 +18,6 @@ cloudinary.config({
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
 });
-
-console.log(cloudinary.config());
 
 const PORT = process.env.PORT;
 
@@ -34,6 +33,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/photo", uploadPhotoRoutes);
 app.use("/api/v1/restaurants", restaurantsRouter);
 app.use("/api/v1/couriers", couriersRouter);
+app.use("/api/v1/menuitems", menuItemsRouter);
 
 
 app.use(express.urlencoded({

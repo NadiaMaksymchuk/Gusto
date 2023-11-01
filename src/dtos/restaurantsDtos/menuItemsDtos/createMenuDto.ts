@@ -1,5 +1,5 @@
 export interface CreateMenuItemDto {
-    restorantId: number;
+    restaurantId: number;
     name: string;
     description: string;
     price: number;

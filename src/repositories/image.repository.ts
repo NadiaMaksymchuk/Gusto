@@ -9,7 +9,7 @@ export class ImageRepository {
             ...Object.values(newImage),
         ];
     
-        const queryText = `INSERT INTO Image (id, url, urlMin) VALUES (${arrayToStringWithQuotes(values)});`;
+        const queryText = `INSERT INTO Images (id, url, urlMin) VALUES (${arrayToStringWithQuotes(values)});`;
     
         return new Promise<void>((resolve, reject) => {
             sqlPool.query(queryText, function (err: any, res: any) {
@@ -22,7 +22,7 @@ export class ImageRepository {
     }
     
     async getImageById(imageId: string) {
-        const queryText = `SELECT * FROM Image WHERE id = '${imageId}';`;
+        const queryText = `SELECT * FROM Images WHERE id = '${imageId}';`;
     
         return new Promise<ImageDto | null>((resolve, reject) => {
             sqlPool.query(queryText, function (err: any, res: any) {
@@ -39,7 +39,7 @@ export class ImageRepository {
     }
 
     async deleteImageById(imageId: string) {
-        const queryText = `DELETE FROM Image WHERE id = '${imageId}';`;
+        const queryText = `DELETE FROM Images WHERE id = '${imageId}';`;
     
         return new Promise<void>((resolve, reject) => {
             sqlPool.query(queryText, function (err: any, res: any) {
