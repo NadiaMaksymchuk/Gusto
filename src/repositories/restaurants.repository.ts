@@ -35,6 +35,7 @@ class RestaurantsRepository {
             ...row,
           }));
         }
+        
 
         resolve(restaurants);
       });

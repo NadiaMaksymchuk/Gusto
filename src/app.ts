@@ -6,7 +6,7 @@ import authRoutes from './routes/auth';
 import passport from 'passport';
 import { v2 as cloudinary } from 'cloudinary';
 import uploadPhotoRoutes from './routes/uploadPhoto.route'
-
+import restaurantsrouter from './routes/restoraunt.route'
 
 dotenv.config();
 require('./strategies/google');
@@ -28,9 +28,10 @@ app.use(passport.initialize());
 
 createDbIfDontExist();
 
-app.use("/api/v3/users", userRouter);
-app.use("/api/auth", authRoutes);
-app.use("/api/photo", uploadPhotoRoutes);
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/photo", uploadPhotoRoutes);
+app.use("/api/v1/restaurants", restaurantsrouter);
 
 
 app.use(express.urlencoded({
