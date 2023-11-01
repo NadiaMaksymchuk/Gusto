@@ -5,8 +5,9 @@ import { createDbIfDontExist } from "./db/script";
 import authRoutes from './routes/auth';
 import passport from 'passport';
 import { v2 as cloudinary } from 'cloudinary';
-import uploadPhotoRoutes from './routes/uploadPhoto.route'
-import restaurantsrouter from './routes/restoraunt.route'
+import uploadPhotoRoutes from './routes/uploadPhoto.route';
+import restaurantsRouter from './routes/restoraunt.route';
+import couriersRouter from './routes/courier.route';
 
 dotenv.config();
 require('./strategies/google');
@@ -31,7 +32,8 @@ createDbIfDontExist();
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/photo", uploadPhotoRoutes);
-app.use("/api/v1/restaurants", restaurantsrouter);
+app.use("/api/v1/restaurants", restaurantsRouter);
+app.use("/api/v1/couriers", couriersRouter);
 
 
 app.use(express.urlencoded({

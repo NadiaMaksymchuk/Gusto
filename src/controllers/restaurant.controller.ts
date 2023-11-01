@@ -71,7 +71,7 @@ export class RestaurantsController {
         const id = +req.params.id;
         try{
             await this.restorauntRepository.updateRestaurant(id, req.body as UpdateRestaurantDto);
-            return ResponseHandler.created(res, "Restaurant updated");
+            return ResponseHandler.updated(res, "Restaurant updated");
         }
         catch(err) {
             return ResponseHandler.error(res, err.message);
