@@ -7,14 +7,10 @@ import { arrayToStringWithQuotes } from "../utils/request.util";
 class CouriersRepository {
   async createCourier(newCourier: CreateCourierDto) {
     const values = [
-      newCourier.firstName,
-      newCourier.lastName,
-      newCourier.numberPhone,
-      newCourier.vehicleNumber,
-      newCourier.availabilityStatus,
+      ...Object.values(newCourier),
     ];
 
-    const queryText = `INSERT INTO Couriers (firstName, lastName, numberPhone, vehicleNumber, availabilityStatus) VALUES (${arrayToStringWithQuotes(values)});`;
+    const queryText = `INSERT INTO Couriers (firstName, lastName, email, numberPhone, vehicleNumber, availabilityStatus, sex, password, salt) VALUES (${arrayToStringWithQuotes(values)});`;
 
     return new Promise<void>((resolve, reject) => {
       sqlPool.query(queryText, function (err: any, res: any) {
@@ -22,6 +18,22 @@ class CouriersRepository {
           reject(err);
         }
         resolve();
+      });
+    });
+  }
+
+  async getCourierByEmail(email: string): Promise<CourierDto> {
+    return new Promise((resolve, reject) => {
+      sqlPool.query(`SELECT * FROM Couriers WHERE email = "${email}";`, function (err: any, res: any) {
+        if (err) {
+          reject(err);
+        }
+        let courier = {} as CourierDto;
+        if (res.length > 0) {
+          courier = { ...res[0] };
+        }
+
+        resolve(courier);
       });
     });
   }

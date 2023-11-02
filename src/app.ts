@@ -15,6 +15,7 @@ import deliveryDetailsRouter from './routes/deliveryDetail.router';
 import bodyParser from 'body-parser';
 import emailRouter from'./routes/email.route';
 import { Request, Response } from "express";
+import { requireJwtMiddleware } from "./middwares/authMiddleware";
 
 
 dotenv.config();
@@ -40,7 +41,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/photo", uploadPhotoRoutes);
 app.use("/api/v1/restaurants", restaurantsRouter);
-app.use("/api/v1/couriers", couriersRouter);
+app.use("/api/v1/couriers",requireJwtMiddleware, couriersRouter);
 app.use("/api/v1/menuitems", menuItemsRouter);
 app.use("/api/v1/orderitems", orderItemsRouter);
 app.use("/api/v1/orders", ordersRouter);
@@ -51,29 +52,6 @@ app.use("/api/v1/email-send", emailRouter);
 app.use(express.urlencoded({
   extended: true
 }));
-
-app.post(
-  '/send-email',
-  (req: Request, res: Response) => {
-    const sgMail = require('@sendgrid/mail')
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-const msg = {
-  to: 'nadiamaksy4uk@gmail.com', // Change to your recipient
-  from: 'nadia29102003@gmail.com', // Change to your verified sender
-  subject: 'Sending with Gusto is Fun',
-  text: 'and easy to do anywhere, even with Node.js',
-  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-}
-sgMail
-  .send(msg)
-  .then(() => {
-    console.log('Email sent')
-  })
-  .catch((error) => {
-    console.error(error)
-  })
-  }
-);
 
 const start = async () => {
     try {

@@ -51,7 +51,8 @@ export class UserController {
       email: user.email,
       dateCreated: Number(new Date()),
       issued: 0,
-      expires: 0
+      expires: 0,
+      isCourier: false
     };
 
     const { token, issued, expires } = encodeSession(process.env.TOKEN_SECRET!, partialSession);
@@ -76,7 +77,8 @@ export class UserController {
       email: user.email,
       dateCreated: Number(new Date()),
       issued: 0,
-      expires: 0
+      expires: 0,
+      isCourier: false
     };
 
     const { token, issued, expires } = encodeSession(process.env.TOKEN_SECRET!, partialSession);

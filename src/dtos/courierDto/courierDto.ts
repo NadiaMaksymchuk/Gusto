@@ -1,8 +1,11 @@
 export interface CourierDto {
     id: number;
+    email: string;
     firstName: string;
     lastName: string;
     numberPhone: string;
     vehicleNumber: string;
-    availabilityStatus: number;
+    availabilityStatus: number; 
+    password: string;
+    salt: string;
 }

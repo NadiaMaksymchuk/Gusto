@@ -4,6 +4,10 @@ import CouriersRepository from '../repositories/couries.repository';
 import { CreateCourierDto } from '../dtos/courierDto/createCourierDto';
 import { CourierDto } from '../dtos/courierDto/courierDto';
 import { UpdateCourierDto } from '../dtos/courierDto/updateCourierDto';
+import { hashPassword, verifyPassword } from '../handlers/password.handles';
+import { encodeSession } from '../utils/jwtUtils/jwt.crafter.util';
+import { Session } from '../models/jwt/session';
+import { LoginCourierDto } from '../dtos/courierDto/loginCourierDto';
 
 export class CouriersController {
   private couriersRepository = new CouriersRepository();
@@ -35,6 +39,62 @@ export class CouriersController {
     }
 
     return ResponseHandler.success<CourierDto>(res, courier, "Courier found");
+  }
+
+  signUpCourier = async (req: Request, res: Response) => {
+    const newCourier = req.body as CreateCourierDto;
+    let courier = await this.couriersRepository.getCourierByEmail(newCourier.email);
+
+    if (Object.keys(courier).length !== 0) {
+      return ResponseHandler.badRequest(res, "Courier with this email alredy exist");
+    }
+
+    const { salt, hashedPassword } = await hashPassword(newCourier.password);
+
+    newCourier.password = hashedPassword;
+    newCourier.salt = salt;
+    await this.couriersRepository.createCourier(newCourier);
+
+    courier = await this.couriersRepository.getCourierByEmail(newCourier.email);
+
+    const partialSession: Session = {
+      id: courier.id,
+      email: courier.email,
+      dateCreated: Number(new Date()),
+      issued: 0,
+      expires: 0,
+      isCourier: true
+    };
+
+    const { token, issued, expires } = encodeSession(process.env.TOKEN_SECRET!, partialSession);
+
+    return ResponseHandler.success<string>(res, token, "Registered");
+  }
+
+  signInCourier = async (req: Request, res: Response) => {
+    const loginUserDto = req.body as LoginCourierDto;
+    let courier = await this.couriersRepository.getCourierByEmail(loginUserDto.email);
+
+    if (!courier) {
+      return ResponseHandler.badRequest(res, "User don`t exist");
+    }
+
+    if (!await verifyPassword(loginUserDto.password, courier.salt, courier.password)) {
+      return ResponseHandler.badRequest(res, "Invalid password");
+    }
+
+    const partialSession: Session = {
+      id: courier.id,
+      email: courier.email,
+      dateCreated: Number(new Date()),
+      issued: 0,
+      expires: 0,
+      isCourier: true
+    };
+
+    const { token, issued, expires } = encodeSession(process.env.TOKEN_SECRET!, partialSession);
+
+    return ResponseHandler.success<string>(res, token, "Entered");
   }
 
   getCouriersByAvailabilityStatus = async (req: Request, res: Response) => {
