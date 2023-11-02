@@ -12,6 +12,10 @@ import menuItemsRouter from './routes/menuItem.route';
 import orderItemsRouter from './routes/orderItems.route';
 import ordersRouter from './routes/orders.route';
 import deliveryDetailsRouter from './routes/deliveryDetail.router';
+import bodyParser from 'body-parser';
+import emailRouter from'./routes/email.route';
+import { Request, Response } from "express";
+
 
 dotenv.config();
 require('./strategies/google');
@@ -24,10 +28,13 @@ cloudinary.config({
 
 const PORT = process.env.PORT;
 
-export const app = express()
+export const app = express();
+
+//setApiKey('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');
 
 app.use(express.json());
 app.use(passport.initialize());
+app.use(bodyParser.json());
 
 createDbIfDontExist();
 
@@ -40,11 +47,35 @@ app.use("/api/v1/menuitems", menuItemsRouter);
 app.use("/api/v1/orderitems", orderItemsRouter);
 app.use("/api/v1/orders", ordersRouter);
 app.use("/api/v1/deliverydetails", deliveryDetailsRouter);
+app.use("/api/v1/email-send", emailRouter);
 
 
 app.use(express.urlencoded({
   extended: true
 }));
+
+app.post(
+  '/send-email',
+  (req: Request, res: Response) => {
+    const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+const msg = {
+  to: 'nadiamaksy4uk@gmail.com', // Change to your recipient
+  from: 'nadia29102003@gmail.com', // Change to your verified sender
+  subject: 'Sending with Gusto is Fun',
+  text: 'and easy to do anywhere, even with Node.js',
+  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+}
+sgMail
+  .send(msg)
+  .then(() => {
+    console.log('Email sent')
+  })
+  .catch((error) => {
+    console.error(error)
+  })
+  }
+);
 
 const start = async () => {
     try {

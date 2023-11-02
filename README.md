@@ -42,7 +42,7 @@ Backend:
 - Framework: express
 - Database: MySql
 - Cloud: Azure
-- Other: JWT, Cloudinary, Docker
+- Other: JWT, Cloudinary, SendGrid, Docker
 
 [Go Up](#go-up)
 
