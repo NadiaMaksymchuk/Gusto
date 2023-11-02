@@ -30,8 +30,6 @@ const PORT = process.env.PORT;
 
 export const app = express();
 
-//setApiKey('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');
-
 app.use(express.json());
 app.use(passport.initialize());
 app.use(bodyParser.json());
