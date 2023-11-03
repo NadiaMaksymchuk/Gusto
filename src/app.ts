@@ -14,9 +14,9 @@ import ordersRouter from './routes/orders.route';
 import deliveryDetailsRouter from './routes/deliveryDetail.router';
 import bodyParser from 'body-parser';
 import emailRouter from'./routes/email.route';
-import { Request, Response } from "express";
 import { requireJwtMiddleware } from "./middwares/authMiddleware";
-
+import notificationRouter from './routes/notification.route';
+import chatRouter from './routes/chat.route';
 
 dotenv.config();
 require('./strategies/google');
@@ -37,16 +37,18 @@ app.use(bodyParser.json());
 
 createDbIfDontExist();
 
-app.use("/api/v1/users", userRouter);
+app.use("/api/v1/users",requireJwtMiddleware, userRouter);
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/photo", uploadPhotoRoutes);
-app.use("/api/v1/restaurants", restaurantsRouter);
+app.use("/api/v1/photo",requireJwtMiddleware, uploadPhotoRoutes);
+app.use("/api/v1/restaurants",requireJwtMiddleware, restaurantsRouter);
 app.use("/api/v1/couriers",requireJwtMiddleware, couriersRouter);
-app.use("/api/v1/menuitems", menuItemsRouter);
-app.use("/api/v1/orderitems", orderItemsRouter);
-app.use("/api/v1/orders", ordersRouter);
-app.use("/api/v1/deliverydetails", deliveryDetailsRouter);
-app.use("/api/v1/email-send", emailRouter);
+app.use("/api/v1/menuitems", requireJwtMiddleware,menuItemsRouter);
+app.use("/api/v1/orderitems",requireJwtMiddleware, orderItemsRouter);
+app.use("/api/v1/orders", requireJwtMiddleware,ordersRouter);
+app.use("/api/v1/deliverydetails", requireJwtMiddleware,deliveryDetailsRouter);
+app.use("/api/v1/email-send",requireJwtMiddleware, emailRouter);
+app.use("/api/v1/notifications",requireJwtMiddleware, notificationRouter);
+app.use("/api/v1/chats", requireJwtMiddleware,chatRouter);
 
 
 app.use(express.urlencoded({

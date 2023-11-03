@@ -7,8 +7,8 @@ import { ExpirationStatus } from "../models/jwt/expirationStatus";
 /**
  * Express middleware, checks for a valid JSON Web Token and returns 401 Unauthorized if one isn't found.
  */
-export var CurrentUserId: number;
-export var CurrentCourierId: number;
+export let CurrentUserId: number | null = null;
+export let IsCourier: boolean = false;
 
 export function requireJwtMiddleware(request: Request, response: Response, next: NextFunction) {
 
@@ -56,12 +56,10 @@ export function requireJwtMiddleware(request: Request, response: Response, next:
         session = decodedSession.session;
     }
 
-    if (!session.isCourier) {
-        CurrentUserId = session.id;
-    }
-    else {
-        CurrentCourierId = session.id;
-    }
+    IsCourier = session.isCourier;
+
+
+    CurrentUserId = session.id;
 
     response.locals = {
         ...response.locals,
