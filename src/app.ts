@@ -17,6 +17,10 @@ import emailRouter from'./routes/email.route';
 import { requireJwtMiddleware } from "./middwares/authMiddleware";
 import notificationRouter from './routes/notification.route';
 import chatRouter from './routes/chat.route';
+import * as path from 'path';
+import cors from "cors";
+import { createServer } from 'http'
+
 
 dotenv.config();
 require('./strategies/google');
@@ -30,10 +34,20 @@ cloudinary.config({
 const PORT = process.env.PORT;
 
 export const app = express();
+app.use(express.static('public'));
 
-app.use(express.json());
+
+
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: "http://localhost:5000"
+  })
+)
+app.use(express.json())
 app.use(passport.initialize());
 app.use(bodyParser.json());
+
 
 createDbIfDontExist();
 
@@ -50,22 +64,29 @@ app.use("/api/v1/email-send",requireJwtMiddleware, emailRouter);
 app.use("/api/v1/notifications",requireJwtMiddleware, notificationRouter);
 app.use("/api/v1/chats", requireJwtMiddleware,chatRouter);
 
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const socket = new Server(server);
 
-app.use(express.urlencoded({
-  extended: true
-}));
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
 
-const start = async () => {
-    try {
-      await app.listen(PORT);
-      console.log(`Server running on port ${PORT}`);
-    } catch (e) {
-      console.log(e);
-      process.exit(1);
-    }
-  };
-  
-  start().catch((err) => {
-    console.log(`Server stopped with err: ${err}`);
-    process.exit(1);
-  });
+// add this
+app.get('/socket.io/socket.io.js', (req, res) => {
+  res.sendFile(__dirname + '/node_modules/socket.io/client-dist/socket.io.js');
+});
+
+socket.on("connection", (socket) => {
+	console.log(`⚡: ${socket.id} user just connected!`);
+
+	socket.on("disconnect", () => {
+		socket.disconnect();
+		console.log("🔥: A user disconnected");
+	});
+});
+
+server.listen(PORT, () => {
+  console.log('listening on: 5000');
+});

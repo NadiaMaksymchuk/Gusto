@@ -38,7 +38,7 @@ Gusto is an online web platform for food delivery from your favorite restaurant 
 
 Backend:
 - Platform: Node.js
-- Network: REST, WebSockets
+- Network: REST, SockedIO
 - Framework: express
 - Database: MySql
 - Cloud: Azure
