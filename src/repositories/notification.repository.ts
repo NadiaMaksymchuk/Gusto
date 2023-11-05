@@ -5,11 +5,11 @@ import { CurrentUserId } from "../middwares/authMiddleware";
 
 class NotificationsRepository {
     async createNotification(notificationData: CreateNotificationDto): Promise<void> {
-        const { userId, courierId, text, type } = notificationData;
+        const { userId, text, type } = notificationData;
       
         const queryText = `
-          INSERT INTO Notifications (userId, courierId, text, type, isRead)
-          VALUES (${userId}, ${courierId}, '${text}', ${type}, FALSE);
+          INSERT INTO Notifications (userId, text, type, isRead)
+          VALUES (${userId}, '${text}', ${type}, FALSE);
         `;
       
         return new Promise<void>((resolve, reject) => {

@@ -13,14 +13,18 @@ import orderItemsRouter from './routes/orderItems.route';
 import ordersRouter from './routes/orders.route';
 import deliveryDetailsRouter from './routes/deliveryDetail.router';
 import bodyParser from 'body-parser';
-import emailRouter from'./routes/email.route';
+import emailRouter from './routes/email.route';
 import { requireJwtMiddleware } from "./middwares/authMiddleware";
 import notificationRouter from './routes/notification.route';
 import chatRouter from './routes/chat.route';
-import * as path from 'path';
 import cors from "cors";
-import { createServer } from 'http'
+import { CreateMessageDto } from "./dtos/chatDtos/createMessagesDto";
+import MessagesRepository from "./repositories/messages.repository";
+import NotificationsRepository from "./repositories/notification.repository";
+import { CreateNotificationDto } from "./dtos/notificationDtos/createNotificationDto";
 
+const messagesRepository = new MessagesRepository();
+const notificationRepository = new NotificationsRepository();
 
 dotenv.config();
 require('./strategies/google');
@@ -51,40 +55,77 @@ app.use(bodyParser.json());
 
 createDbIfDontExist();
 
-app.use("/api/v1/users",requireJwtMiddleware, userRouter);
+app.use("/api/v1/users", requireJwtMiddleware, userRouter);
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/photo",requireJwtMiddleware, uploadPhotoRoutes);
-app.use("/api/v1/restaurants",requireJwtMiddleware, restaurantsRouter);
-app.use("/api/v1/couriers",requireJwtMiddleware, couriersRouter);
-app.use("/api/v1/menuitems", requireJwtMiddleware,menuItemsRouter);
-app.use("/api/v1/orderitems",requireJwtMiddleware, orderItemsRouter);
-app.use("/api/v1/orders", requireJwtMiddleware,ordersRouter);
-app.use("/api/v1/deliverydetails", requireJwtMiddleware,deliveryDetailsRouter);
-app.use("/api/v1/email-send",requireJwtMiddleware, emailRouter);
-app.use("/api/v1/notifications",requireJwtMiddleware, notificationRouter);
-app.use("/api/v1/chats", requireJwtMiddleware,chatRouter);
+app.use("/api/v1/photo", requireJwtMiddleware, uploadPhotoRoutes);
+app.use("/api/v1/restaurants", requireJwtMiddleware, restaurantsRouter);
+app.use("/api/v1/couriers", requireJwtMiddleware, couriersRouter);
+app.use("/api/v1/menuitems", requireJwtMiddleware, menuItemsRouter);
+app.use("/api/v1/orderitems", requireJwtMiddleware, orderItemsRouter);
+app.use("/api/v1/orders", requireJwtMiddleware, ordersRouter);
+app.use("/api/v1/deliverydetails", requireJwtMiddleware, deliveryDetailsRouter);
+app.use("/api/v1/email-send", requireJwtMiddleware, emailRouter);
+app.use("/api/v1/notifications", requireJwtMiddleware, notificationRouter);
+app.use("/api/v1/chats", requireJwtMiddleware, chatRouter);
 
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const socket = new Server(server);
+const ioChat = new Server(server).of('/chat');
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-// add this
 app.get('/socket.io/socket.io.js', (req, res) => {
   res.sendFile(__dirname + '/node_modules/socket.io/client-dist/socket.io.js');
 });
 
-socket.on("connection", (socket) => {
-	console.log(`⚡: ${socket.id} user just connected!`);
+ioChat.on("connection", (socket) => {
+  console.log(`⚡: ${socket.id} user just connected!`);
 
-	socket.on("disconnect", () => {
-		socket.disconnect();
-		console.log("🔥: A user disconnected");
-	});
+  socket.on("send-message", async (message: string, room: string) => {
+    const newMessage: CreateMessageDto = {
+      chatId: +room,
+      text: message
+    }
+    await messagesRepository.createMessage(newMessage);
+    socket.to(room).emit("receive-message", message);
+  })
+
+  socket.on("join-room", (room: string) => {
+    socket.join(room);
+  });
+
+  socket.on("disconnect", () => {
+    socket.disconnect();
+    console.log("🔥: A user disconnected");
+  });
+});
+
+const ioNotification = new Server(server).of('/notification');
+
+ioNotification.on("connection", (socket) => {
+  console.log(`⚡: ${socket.id} user just connected!`);
+
+  socket.on("send-notification", async (message: string, type: number, room: string) => {
+    const newNotification: CreateNotificationDto = {
+      userId: +room,
+      text: message,
+      type: type
+    }
+    await notificationRepository.createNotification(newNotification);
+    socket.to(room).emit("receive-notification", message, type);
+  })
+
+  socket.on("join-room", (room: string) => {
+    socket.join(room);
+  });
+
+  socket.on("disconnect", () => {
+    socket.disconnect();
+    console.log("🔥: A user disconnected");
+  });
 });
 
 server.listen(PORT, () => {
