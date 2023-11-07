@@ -4,6 +4,8 @@ import { MenuItemsDto } from '../dtos/restaurantsDtos/menuItemsDtos/menuItemsDto
 import MenuItemsRepository from '../repositories/menuItems.repository';
 import { CreateMenuItemDto } from '../dtos/restaurantsDtos/menuItemsDtos/createMenuDto';
 import { UpdateMenuItemDto } from '../dtos/restaurantsDtos/menuItemsDtos/updateMenuItems';
+import { validationResult } from 'express-validator';
+import { convertErrorsToLowerCase } from '../utils/errors.util';
 
 export class MenuItemsController {
   private menuItemsRepository = new MenuItemsRepository();
@@ -31,14 +33,18 @@ export class MenuItemsController {
   }
 
   createMenuItem = async (req: Request, res: Response) => {
-    const newMenuItem = req.body as CreateMenuItemDto;
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const newMenuItem = req.body as CreateMenuItemDto;
 
-    try {
-      await this.menuItemsRepository.addMenuItem(newMenuItem);
-      return ResponseHandler.created(res, 'Menu item created');
-    } catch (err) {
-      return ResponseHandler.error(res, `Error in creating menu item: ${err}`);
-    }
+      try {
+        await this.menuItemsRepository.addMenuItem(newMenuItem);
+        return ResponseHandler.created(res, 'Menu item created');
+      } catch (err) {
+        return ResponseHandler.error(res, `Error in creating menu item: ${err}`);
+      }
+     }
+     return ResponseHandler.badRequest(res, `Invalid request: ${convertErrorsToLowerCase(errors)}`);
   };
 
   updateMenuItem = async (req: Request, res: Response) => {

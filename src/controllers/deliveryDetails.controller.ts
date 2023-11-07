@@ -4,19 +4,25 @@ import { CreateDeliveryDetailDto } from '../dtos/deliveryDetailDto/createDeliver
 import { DeliveryDetailsRepository } from '../repositories/deliveryDetails.repository';
 import { DeliveryDetailWithCourierAndOrderDto } from '../dtos/deliveryDetailDto/deliveryDetailDto';
 import { DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto } from '../dtos/deliveryDetailDto/DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto';
+import { validationResult } from 'express-validator';
+import { convertErrorsToLowerCase } from '../utils/errors.util';
 
 export class DeliveryDetailsController {
   private deliveryDetailsRepository = new DeliveryDetailsRepository();
 
   createDeliveryDetail = async (req: Request, res: Response) => {
-    const newDeliveryDetail = req.body as CreateDeliveryDetailDto;
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const newDeliveryDetail = req.body as CreateDeliveryDetailDto;
 
-    try {
-      await this.deliveryDetailsRepository.createDeliveryDetail(newDeliveryDetail);
-      return ResponseHandler.created(res, 'Delivery detail created');
-    } catch (err) {
-      return ResponseHandler.error(res, `Error in creating delivery detail: ${err}`);
+      try {
+        await this.deliveryDetailsRepository.createDeliveryDetail(newDeliveryDetail);
+        return ResponseHandler.created(res, 'Delivery detail created');
+      } catch (err) {
+        return ResponseHandler.error(res, `Error in creating delivery detail: ${err}`);
+      }
     }
+    return ResponseHandler.badRequest(res, `Invalid request: ${convertErrorsToLowerCase(errors)}`);
   };
 
   deleteDeliveryDetail = async (req: Request, res: Response) => {

@@ -1,22 +1,28 @@
+import { validationResult } from "express-validator";
 import { CreateRestaurantDto } from "../dtos/restaurantsDtos/createRestaurantDto";
 import { RestaurantDto } from "../dtos/restaurantsDtos/restaurantDto";
 import { UpdateRestaurantDto } from "../dtos/restaurantsDtos/updateRestorauntDto";
 import { ResponseHandler } from "../handlers/response.handler";
 import RestaurantsRepository from "../repositories/restaurants.repository";
 import { Request, Response } from "express";
+import { convertErrorsToLowerCase } from "../utils/errors.util";
 
 
 export class RestaurantsController {
     private restorauntRepository = new RestaurantsRepository;
 
     createRestaurant = async (req: Request, res: Response) => {
-        try{
-            await this.restorauntRepository.createRestaurant(req.body as CreateRestaurantDto);
-            return ResponseHandler.created(res, "Restaurant created");
-        }
-        catch(err) {
-            return ResponseHandler.error(res, err.message);
-        }
+        const errors = validationResult(req);
+        if (errors.isEmpty()) {
+            try{
+                await this.restorauntRepository.createRestaurant(req.body as CreateRestaurantDto);
+                return ResponseHandler.created(res, "Restaurant created");
+            }
+            catch(err) {
+                return ResponseHandler.error(res, err.message);
+            }
+         }
+         return ResponseHandler.badRequest(res, `Invalid request: ${convertErrorsToLowerCase(errors)}`);
     }
 
     getAllRestaurants = async (req: Request, res: Response) => {
