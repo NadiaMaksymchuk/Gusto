@@ -1,4 +1,4 @@
-export interface NotificationDto {
+export class NotificationDto {
   text: string;
   type: string;
 }

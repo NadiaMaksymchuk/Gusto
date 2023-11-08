@@ -1,4 +1,4 @@
-export interface CreateDeliveryDetailDto {
+export class CreateDeliveryDetailDto {
   orderId: number;
   courierId: number;
   quantity: number;

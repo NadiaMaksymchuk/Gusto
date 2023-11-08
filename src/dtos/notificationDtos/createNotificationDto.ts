@@ -1,4 +1,4 @@
-export interface CreateNotificationDto {
+export class CreateNotificationDto {
   userId: number;
   text: string;
   type: number;

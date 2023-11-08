@@ -1,6 +1,6 @@
 import { RestaurantDto } from "../restaurantsDtos/restaurantDto";
 
-export interface OrderWithItemsImagesAndRestaurantDto {
+export class OrderWithItemsImagesAndRestaurantDto {
   id: number;
   orderStatus: number;
   orderDate: Date;
@@ -9,7 +9,7 @@ export interface OrderWithItemsImagesAndRestaurantDto {
   orderItems: OrderItemWithMenuItemImageDto[];
 }
 
-export interface OrderItemWithMenuItemImageDto {
+export class OrderItemWithMenuItemImageDto {
   id: number;
   menuItemId: number;
   quantity: number;
@@ -17,13 +17,13 @@ export interface OrderItemWithMenuItemImageDto {
   menuItem: MenuItemWithImageDto;
 }
 
-export interface MenuItemWithImageDto {
+export class MenuItemWithImageDto {
   name: string;
   description: string;
   price: number;
   image: MenuItemImageDto;
 }
 
-export interface MenuItemImageDto {
+export class MenuItemImageDto {
   url: string;
 }

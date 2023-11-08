@@ -1,4 +1,4 @@
-export interface CreateOrderDto {
+export class CreateOrderDto {
   userId: string;
   restaurantId: number;
   orderStatus: number;

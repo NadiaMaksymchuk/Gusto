@@ -1,42 +1,42 @@
-export interface DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto {
-  id: number; // Delivery Detail ID
+export class DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto {
+  id: number; 
   courierFirstName: string;
   courierLastName: string;
-  orders: OrderWithRestaurantAndOrderItemsDto[]; // Array of orders
+  orders: OrderWithRestaurantAndOrderItemsDto[]
 }
 
-interface OrderWithRestaurantAndOrderItemsDto {
-  id: number; // Order ID
-  orderUserId: number; // User ID
-  orderRestaurantId: number; // Restaurant ID
+class OrderWithRestaurantAndOrderItemsDto {
+  id: number; 
+  orderUserId: number; 
+  orderRestaurantId: number;
   orderStatus: number;
-  orderDate: Date; // You may want to use a Date type here
+  orderDate: Date; 
   restaurant: RestaurantDto;
-  orderItems: OrderItemWithMenuItemImageDto[]; // Array of order items
+  orderItems: OrderItemWithMenuItemImageDto[]; 
 }
 
-interface RestaurantDto {
+class RestaurantDto {
   name: string;
   cuisineType: number;
   address: string;
   contacts: string;
 }
 
-interface OrderItemWithMenuItemImageDto {
-  id: number; // Order Item ID
-  menuItemId: number; // Menu Item ID
+class OrderItemWithMenuItemImageDto {
+  id: number; 
+  menuItemId: number; 
   orderItemQuantity: number;
   orderItemTotalPrice: number;
   menuItem: MenuItemWithImageDto;
 }
 
-interface MenuItemWithImageDto {
+class MenuItemWithImageDto {
   name: string;
   description: string;
   price: number;
   image: MenuItemImageDto;
 }
 
-interface MenuItemImageDto {
+class MenuItemImageDto {
   url: string;
 }

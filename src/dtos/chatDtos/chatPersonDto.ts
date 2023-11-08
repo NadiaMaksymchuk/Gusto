@@ -1,4 +1,4 @@
-interface ChatPersonDto {
+class ChatPersonDto {
   Email: string;
   FirstName: string;
   LastName: string;

@@ -1,4 +1,4 @@
-export interface ChatDto {
+export class ChatDto {
   id: number;
   name: string;
 }

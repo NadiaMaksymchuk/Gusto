@@ -1,4 +1,4 @@
-export interface DeliveryDetailWithCourierAndOrderDto {
+export class DeliveryDetailWithCourierAndOrderDto {
   id: number;
   orderId: number;
   quantity: number;

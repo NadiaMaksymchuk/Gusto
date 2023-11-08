@@ -1,4 +1,4 @@
-export interface CreateRestaurantDto {
+export class CreateRestaurantDto {
   name: string;
   cuisineType: number;
   address: string;

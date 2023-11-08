@@ -1,4 +1,4 @@
-export interface UpdateMenuItemDto {
+export class UpdateMenuItemDto {
   name: string;
   description: string;
   price: number;

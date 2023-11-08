@@ -1,4 +1,4 @@
-export interface CourierDto {
+export class CourierDto {
   id: number;
   email: string;
   firstName: string;

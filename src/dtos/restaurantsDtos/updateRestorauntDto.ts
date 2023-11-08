@@ -1,4 +1,4 @@
-export interface UpdateRestaurantDto {
+export class UpdateRestaurantDto {
   address: string;
   contacts: string;
 }

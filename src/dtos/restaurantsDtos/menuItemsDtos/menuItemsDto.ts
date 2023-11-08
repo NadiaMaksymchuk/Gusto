@@ -1,4 +1,4 @@
-export interface MenuItemsDto {
+export class MenuItemsDto {
   id: number;
   name: string;
   description: string;

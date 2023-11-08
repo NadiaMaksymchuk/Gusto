@@ -1,4 +1,4 @@
-export interface UpdateUserDto {
+export class UpdateUserDto {
   city: number;
   language: number;
   firstName: string;
