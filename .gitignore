@@ -3,3 +3,6 @@ out/
 
 .env
 index.html
+
+build
+coverage

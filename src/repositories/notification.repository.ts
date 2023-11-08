@@ -4,24 +4,25 @@ import { NotificationDto } from "../dtos/notificationDtos/notificationDto";
 import { CurrentUserId } from "../middwares/authMiddleware";
 
 class NotificationsRepository {
-    async createNotification(notificationData: CreateNotificationDto): Promise<void> {
-        const { userId, text, type } = notificationData;
-      
-        const queryText = `
+  async createNotification(
+    notificationData: CreateNotificationDto,
+  ): Promise<void> {
+    const { userId, text, type } = notificationData;
+
+    const queryText = `
           INSERT INTO Notifications (userId, text, type, isRead)
           VALUES (${userId}, '${text}', ${type}, FALSE);
         `;
-      
-        return new Promise<void>((resolve, reject) => {
-          sqlPool.query(queryText, function (err: any, res: any) {
-            if (err) {
-              reject(err);
-            }
-            resolve();
-          });
-        });
-      }
-      
+
+    return new Promise<void>((resolve, reject) => {
+      sqlPool.query(queryText, function (err: any, res: any) {
+        if (err) {
+          reject(err);
+        }
+        resolve();
+      });
+    });
+  }
 
   async deleteNotification(notificationId: number): Promise<void> {
     const queryText = `DELETE FROM Notifications WHERE id = ${notificationId};`;
@@ -53,7 +54,7 @@ class NotificationsRepository {
           }
 
           resolve(notifications);
-        }
+        },
       );
     });
   }

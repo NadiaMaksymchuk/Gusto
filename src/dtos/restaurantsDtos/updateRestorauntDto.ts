@@ -1,4 +1,4 @@
 export interface UpdateRestaurantDto {
-    address: string;
-    contacts: string;
+  address: string;
+  contacts: string;
 }

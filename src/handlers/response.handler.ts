@@ -1,5 +1,5 @@
-import { Response } from 'express';
-import { HttpStatusCode } from '../dtos/enums/status.code.enum';
+import { Response } from "express";
+import { HttpStatusCode } from "../dtos/enums/status.code.enum";
 
 export class ResponseHandler {
   static success<T>(res: Response, data: T, message: string) {

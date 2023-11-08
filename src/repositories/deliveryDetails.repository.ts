@@ -6,11 +6,11 @@ import { arrayToStringWithQuotes } from "../utils/request.util";
 
 export class DeliveryDetailsRepository {
   async createDeliveryDetail(newDeliveryDetail: CreateDeliveryDetailDto) {
-    const values = [
-        ...Object.values(newDeliveryDetail),
-    ];
+    const values = [...Object.values(newDeliveryDetail)];
 
-    const queryText = `INSERT INTO DeliveryDetails (orderId, courierId, quantity, totalPrice, status) VALUES (${arrayToStringWithQuotes(values)});`;
+    const queryText = `INSERT INTO DeliveryDetails (orderId, courierId, quantity, totalPrice, status) VALUES (${arrayToStringWithQuotes(
+      values,
+    )});`;
 
     return new Promise<void>((resolve, reject) => {
       sqlPool.query(queryText, function (err: any, res: any) {
@@ -34,7 +34,9 @@ export class DeliveryDetailsRepository {
     });
   }
 
-  async getDeliveryDetailsByCourierId(courierId: number): Promise<DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto[]> {
+  async getDeliveryDetailsByCourierId(
+    courierId: number,
+  ): Promise<DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto[]> {
     return new Promise((resolve, reject) => {
       sqlPool.query(
         `
@@ -59,7 +61,10 @@ export class DeliveryDetailsRepository {
             reject(err);
           }
 
-          const deliveryDetails = new Map<number, DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto>();
+          const deliveryDetails = new Map<
+            number,
+            DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto
+          >();
           if (res) {
             for (const row of res) {
               const deliveryDetailId = row.id;
@@ -108,12 +113,14 @@ export class DeliveryDetailsRepository {
           }
 
           resolve([...deliveryDetails.values()]);
-        }
+        },
       );
     });
   }
 
-  async getDeliveryDetailsByOrderId(orderId: number): Promise<DeliveryDetailWithCourierAndOrderDto[]> {
+  async getDeliveryDetailsByOrderId(
+    orderId: number,
+  ): Promise<DeliveryDetailWithCourierAndOrderDto[]> {
     return new Promise((resolve, reject) => {
       sqlPool.query(
         `
@@ -130,15 +137,16 @@ export class DeliveryDetailsRepository {
 
           let deliveryDetails = [];
           if (res) {
-            deliveryDetails = res.map((row: DeliveryDetailWithCourierAndOrderDto) => ({
-              ...row,
-            }));
+            deliveryDetails = res.map(
+              (row: DeliveryDetailWithCourierAndOrderDto) => ({
+                ...row,
+              }),
+            );
           }
 
           resolve(deliveryDetails);
-        }
+        },
       );
     });
   }
 }
-

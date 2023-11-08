@@ -6,11 +6,11 @@ import { arrayToStringWithQuotes } from "../utils/request.util";
 
 class CouriersRepository {
   async createCourier(newCourier: CreateCourierDto) {
-    const values = [
-      ...Object.values(newCourier),
-    ];
+    const values = [...Object.values(newCourier)];
 
-    const queryText = `INSERT INTO Couriers (firstName, lastName, email, numberPhone, vehicleNumber, availabilityStatus, sex, password, salt) VALUES (${arrayToStringWithQuotes(values)});`;
+    const queryText = `INSERT INTO Couriers (firstName, lastName, email, numberPhone, vehicleNumber, availabilityStatus, sex, password, salt) VALUES (${arrayToStringWithQuotes(
+      values,
+    )});`;
 
     return new Promise<void>((resolve, reject) => {
       sqlPool.query(queryText, function (err: any, res: any) {
@@ -24,17 +24,20 @@ class CouriersRepository {
 
   async getCourierByEmail(email: string): Promise<CourierDto> {
     return new Promise((resolve, reject) => {
-      sqlPool.query(`SELECT * FROM Couriers WHERE email = "${email}";`, function (err: any, res: any) {
-        if (err) {
-          reject(err);
-        }
-        let courier = {} as CourierDto;
-        if (res.length > 0) {
-          courier = { ...res[0] };
-        }
+      sqlPool.query(
+        `SELECT * FROM Couriers WHERE email = "${email}";`,
+        function (err: any, res: any) {
+          if (err) {
+            reject(err);
+          }
+          let courier = {} as CourierDto;
+          if (res.length > 0) {
+            courier = { ...res[0] };
+          }
 
-        resolve(courier);
-      });
+          resolve(courier);
+        },
+      );
     });
   }
 
@@ -59,37 +62,43 @@ class CouriersRepository {
 
   async getCourierById(courierId: number): Promise<CourierDto | null> {
     return new Promise((resolve, reject) => {
-      sqlPool.query(`SELECT * FROM Couriers WHERE id = ${courierId};`, function (err: any, res: any) {
-        if (err) {
-          reject(err);
-        }
+      sqlPool.query(
+        `SELECT * FROM Couriers WHERE id = ${courierId};`,
+        function (err: any, res: any) {
+          if (err) {
+            reject(err);
+          }
 
-        if (res && res.length > 0) {
-          const courier = res[0];
-          resolve(courier);
-        } else {
-          resolve(null);
-        }
-      });
+          if (res && res.length > 0) {
+            const courier = res[0];
+            resolve(courier);
+          } else {
+            resolve(null);
+          }
+        },
+      );
     });
   }
 
   async getCouriersByAvailabilityStatus(status: number): Promise<CourierDto[]> {
     return new Promise((resolve, reject) => {
-      sqlPool.query(`SELECT * FROM Couriers WHERE availabilityStatus = ${status};`, function (err: any, res: any) {
-        if (err) {
-          reject(err);
-        }
+      sqlPool.query(
+        `SELECT * FROM Couriers WHERE availabilityStatus = ${status};`,
+        function (err: any, res: any) {
+          if (err) {
+            reject(err);
+          }
 
-        let couriers = [];
-        if (res) {
-          couriers = res.map((row: CourierDto) => ({
-            ...row,
-          }));
-        }
+          let couriers = [];
+          if (res) {
+            couriers = res.map((row: CourierDto) => ({
+              ...row,
+            }));
+          }
 
-        resolve(couriers);
-      });
+          resolve(couriers);
+        },
+      );
     });
   }
 

@@ -1,15 +1,15 @@
-import { Request, Response } from 'express';
-import { ResponseHandler } from '../handlers/response.handler';
-import CouriersRepository from '../repositories/couries.repository';
-import { CreateCourierDto } from '../dtos/courierDto/createCourierDto';
-import { CourierDto } from '../dtos/courierDto/courierDto';
-import { UpdateCourierDto } from '../dtos/courierDto/updateCourierDto';
-import { hashPassword, verifyPassword } from '../handlers/password.handles';
-import { encodeSession } from '../utils/jwtUtils/jwt.crafter.util';
-import { Session } from '../models/jwt/session';
-import { LoginCourierDto } from '../dtos/courierDto/loginCourierDto';
-import { validationResult } from 'express-validator';
-import { convertErrorsToLowerCase } from '../utils/errors.util';
+import { Request, Response } from "express";
+import { ResponseHandler } from "../handlers/response.handler";
+import CouriersRepository from "../repositories/couries.repository";
+import { CreateCourierDto } from "../dtos/courierDto/createCourierDto";
+import { CourierDto } from "../dtos/courierDto/courierDto";
+import { UpdateCourierDto } from "../dtos/courierDto/updateCourierDto";
+import { hashPassword, verifyPassword } from "../handlers/password.handles";
+import { encodeSession } from "../utils/jwtUtils/jwt.crafter.util";
+import { Session } from "../models/jwt/session";
+import { LoginCourierDto } from "../dtos/courierDto/loginCourierDto";
+import { validationResult } from "express-validator";
+import { convertErrorsToLowerCase } from "../utils/errors.util";
 
 export class CouriersController {
   private couriersRepository = new CouriersRepository();
@@ -18,7 +18,7 @@ export class CouriersController {
     const newCourier = req.body as CreateCourierDto;
     try {
       await this.couriersRepository.createCourier(newCourier);
-      return ResponseHandler.created(res, 'Courier created');
+      return ResponseHandler.created(res, "Courier created");
     } catch (err) {
       return ResponseHandler.error(res, `Error in creating courier: ${err}`);
     }
@@ -29,8 +29,12 @@ export class CouriersController {
     if (!couriers.length) {
       return ResponseHandler.notFound(res, "Couriers not found");
     }
-    return ResponseHandler.success<CourierDto[]>(res, couriers, "Couriers found");
-  }
+    return ResponseHandler.success<CourierDto[]>(
+      res,
+      couriers,
+      "Couriers found",
+    );
+  };
 
   getCourierById = async (req: Request, res: Response) => {
     const courierId = +req.params.id;
@@ -41,16 +45,21 @@ export class CouriersController {
     }
 
     return ResponseHandler.success<CourierDto>(res, courier, "Courier found");
-  }
+  };
 
   signUpCourier = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       const newCourier = req.body as CreateCourierDto;
-      let courier = await this.couriersRepository.getCourierByEmail(newCourier.email);
+      let courier = await this.couriersRepository.getCourierByEmail(
+        newCourier.email,
+      );
 
       if (Object.keys(courier).length !== 0) {
-        return ResponseHandler.badRequest(res, "Courier with this email alredy exist");
+        return ResponseHandler.badRequest(
+          res,
+          "Courier with this email alredy exist",
+        );
       }
 
       const { salt, hashedPassword } = await hashPassword(newCourier.password);
@@ -59,7 +68,9 @@ export class CouriersController {
       newCourier.salt = salt;
       await this.couriersRepository.createCourier(newCourier);
 
-      courier = await this.couriersRepository.getCourierByEmail(newCourier.email);
+      courier = await this.couriersRepository.getCourierByEmail(
+        newCourier.email,
+      );
 
       const partialSession: Session = {
         id: courier.id,
@@ -67,27 +78,41 @@ export class CouriersController {
         dateCreated: Number(new Date()),
         issued: 0,
         expires: 0,
-        isCourier: true
+        isCourier: true,
       };
 
-      const { token, issued, expires } = encodeSession(process.env.TOKEN_SECRET!, partialSession);
+      const { token, issued, expires } = encodeSession(
+        process.env.TOKEN_SECRET!,
+        partialSession,
+      );
 
       return ResponseHandler.success<string>(res, token, "Registered");
     }
-    return ResponseHandler.badRequest(res, `Invalid request: ${convertErrorsToLowerCase(errors)}`);
-  }
+    return ResponseHandler.badRequest(
+      res,
+      `Invalid request: ${convertErrorsToLowerCase(errors)}`,
+    );
+  };
 
   signInCourier = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       const loginUserDto = req.body as LoginCourierDto;
-      let courier = await this.couriersRepository.getCourierByEmail(loginUserDto.email);
+      let courier = await this.couriersRepository.getCourierByEmail(
+        loginUserDto.email,
+      );
 
       if (!courier) {
         return ResponseHandler.badRequest(res, "User don`t exist");
       }
 
-      if (!await verifyPassword(loginUserDto.password, courier.salt, courier.password)) {
+      if (
+        !(await verifyPassword(
+          loginUserDto.password,
+          courier.salt,
+          courier.password,
+        ))
+      ) {
         return ResponseHandler.badRequest(res, "Invalid password");
       }
 
@@ -97,34 +122,50 @@ export class CouriersController {
         dateCreated: Number(new Date()),
         issued: 0,
         expires: 0,
-        isCourier: true
+        isCourier: true,
       };
 
-      const { token, issued, expires } = encodeSession(process.env.TOKEN_SECRET!, partialSession);
+      const { token, issued, expires } = encodeSession(
+        process.env.TOKEN_SECRET!,
+        partialSession,
+      );
 
       return ResponseHandler.success<string>(res, token, "Entered");
     }
-    return ResponseHandler.badRequest(res, `Invalid request: ${convertErrorsToLowerCase(errors)}`);
-
-  }
+    return ResponseHandler.badRequest(
+      res,
+      `Invalid request: ${convertErrorsToLowerCase(errors)}`,
+    );
+  };
 
   getCouriersByAvailabilityStatus = async (req: Request, res: Response) => {
     const status = +req.params.status;
-    const couriers = await this.couriersRepository.getCouriersByAvailabilityStatus(status);
+    const couriers =
+      await this.couriersRepository.getCouriersByAvailabilityStatus(status);
 
     if (!couriers.length) {
-      return ResponseHandler.notFound(res, "No couriers with the specified availability status found");
+      return ResponseHandler.notFound(
+        res,
+        "No couriers with the specified availability status found",
+      );
     }
 
-    return ResponseHandler.success<CourierDto[]>(res, couriers, "Couriers found by availability status");
-  }
+    return ResponseHandler.success<CourierDto[]>(
+      res,
+      couriers,
+      "Couriers found by availability status",
+    );
+  };
 
   updateCourier = async (req: Request, res: Response) => {
     const courierId = +req.params.id;
     const updatedCourierData = req.body as UpdateCourierDto;
 
     try {
-      await this.couriersRepository.updateCourier(courierId, updatedCourierData);
+      await this.couriersRepository.updateCourier(
+        courierId,
+        updatedCourierData,
+      );
       return ResponseHandler.updated(res, "Courier updated");
     } catch (err) {
       return ResponseHandler.error(res, `Error in updating courier: ${err}`);
@@ -136,12 +177,21 @@ export class CouriersController {
     const availabilityStatus = +req.params.status;
 
     try {
-      await this.couriersRepository.setAvailabilityStatus(courierId, availabilityStatus);
-      return ResponseHandler.updated(res, "Courier availability status updated");
+      await this.couriersRepository.setAvailabilityStatus(
+        courierId,
+        availabilityStatus,
+      );
+      return ResponseHandler.updated(
+        res,
+        "Courier availability status updated",
+      );
     } catch (err) {
-      return ResponseHandler.error(res, `Error in updating courier availability status: ${err}`);
+      return ResponseHandler.error(
+        res,
+        `Error in updating courier availability status: ${err}`,
+      );
     }
-  }
+  };
 
   deleteCourier = async (req: Request, res: Response) => {
     const courierId = +req.params.id;

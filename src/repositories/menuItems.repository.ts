@@ -25,51 +25,53 @@ export class MenuItemsRepository {
         LEFT JOIN Images AS i ON m.imageId = i.id
         WHERE Restaurants.id = ${restaurantId};
       `;
-  
+
       sqlPool.query(query, function (err: any, res: any) {
         if (err) {
           reject(err);
         }
-  
+
         let menuItems = [];
         if (res) {
           menuItems = res.map((row: MenuItemsDto) => ({
             ...row,
           }));
         }
-  
+
         resolve(menuItems);
       });
     });
   }
-  
 
   async getMenuById(menuItemId: number): Promise<MenuItemsDto | null> {
     return new Promise((resolve, reject) => {
-      sqlPool.query(`SELECT MenuItems.id, MenuItems.name, MenuItems.description, MenuItems.price, Images.url as imageUrl
+      sqlPool.query(
+        `SELECT MenuItems.id, MenuItems.name, MenuItems.description, MenuItems.price, Images.url as imageUrl
       FROM MenuItems
       LEFT JOIN Images ON MenuItems.imageId = Images.id
-      WHERE MenuItems.id = ${menuItemId};`, function (err: any, res: any) {
-        if (err) {
-          reject(err);
-        }
+      WHERE MenuItems.id = ${menuItemId};`,
+        function (err: any, res: any) {
+          if (err) {
+            reject(err);
+          }
 
-        if (res && res.length > 0) {
-          const menuItem = res[0];
-          resolve(menuItem);
-        } else {
-          resolve(null);
-        }
-      });
+          if (res && res.length > 0) {
+            const menuItem = res[0];
+            resolve(menuItem);
+          } else {
+            resolve(null);
+          }
+        },
+      );
     });
   }
 
   async addMenuItem(newMenuItem: CreateMenuItemDto) {
-    const values = [
-        ...Object.values(newMenuItem),
-    ];
+    const values = [...Object.values(newMenuItem)];
 
-    const queryText = `INSERT INTO MenuItems (restaurantId, name, description, price, imageId, type) VALUES (${arrayToStringWithQuotes(values)});`;
+    const queryText = `INSERT INTO MenuItems (restaurantId, name, description, price, imageId, type) VALUES (${arrayToStringWithQuotes(
+      values,
+    )});`;
 
     return new Promise<void>((resolve, reject) => {
       sqlPool.query(queryText, function (err: any, res: any) {
@@ -81,7 +83,10 @@ export class MenuItemsRepository {
     });
   }
 
-  async updateMenuItem(menuItemId: number, updatedMenuItemData: UpdateMenuItemDto) {
+  async updateMenuItem(
+    menuItemId: number,
+    updatedMenuItemData: UpdateMenuItemDto,
+  ) {
     const queryText = `UPDATE MenuItems SET name = "${updatedMenuItemData.name}", description = "${updatedMenuItemData.description}", price = ${updatedMenuItemData.price}, imageId = "${updatedMenuItemData.imageId}", type = ${updatedMenuItemData.type} WHERE id = ${menuItemId};`;
 
     return new Promise<void>((resolve, reject) => {
@@ -105,6 +110,6 @@ export class MenuItemsRepository {
       });
     });
   }
- }
+}
 
 export default MenuItemsRepository;

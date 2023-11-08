@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
-import sgMail from '@sendgrid/mail';
-import { EmailDto } from '../dtos/emailsDtos/emailDto';
-import { ResponseHandler } from '../handlers/response.handler';
-import { convertErrorsToLowerCase } from '../utils/errors.util';
-import { validationResult } from 'express-validator';
+import { Request, Response } from "express";
+import sgMail from "@sendgrid/mail";
+import { EmailDto } from "../dtos/emailsDtos/emailDto";
+import { ResponseHandler } from "../handlers/response.handler";
+import { convertErrorsToLowerCase } from "../utils/errors.util";
+import { validationResult } from "express-validator";
 
 export class EmailController {
   sendEmail = async (req: Request, res: Response) => {
@@ -21,11 +21,14 @@ export class EmailController {
 
         await sgMail.send(message);
 
-        return ResponseHandler.created(res, 'The email was sent');
+        return ResponseHandler.created(res, "The email was sent");
       } catch (error) {
         return ResponseHandler.error(res, `The email was not sent`);
       }
     }
-    return ResponseHandler.badRequest(res, `Invalid request: ${convertErrorsToLowerCase(errors)}`);
+    return ResponseHandler.badRequest(
+      res,
+      `Invalid request: ${convertErrorsToLowerCase(errors)}`,
+    );
   };
 }

@@ -1,4 +1,4 @@
 export interface UpdateOrderItemDto {
-    quantity: number;
-    totalPrice: number;
+  quantity: number;
+  totalPrice: number;
 }

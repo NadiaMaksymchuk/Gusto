@@ -8,13 +8,15 @@ export class UserRepository {
   async getAll(): Promise<UserDto[]> {
     return new Promise((resolve, reject) => {
       sqlPool.query("Select * from users;", function (err: any, res: any) {
-        if (err) {reject(err);}
+        if (err) {
+          reject(err);
+        }
         let users = [];
         if (res) {
           users = res.map((row: UserDto) => ({
             ...row,
             dateOfBirth: new Date(row.dateOfBirth),
-          }))
+          }));
         }
 
         resolve(users);
@@ -23,29 +25,38 @@ export class UserRepository {
   }
 
   async getUserByEmail(email: string): Promise<UserDto> {
-    return new Promise((resolve, reject) => { 
-      sqlPool.query(`Select * from users WHERE email = "${email}";`, function (err: any, res: any) {
-        if (err) {reject(err);}
-        let user = {} as UserDto;
-        if(res) {
-          user = {...res[0]};  
-        }
+    return new Promise((resolve, reject) => {
+      sqlPool.query(
+        `Select * from users WHERE email = "${email}";`,
+        function (err: any, res: any) {
+          sqlPool.end();
+          if (err) {
+            reject(err);
+          } else {
+            let user = {} as UserDto;
+            if (res) {
+              user = { ...res[0] };
+            }
 
-        resolve(user)
-      })
+            resolve(user);
+          }
+        },
+      );
     });
   }
 
   async addUser(newUser: CreateUserDto) {
-    const values = [
-      ...Object.values(newUser),
-    ];
+    const values = [...Object.values(newUser)];
 
-    const queryText = `INSERT INTO users (city, language, firstName, lastName, dateOfBirth, email, numberPhone, sex, password, salt) VALUES (${arrayToStringWithQuotes(values)});`;
+    const queryText = `INSERT INTO users (city, language, firstName, lastName, dateOfBirth, email, numberPhone, sex, password, salt) VALUES (${arrayToStringWithQuotes(
+      values,
+    )});`;
 
     return new Promise<void>((resolve, reject) => {
       sqlPool.query(queryText, function (err: any, res: any) {
-        if (err) {reject(err);}
+        if (err) {
+          reject(err);
+        }
         resolve();
       });
     });
@@ -56,7 +67,9 @@ export class UserRepository {
 
     return new Promise<void>((resolve, reject) => {
       sqlPool.query(queryText, function (err: any, res: any) {
-        if (err) {reject(err);}
+        if (err) {
+          reject(err);
+        }
         resolve();
       });
     });
@@ -66,7 +79,9 @@ export class UserRepository {
     const queryText = `DELETE FROM users WHERE id = ${id};`;
     return new Promise<void>((resolve, reject) => {
       sqlPool.query(queryText, function (err: any, res: any) {
-        if (err) {reject(err);}
+        if (err) {
+          reject(err);
+        }
         resolve();
       });
     });

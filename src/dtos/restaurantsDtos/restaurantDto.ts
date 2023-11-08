@@ -1,7 +1,7 @@
 export interface RestaurantDto {
-    id: number;
-    name: string;
-    cuisineType: number;
-    address: string;
-    contacts: string;
+  id: number;
+  name: string;
+  cuisineType: number;
+  address: string;
+  contacts: string;
 }

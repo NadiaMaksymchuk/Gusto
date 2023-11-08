@@ -7,80 +7,90 @@ import RestaurantsRepository from "../repositories/restaurants.repository";
 import { Request, Response } from "express";
 import { convertErrorsToLowerCase } from "../utils/errors.util";
 
-
 export class RestaurantsController {
-    private restorauntRepository = new RestaurantsRepository;
+  private restorauntRepository = new RestaurantsRepository();
 
-    createRestaurant = async (req: Request, res: Response) => {
-        const errors = validationResult(req);
-        if (errors.isEmpty()) {
-            try{
-                await this.restorauntRepository.createRestaurant(req.body as CreateRestaurantDto);
-                return ResponseHandler.created(res, "Restaurant created");
-            }
-            catch(err) {
-                return ResponseHandler.error(res, err.message);
-            }
-         }
-         return ResponseHandler.badRequest(res, `Invalid request: ${convertErrorsToLowerCase(errors)}`);
+  createRestaurant = async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      try {
+        await this.restorauntRepository.createRestaurant(
+          req.body as CreateRestaurantDto,
+        );
+        return ResponseHandler.created(res, "Restaurant created");
+      } catch (err) {
+        return ResponseHandler.error(res, err.message);
+      }
     }
+    return ResponseHandler.badRequest(
+      res,
+      `Invalid request: ${convertErrorsToLowerCase(errors)}`,
+    );
+  };
 
-    getAllRestaurants = async (req: Request, res: Response) => {
-        try{
-            const restaurants = await this.restorauntRepository.getAllRestaurants();
+  getAllRestaurants = async (req: Request, res: Response) => {
+    try {
+      const restaurants = await this.restorauntRepository.getAllRestaurants();
 
-            if(!restaurants.length) {
-                return ResponseHandler.notFound(res, "Restaurants not found");
-            }
-            return ResponseHandler.success<RestaurantDto[]>(res, restaurants, "Restaurants finded");
-        }
-        catch(err) {
-            return ResponseHandler.error(res, err.message);
-        }
+      if (!restaurants.length) {
+        return ResponseHandler.notFound(res, "Restaurants not found");
+      }
+      return ResponseHandler.success<RestaurantDto[]>(
+        res,
+        restaurants,
+        "Restaurants finded",
+      );
+    } catch (err) {
+      return ResponseHandler.error(res, err.message);
     }
+  };
 
-    getRestaurantById = async (req: Request, res: Response) => {
-        const id = +req.params.id;
+  getRestaurantById = async (req: Request, res: Response) => {
+    const id = +req.params.id;
 
-        try {
-            const restaurant = await this.restorauntRepository.getRestaurantById(id);
+    try {
+      const restaurant = await this.restorauntRepository.getRestaurantById(id);
 
-            if(!restaurant) {
-                return ResponseHandler.notFound(res, "Restaurant not found");
-            }
+      if (!restaurant) {
+        return ResponseHandler.notFound(res, "Restaurant not found");
+      }
 
-            return ResponseHandler.success<RestaurantDto>(res, restaurant, "Restaurant finded");
-        }
-        catch(err) {
-            return ResponseHandler.error(res, err.message);
-        }
+      return ResponseHandler.success<RestaurantDto>(
+        res,
+        restaurant,
+        "Restaurant finded",
+      );
+    } catch (err) {
+      return ResponseHandler.error(res, err.message);
     }
+  };
 
-    deleteRestaurant = async (req: Request, res: Response) => {
-        const id = +req.params.id;
+  deleteRestaurant = async (req: Request, res: Response) => {
+    const id = +req.params.id;
 
-        try {
-            const restaurant = await this.restorauntRepository.getRestaurantById(id);
+    try {
+      const restaurant = await this.restorauntRepository.getRestaurantById(id);
 
-            if(!restaurant) {
-                return ResponseHandler.notFound(res, "Restaurant not found");
-            }
+      if (!restaurant) {
+        return ResponseHandler.notFound(res, "Restaurant not found");
+      }
 
-            return ResponseHandler.noContent(res, "Restaurant deleted");
-        }
-        catch(err) {
-            return ResponseHandler.error(res, err.message);
-        }
+      return ResponseHandler.noContent(res, "Restaurant deleted");
+    } catch (err) {
+      return ResponseHandler.error(res, err.message);
     }
+  };
 
-    updateRestaurant = async (req: Request, res: Response) => {
-        const id = +req.params.id;
-        try{
-            await this.restorauntRepository.updateRestaurant(id, req.body as UpdateRestaurantDto);
-            return ResponseHandler.updated(res, "Restaurant updated");
-        }
-        catch(err) {
-            return ResponseHandler.error(res, err.message);
-        }
+  updateRestaurant = async (req: Request, res: Response) => {
+    const id = +req.params.id;
+    try {
+      await this.restorauntRepository.updateRestaurant(
+        id,
+        req.body as UpdateRestaurantDto,
+      );
+      return ResponseHandler.updated(res, "Restaurant updated");
+    } catch (err) {
+      return ResponseHandler.error(res, err.message);
     }
+  };
 }

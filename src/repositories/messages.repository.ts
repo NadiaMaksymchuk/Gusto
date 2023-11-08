@@ -10,7 +10,7 @@ class MessagesRepository {
       CurrentUserId,
       newMessage.chatId,
       newMessage.text,
-      new Date().toISOString().replace('T', ' ').replace('Z', ''),
+      new Date().toISOString().replace("T", " ").replace("Z", ""),
     ];
 
     const queryText = `
@@ -27,7 +27,6 @@ class MessagesRepository {
       });
     });
   }
-
 
   async updateMessage(messageId: number, text: string): Promise<void> {
     const queryText = `
@@ -68,7 +67,7 @@ class MessagesRepository {
       )
       AND C.id = ${chatId};
     `;
-  
+
     return new Promise<ChatPersonDto[]>((resolve, reject) => {
       sqlPool.query(queryText, function (err: any, res: any) {
         if (err) {
@@ -94,7 +93,6 @@ class MessagesRepository {
     });
   }
 
-  
   async getFirst30MessagesByChatId(chatId: number) {
     const query = `
       SELECT
@@ -112,7 +110,7 @@ class MessagesRepository {
       ORDER BY M.createdAt DESC
       LIMIT 30;
     `;
-  
+
     return new Promise((resolve, reject) => {
       sqlPool.query(query, (error, results) => {
         if (error) {
@@ -123,8 +121,6 @@ class MessagesRepository {
       });
     });
   }
-   
-  
 
   async deleteMessage(messageId: number): Promise<void> {
     const queryText = `DELETE FROM Messages WHERE id = ${messageId};`;

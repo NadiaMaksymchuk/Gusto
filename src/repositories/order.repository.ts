@@ -5,12 +5,11 @@ import { arrayToStringWithQuotes } from "../utils/request.util";
 
 export class OrdersRepository {
   async createOrder(newOrder: CreateOrderDto) {
-    const values = [
-        ...Object.values(newOrder),
+    const values = [...Object.values(newOrder)];
 
-    ];
-
-    const queryText = `INSERT INTO Orders (userId, restaurantId, orderStatus, orderDate) VALUES (${arrayToStringWithQuotes(values)});`;
+    const queryText = `INSERT INTO Orders (userId, restaurantId, orderStatus, orderDate) VALUES (${arrayToStringWithQuotes(
+      values,
+    )});`;
 
     return new Promise<void>((resolve, reject) => {
       sqlPool.query(queryText, function (err: any, res: any) {
@@ -22,7 +21,10 @@ export class OrdersRepository {
     });
   }
 
-  async getOrdersWithOrderItemsAndImagesByUserAndStatus(userId: number, orderStatus: number): Promise<OrderWithItemsImagesAndRestaurantDto[]> {
+  async getOrdersWithOrderItemsAndImagesByUserAndStatus(
+    userId: number,
+    orderStatus: number,
+  ): Promise<OrderWithItemsImagesAndRestaurantDto[]> {
     return new Promise((resolve, reject) => {
       sqlPool.query(
         `
@@ -43,7 +45,10 @@ export class OrdersRepository {
             reject(err);
           }
 
-          const ordersWithItemsImagesAndRestaurant = new Map<number, OrderWithItemsImagesAndRestaurantDto>();
+          const ordersWithItemsImagesAndRestaurant = new Map<
+            number,
+            OrderWithItemsImagesAndRestaurantDto
+          >();
           if (res) {
             for (const row of res) {
               const orderId = row.orderId;
@@ -54,11 +59,11 @@ export class OrdersRepository {
                   orderDate: row.orderDate,
                   deliveryTime: row.deliveryTime,
                   restaurant: {
-                      name: row.name,
-                      cuisineType: row.cuisineType,
-                      address: row.address,
-                      contacts: row.contacts,
-                      id: row.id
+                    name: row.name,
+                    cuisineType: row.cuisineType,
+                    address: row.address,
+                    contacts: row.contacts,
+                    id: row.id,
                   },
                   orderItems: [],
                 });
@@ -79,12 +84,14 @@ export class OrdersRepository {
                 },
               };
 
-              ordersWithItemsImagesAndRestaurant.get(orderId)?.orderItems.push(orderItem);
+              ordersWithItemsImagesAndRestaurant
+                .get(orderId)
+                ?.orderItems.push(orderItem);
             }
           }
 
           resolve([...ordersWithItemsImagesAndRestaurant.values()]);
-        }
+        },
       );
     });
   }

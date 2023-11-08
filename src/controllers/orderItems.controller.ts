@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
-import { CreateOrderItemDto } from '../dtos/orderItemsDtos/createOrderItemDto';
-import { OrderItemsRepository } from '../repositories/orderItem.repository';
-import { ResponseHandler } from '../handlers/response.handler';
-import { UpdateOrderItemDto } from '../dtos/orderItemsDtos/updateOrderItemDto';
-import { validationResult } from 'express-validator';
-import { convertErrorsToLowerCase } from '../utils/errors.util';
+import { Request, Response } from "express";
+import { CreateOrderItemDto } from "../dtos/orderItemsDtos/createOrderItemDto";
+import { OrderItemsRepository } from "../repositories/orderItem.repository";
+import { ResponseHandler } from "../handlers/response.handler";
+import { UpdateOrderItemDto } from "../dtos/orderItemsDtos/updateOrderItemDto";
+import { validationResult } from "express-validator";
+import { convertErrorsToLowerCase } from "../utils/errors.util";
 
 export class OrderItemsController {
   private orderItemsRepository = new OrderItemsRepository();
@@ -16,13 +16,18 @@ export class OrderItemsController {
 
       try {
         await this.orderItemsRepository.createOrderItem(newOrderItem);
-        return ResponseHandler.created(res, 'Order item created');
+        return ResponseHandler.created(res, "Order item created");
       } catch (err) {
-        return ResponseHandler.error(res, `Error in creating order item: ${err}`);
+        return ResponseHandler.error(
+          res,
+          `Error in creating order item: ${err}`,
+        );
       }
     }
-    return ResponseHandler.badRequest(res, `Invalid request: ${convertErrorsToLowerCase(errors)}`);
-
+    return ResponseHandler.badRequest(
+      res,
+      `Invalid request: ${convertErrorsToLowerCase(errors)}`,
+    );
   };
 
   updateOrderItem = async (req: Request, res: Response) => {
@@ -30,8 +35,11 @@ export class OrderItemsController {
     const updatedOrderItemData = req.body as UpdateOrderItemDto;
 
     try {
-      await this.orderItemsRepository.updateOrderItem(orderItemId, updatedOrderItemData);
-      return ResponseHandler.updated(res, 'Order item updated');
+      await this.orderItemsRepository.updateOrderItem(
+        orderItemId,
+        updatedOrderItemData,
+      );
+      return ResponseHandler.updated(res, "Order item updated");
     } catch (err) {
       return ResponseHandler.error(res, `Error in updating order item: ${err}`);
     }
@@ -42,7 +50,7 @@ export class OrderItemsController {
 
     try {
       await this.orderItemsRepository.deleteOrderItem(orderItemId);
-      return ResponseHandler.noContent(res, 'Order item deleted');
+      return ResponseHandler.noContent(res, "Order item deleted");
     } catch (err) {
       return ResponseHandler.error(res, `Error in deleting order item: ${err}`);
     }

@@ -20,50 +20,57 @@ export class UserController {
       return ResponseHandler.notFound(res, "Users not found");
     }
     return ResponseHandler.success<UserDto[]>(res, users, "User found");
-  }
+  };
 
   createUser = async (req: Request, res: Response) => {
     const userdto = req.body as CreateUserDto;
     try {
       await this.userRepository.addUser(userdto);
-      return ResponseHandler.created(res, 'User created');
+      return ResponseHandler.created(res, "User created");
     } catch (err) {
-      return ResponseHandler.error(res, `Error in creating user ${err}`)
+      return ResponseHandler.error(res, `Error in creating user ${err}`);
     }
   };
 
   signUp = async (req: Request, res: Response) => {
     const errors = validationResult(req);
-    if (errors.isEmpty()) {const userdto = req.body as CreateUserDto;
+    if (errors.isEmpty()) {
+      const userdto = req.body as CreateUserDto;
       let user = await this.userRepository.getUserByEmail(userdto.email);
-  
+
       if (Object.keys(user).length !== 0) {
-        return ResponseHandler.badRequest(res, "User with this email alredy exist");
+        return res.status(400);
       }
-  
+
       const { salt, hashedPassword } = await hashPassword(userdto.password);
-  
+
       userdto.password = hashedPassword;
       userdto.salt = salt;
       await this.userRepository.addUser(userdto);
-  
+
       user = await this.userRepository.getUserByEmail(userdto.email);
-  
+
       const partialSession: Session = {
         id: user.id,
         email: user.email,
         dateCreated: Number(new Date()),
         issued: 0,
         expires: 0,
-        isCourier: false
+        isCourier: false,
       };
-  
-      const { token, issued, expires } = encodeSession(process.env.TOKEN_SECRET!, partialSession);
-  
+
+      const { token, issued, expires } = encodeSession(
+        process.env.TOKEN_SECRET!,
+        partialSession,
+      );
+
       return ResponseHandler.success<string>(res, token, "Registered");
-     }
-     return ResponseHandler.badRequest(res, `Invalid request: ${convertErrorsToLowerCase(errors)}`);
-  }
+    }
+    return ResponseHandler.badRequest(
+      res,
+      `Invalid request: ${convertErrorsToLowerCase(errors)}`,
+    );
+  };
 
   signIn = async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -74,34 +81,42 @@ export class UserController {
       if (!user) {
         return ResponseHandler.badRequest(res, "User don`t exist");
       }
-  
-      if (!await verifyPassword(loginUserDto.password, user.salt, user.password)) {
+
+      if (
+        !(await verifyPassword(loginUserDto.password, user.salt, user.password))
+      ) {
         return ResponseHandler.badRequest(res, "Invalid request: ");
       }
-  
+
       const partialSession: Session = {
         id: user.id,
         email: user.email,
         dateCreated: Number(new Date()),
         issued: 0,
         expires: 0,
-        isCourier: false
+        isCourier: false,
       };
-  
-      const { token, issued, expires } = encodeSession(process.env.TOKEN_SECRET!, partialSession);
-  
+
+      const { token, issued, expires } = encodeSession(
+        process.env.TOKEN_SECRET!,
+        partialSession,
+      );
+
       return ResponseHandler.success<string>(res, token, "Entered");
     }
-    return ResponseHandler.badRequest(res, `Invalid request: ${convertErrorsToLowerCase(errors)}`);
-  }
+    return ResponseHandler.badRequest(
+      res,
+      `Invalid request: ${convertErrorsToLowerCase(errors)}`,
+    );
+  };
 
   deleteUser = async (req: Request, res: Response) => {
     const id = +req.params.id;
     try {
       await this.userRepository.deleteUser(id);
-      return ResponseHandler.noContent(res, 'User deleted');
+      return ResponseHandler.noContent(res, "User deleted");
     } catch (err) {
-      return ResponseHandler.error(res, `Error in deleting user ${err}`)
+      return ResponseHandler.error(res, `Error in deleting user ${err}`);
     }
   };
 
@@ -114,4 +129,4 @@ export class UserController {
       return ResponseHandler.error(res, `Error in updating user ${err}`);
     }
   };
-};
+}

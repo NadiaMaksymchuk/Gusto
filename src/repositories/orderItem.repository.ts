@@ -5,12 +5,11 @@ import { arrayToStringWithQuotes } from "../utils/request.util";
 
 export class OrderItemsRepository {
   async createOrderItem(newOrderItem: CreateOrderItemDto) {
-    const values = [
-        ...Object.values(newOrderItem),
+    const values = [...Object.values(newOrderItem)];
 
-    ];
-
-    const queryText = `INSERT INTO OrderItems (orderId, menuItemId, quantity, totalPrice) VALUES (${arrayToStringWithQuotes(values)});`;
+    const queryText = `INSERT INTO OrderItems (orderId, menuItemId, quantity, totalPrice) VALUES (${arrayToStringWithQuotes(
+      values,
+    )});`;
 
     return new Promise<void>((resolve, reject) => {
       sqlPool.query(queryText, function (err: any, res: any) {
@@ -22,7 +21,10 @@ export class OrderItemsRepository {
     });
   }
 
-  async updateOrderItem(orderItemId: number, updatedOrderItemData: UpdateOrderItemDto) {
+  async updateOrderItem(
+    orderItemId: number,
+    updatedOrderItemData: UpdateOrderItemDto,
+  ) {
     const queryText = `UPDATE OrderItems SET quantity = ${updatedOrderItemData.quantity}, totalPrice = ${updatedOrderItemData.totalPrice} WHERE id = ${orderItemId};`;
 
     return new Promise<void>((resolve, reject) => {

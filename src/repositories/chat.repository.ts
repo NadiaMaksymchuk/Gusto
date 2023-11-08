@@ -61,10 +61,10 @@ export class ChatsRepository {
         }
       });
     });
-  };
+  }
 
   async getNumberOfUnreadMessages(chatId: number): Promise<number> {
-    let queryText = '';
+    let queryText = "";
 
     if (!IsCourier) {
       queryText = `
