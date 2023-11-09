@@ -1,8 +1,9 @@
 import { sqlPool } from "../db/sql.pool";
 import { ChatDto } from "../dtos/chatDtos/chatDto";
 import { CurrentUserId, IsCourier } from "../middwares/authMiddleware";
+import { IChatsRepository } from "./interfaces/chat.repository.interface";
 
-export class ChatsRepository {
+export class ChatsRepository implements IChatsRepository{
   async createChat(name: string): Promise<void> {
     const queryText = `
       INSERT INTO Chats (name)

@@ -3,8 +3,9 @@ import { DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto } from "../dto
 import { CreateDeliveryDetailDto } from "../dtos/deliveryDetailDto/createDeliveryDetailDto";
 import { DeliveryDetailWithCourierAndOrderDto } from "../dtos/deliveryDetailDto/deliveryDetailDto";
 import { arrayToStringWithQuotes } from "../utils/request.util";
+import { IDeliveryDetailsRepository } from "./interfaces/deliveryDetails.repository.interface";
 
-export class DeliveryDetailsRepository {
+export class DeliveryDetailsRepository implements IDeliveryDetailsRepository {
   async createDeliveryDetail(newDeliveryDetail: CreateDeliveryDetailDto) {
     const values = [...Object.values(newDeliveryDetail)];
 

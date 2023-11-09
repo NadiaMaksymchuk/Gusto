@@ -2,8 +2,9 @@ import { sqlPool } from "../db/sql.pool";
 import { CreateOrderItemDto } from "../dtos/orderItemsDtos/createOrderItemDto";
 import { UpdateOrderItemDto } from "../dtos/orderItemsDtos/updateOrderItemDto";
 import { arrayToStringWithQuotes } from "../utils/request.util";
+import { IOrderItemsRepository } from "./interfaces/orderItems.repository.interface";
 
-export class OrderItemsRepository {
+export class OrderItemsRepository implements IOrderItemsRepository {
   async createOrderItem(newOrderItem: CreateOrderItemDto) {
     const values = [...Object.values(newOrderItem)];
 

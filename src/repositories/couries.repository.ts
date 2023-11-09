@@ -3,8 +3,9 @@ import { CourierDto } from "../dtos/courierDto/courierDto";
 import { CreateCourierDto } from "../dtos/courierDto/createCourierDto";
 import { UpdateCourierDto } from "../dtos/courierDto/updateCourierDto";
 import { arrayToStringWithQuotes } from "../utils/request.util";
+import { ICouriersRepository } from "./interfaces/couries.repository.interface";
 
-class CouriersRepository {
+class CouriersRepository implements ICouriersRepository {
   async createCourier(newCourier: CreateCourierDto) {
     const values = [...Object.values(newCourier)];
 

@@ -3,8 +3,9 @@ import ChatPersonDto from "../dtos/chatDtos/chatPersonDto";
 import { CreateMessageDto } from "../dtos/chatDtos/createMessagesDto";
 import { CurrentUserId } from "../middwares/authMiddleware";
 import { arrayToStringWithQuotes } from "../utils/request.util";
+import { IMessagesRepository } from "./interfaces/message.repository.interface";
 
-class MessagesRepository {
+class MessagesRepository implements IMessagesRepository {
   async createMessage(newMessage: CreateMessageDto): Promise<void> {
     const values = [
       CurrentUserId,
