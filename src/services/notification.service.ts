@@ -5,9 +5,10 @@ import { NotificationDto } from "../dtos/notificationDtos/notificationDto";
 import ApiResponse from "../handlers/apiResponce.util";
 import { HttpStatusCode } from "../dtos/enums/status.code.enum";
 import { INotificationsRepository } from "../repositories/interfaces/notification.repository.interface";
+import { INotificationsService } from "./interfaces/notification.service.interface";
 
 @injectable()
-export class NotificationsService {
+export class NotificationsService  implements INotificationsService{
   constructor(
     @inject("INotificationsRepository") private readonly notificationsRepository: INotificationsRepository,
   ) {}

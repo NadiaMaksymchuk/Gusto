@@ -1,90 +1,73 @@
 import { Request, Response } from "express";
-import { ResponseHandler } from "../handlers/response.handler";
-import { MenuItemsDto } from "../dtos/restaurantsDtos/menuItemsDtos/menuItemsDto";
-import MenuItemsRepository from "../repositories/menuItems.repository";
+import { validationResult } from "express-validator";
 import { CreateMenuItemDto } from "../dtos/restaurantsDtos/menuItemsDtos/createMenuDto";
 import { UpdateMenuItemDto } from "../dtos/restaurantsDtos/menuItemsDtos/updateMenuItems";
-import { validationResult } from "express-validator";
+import ApiResponse from "../handlers/apiResponce.util";
+import { HttpStatusCode } from "../dtos/enums/status.code.enum";
+import { IMenuItemsService } from "../services/interfaces/menuItems.service.interface";
+import { injectable, inject } from "inversify";
+import "reflect-metadata";
 import { convertErrorsToLowerCase } from "../utils/errors.util";
 
-export class MenuItemsController {
-  private menuItemsRepository = new MenuItemsRepository();
+@injectable()
+class MenuItemsController {
+  constructor(
+    @inject("IMenuItemsService")
+    private readonly menuItemsService: IMenuItemsService
+  ) {}
 
-  getAllByRestaurantIdGroupedByType = async (req: Request, res: Response) => {
+  getAllByRestaurantId = async (req: Request, res: Response) => {
     const restaurantId = +req.params.restaurantId;
-    const menuItems =
-      await this.menuItemsRepository.getAllByRestaurantId(restaurantId);
 
-    if (!menuItems.length) {
-      return ResponseHandler.notFound(res, "Menu items not found");
-    }
+    const response = await this.menuItemsService.getAllByRestaurantId(restaurantId);
 
-    return ResponseHandler.success<MenuItemsDto[]>(
-      res,
-      menuItems,
-      "Menu items found",
-    );
+    return res.status(response.status).json(response);
   };
 
-  getMenuItemById = async (req: Request, res: Response) => {
-    const menuItemId = +req.params.id;
-    const menuItem = await this.menuItemsRepository.getMenuById(menuItemId);
+  getMenuById = async (req: Request, res: Response) => {
+    const menuItemId = +req.params.menuItemId;
 
-    if (!menuItem) {
-      return ResponseHandler.notFound(res, "Menu item not found");
-    }
+    const response = await this.menuItemsService.getMenuById(menuItemId);
 
-    return ResponseHandler.success<MenuItemsDto>(
-      res,
-      menuItem,
-      "Menu item found",
-    );
+    return res.status(response.status).json(response);
   };
 
-  createMenuItem = async (req: Request, res: Response) => {
+  addMenuItem = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       const newMenuItem = req.body as CreateMenuItemDto;
+      const response = await this.menuItemsService.addMenuItem(newMenuItem);
 
-      try {
-        await this.menuItemsRepository.addMenuItem(newMenuItem);
-        return ResponseHandler.created(res, "Menu item created");
-      } catch (err) {
-        return ResponseHandler.error(
-          res,
-          `Error in creating menu item: ${err}`,
-        );
-      }
+      return res.status(response.status).json(response);
     }
-    return ResponseHandler.badRequest(
-      res,
+
+    const response = new ApiResponse(
+      HttpStatusCode.BadRequest,
+      null,
       `Invalid request: ${convertErrorsToLowerCase(errors)}`,
     );
+
+    return res.status(response.status).json(response);
   };
 
   updateMenuItem = async (req: Request, res: Response) => {
-    const menuItemId = +req.params.id;
+    const menuItemId = +req.params.menuItemId;
     const updatedMenuItemData = req.body as UpdateMenuItemDto;
 
-    try {
-      await this.menuItemsRepository.updateMenuItem(
-        menuItemId,
-        updatedMenuItemData,
-      );
-      return ResponseHandler.updated(res, "Menu item updated");
-    } catch (err) {
-      return ResponseHandler.error(res, `Error in updating menu item: ${err}`);
-    }
+    const response = await this.menuItemsService.updateMenuItem(
+      menuItemId,
+      updatedMenuItemData
+    );
+
+    return res.status(response.status).json(response);
   };
 
   deleteMenuItem = async (req: Request, res: Response) => {
-    const menuItemId = +req.params.id;
+    const menuItemId = +req.params.menuItemId;
+    const response = await this.menuItemsService.deleteMenuItem(menuItemId);
 
-    try {
-      await this.menuItemsRepository.deleteMenuItem(menuItemId);
-      return ResponseHandler.noContent(res, "Menu item deleted");
-    } catch (err) {
-      return ResponseHandler.error(res, `Error in deleting menu item: ${err}`);
-    }
+    return res.status(response.status).json(response);
   };
 }
+
+export default MenuItemsController;

@@ -5,9 +5,10 @@ import ApiResponse from "../handlers/apiResponce.util";
 import { HttpStatusCode } from "../dtos/enums/status.code.enum";
 import { DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto } from "../dtos/deliveryDetailDto/DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto";
 import { DeliveryDetailWithCourierAndOrderDto } from "../dtos/deliveryDetailDto/deliveryDetailDto";
+import { IDeliveryDetailsService } from "./interfaces/deliveryDetails.service.interface";
 
 @injectable()
-class DeliveryDetailsService {
+class DeliveryDetailsService implements IDeliveryDetailsService{
   constructor(
     @inject("IDeliveryDetailsRepository")
     private readonly deliveryDetailsRepository: IDeliveryDetailsRepository

@@ -1,58 +1,55 @@
 import { Request, Response } from "express";
-import { CreateOrderItemDto } from "../dtos/orderItemsDtos/createOrderItemDto";
-import { OrderItemsRepository } from "../repositories/orderItem.repository";
-import { ResponseHandler } from "../handlers/response.handler";
-import { UpdateOrderItemDto } from "../dtos/orderItemsDtos/updateOrderItemDto";
 import { validationResult } from "express-validator";
+import { CreateOrderItemDto } from "../dtos/orderItemsDtos/createOrderItemDto";
+import { UpdateOrderItemDto } from "../dtos/orderItemsDtos/updateOrderItemDto";
+import ApiResponse from "../handlers/apiResponce.util";
+import { HttpStatusCode } from "../dtos/enums/status.code.enum";
+import { IOrderItemsService } from "../services/interfaces/orderItems.service.interface";
+import { injectable, inject } from "inversify";
+import "reflect-metadata";
 import { convertErrorsToLowerCase } from "../utils/errors.util";
 
+@injectable()
 export class OrderItemsController {
-  private orderItemsRepository = new OrderItemsRepository();
+  constructor(
+    @inject("IOrderItemsService")
+    private readonly orderItemsService: IOrderItemsService
+  ) {}
 
   createOrderItem = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       const newOrderItem = req.body as CreateOrderItemDto;
+      const response = await this.orderItemsService.createOrderItem(newOrderItem);
 
-      try {
-        await this.orderItemsRepository.createOrderItem(newOrderItem);
-        return ResponseHandler.created(res, "Order item created");
-      } catch (err) {
-        return ResponseHandler.error(
-          res,
-          `Error in creating order item: ${err}`,
-        );
-      }
+      return res.status(response.status).json(response);
     }
-    return ResponseHandler.badRequest(
-      res,
+
+    const response = new ApiResponse(
+      HttpStatusCode.BadRequest,
+      null,
       `Invalid request: ${convertErrorsToLowerCase(errors)}`,
     );
+
+    return res.status(response.status).json(response);
   };
 
   updateOrderItem = async (req: Request, res: Response) => {
-    const orderItemId = +req.params.id;
+    const orderItemId = +req.params.orderItemId;
     const updatedOrderItemData = req.body as UpdateOrderItemDto;
 
-    try {
-      await this.orderItemsRepository.updateOrderItem(
-        orderItemId,
-        updatedOrderItemData,
-      );
-      return ResponseHandler.updated(res, "Order item updated");
-    } catch (err) {
-      return ResponseHandler.error(res, `Error in updating order item: ${err}`);
-    }
+    const response = await this.orderItemsService.updateOrderItem(
+      orderItemId,
+      updatedOrderItemData
+    );
+
+    return res.status(response.status).json(response);
   };
 
   deleteOrderItem = async (req: Request, res: Response) => {
-    const orderItemId = +req.params.id;
+    const orderItemId = +req.params.orderItemId;
+    const response = await this.orderItemsService.deleteOrderItem(orderItemId);
 
-    try {
-      await this.orderItemsRepository.deleteOrderItem(orderItemId);
-      return ResponseHandler.noContent(res, "Order item deleted");
-    } catch (err) {
-      return ResponseHandler.error(res, `Error in deleting order item: ${err}`);
-    }
+    return res.status(response.status).json(response);
   };
 }

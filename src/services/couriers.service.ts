@@ -9,10 +9,11 @@ import { encodeSession } from "../utils/jwtUtils/jwt.crafter.util";
 import { LoginCourierDto } from "../dtos/courierDto/loginCourierDto";
 import { UpdateCourierDto } from "../dtos/courierDto/updateCourierDto";
 import { CourierDto } from "../dtos/courierDto/courierDto";
+import { ICouriersService } from "./interfaces/couriers.service.interface";
 
 
 @injectable()
-export class CouriersService {
+export class CouriersService implements ICouriersService{
     constructor(@inject("ICouriersRepository") private readonly couriersRepository: ICouriersRepository) {}
 
     async signUp(newCourier: CreateCourierDto) {
@@ -108,7 +109,7 @@ export class CouriersService {
             `Courier by id ${courierId} not found`,
           );
         }
-        
+
         return new ApiResponse(
           HttpStatusCode.OK,
           courier,

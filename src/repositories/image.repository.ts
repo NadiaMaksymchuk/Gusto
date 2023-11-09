@@ -1,9 +1,11 @@
+import { injectable } from "inversify";
 import { sqlPool } from "../db/sql.pool";
 import { CreateImageDto } from "../dtos/imagesDtos/createImageDto";
 import { ImageDto } from "../dtos/imagesDtos/imageDto";
 import { arrayToStringWithQuotes } from "../utils/request.util";
 import { IImageRepository } from "./interfaces/image.repository.interface";
 
+@injectable()
 export class ImageRepository implements IImageRepository {
   async addImage(newImage: CreateImageDto) {
     const values = [...Object.values(newImage)];

@@ -5,9 +5,10 @@ import { UpdateOrderItemDto } from "../dtos/orderItemsDtos/updateOrderItemDto";
 import ApiResponse from "../handlers/apiResponce.util";
 import { HttpStatusCode } from "../dtos/enums/status.code.enum";
 import { IOrderItemsRepository } from "../repositories/interfaces/orderItems.repository.interface";
+import { IOrderItemsService } from "./interfaces/orderItems.service.interface";
 
 @injectable()
-export class OrderItemsService {
+export class OrderItemsService implements IOrderItemsService {
   constructor(
     @inject("IOrderItemsRepository") private readonly orderItemsRepository: IOrderItemsRepository,
   ) {}

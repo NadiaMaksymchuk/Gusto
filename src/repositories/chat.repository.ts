@@ -1,8 +1,10 @@
+import { injectable } from "inversify";
 import { sqlPool } from "../db/sql.pool";
 import { ChatDto } from "../dtos/chatDtos/chatDto";
 import { CurrentUserId, IsCourier } from "../middwares/authMiddleware";
 import { IChatsRepository } from "./interfaces/chat.repository.interface";
 
+@injectable()
 export class ChatsRepository implements IChatsRepository{
   async createChat(name: string): Promise<void> {
     const queryText = `

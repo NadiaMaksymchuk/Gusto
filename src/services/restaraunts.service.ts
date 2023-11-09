@@ -6,9 +6,10 @@ import { RestaurantDto } from "../dtos/restaurantsDtos/restaurantDto";
 import IRestaurantsRepository from "../repositories/interfaces/restorants.repository.interface";
 import ApiResponse from "../handlers/apiResponce.util";
 import { HttpStatusCode } from "../dtos/enums/status.code.enum";
+import { IRestaurantService } from "./interfaces/restaraunts.service.interface";
 
 @injectable()
-export class RestaurantService {
+export class RestaurantService implements IRestaurantService {
   constructor(
     @inject("IRestaurantsRepository") private readonly restaurantRepository: IRestaurantsRepository,
   ) {}

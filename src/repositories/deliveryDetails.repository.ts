@@ -1,3 +1,4 @@
+import { injectable } from "inversify";
 import { sqlPool } from "../db/sql.pool";
 import { DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto } from "../dtos/deliveryDetailDto/DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto";
 import { CreateDeliveryDetailDto } from "../dtos/deliveryDetailDto/createDeliveryDetailDto";
@@ -5,6 +6,7 @@ import { DeliveryDetailWithCourierAndOrderDto } from "../dtos/deliveryDetailDto/
 import { arrayToStringWithQuotes } from "../utils/request.util";
 import { IDeliveryDetailsRepository } from "./interfaces/deliveryDetails.repository.interface";
 
+@injectable()
 export class DeliveryDetailsRepository implements IDeliveryDetailsRepository {
   async createDeliveryDetail(newDeliveryDetail: CreateDeliveryDetailDto) {
     const values = [...Object.values(newDeliveryDetail)];

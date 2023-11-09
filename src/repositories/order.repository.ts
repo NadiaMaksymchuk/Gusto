@@ -1,9 +1,11 @@
+import { injectable } from "inversify";
 import { sqlPool } from "../db/sql.pool";
 import { OrderWithItemsImagesAndRestaurantDto } from "../dtos/orderItemsDtos/orderWithItemsAndImagesDto";
 import { CreateOrderDto } from "../dtos/ordersDto/createOrderDto";
 import { arrayToStringWithQuotes } from "../utils/request.util";
 import { IOrdersRepository } from "./interfaces/order.repository.interface";
 
+@injectable()
 export class OrdersRepository  implements IOrdersRepository {
   async createOrder(newOrder: CreateOrderDto) {
     const values = [...Object.values(newOrder)];

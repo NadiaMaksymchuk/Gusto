@@ -6,9 +6,10 @@ import { CreateImageDto } from "../dtos/imagesDtos/createImageDto";
 import ApiResponse from "../handlers/apiResponce.util";
 import { HttpStatusCode } from "../dtos/enums/status.code.enum";
 import { ImageDto } from "../dtos/imagesDtos/imageDto";
+import { IImageService } from "./interfaces/image.service";
 
 @injectable()
-export class CloundinaryService {
+export class CloundinaryService implements IImageService {
   constructor(@inject("IImageRepository") private readonly imageRepository: ImageRepository){}
 
   async getPhotoById(photoId: string): Promise<ApiResponse<ImageDto>> {

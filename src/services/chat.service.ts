@@ -7,9 +7,10 @@ import { IMessagesRepository } from "../repositories/interfaces/message.reposito
 import ChatPersonDto from "../dtos/chatDtos/chatPersonDto";
 import { IChatsRepository } from "../repositories/interfaces/chat.repository.interface";
 import { ChatDto } from "../dtos/chatDtos/chatDto";
+import { IChatService } from "./interfaces/chat.service.interface";
 
 @injectable()
-export class ChatService {
+export class ChatService implements IChatService{
   constructor(
     @inject("IMessagesRepository") private readonly messagesRepository: IMessagesRepository,
     @inject("IChatsRepository") private readonly chatsRepository: IChatsRepository,

@@ -1,9 +1,11 @@
+import { injectable } from "inversify";
 import { sqlPool } from "../db/sql.pool";
 import { CreateNotificationDto } from "../dtos/notificationDtos/createNotificationDto";
 import { NotificationDto } from "../dtos/notificationDtos/notificationDto";
 import { CurrentUserId } from "../middwares/authMiddleware";
 import { INotificationsRepository } from "./interfaces/notification.repository.interface";
 
+@injectable()
 class NotificationsRepository implements INotificationsRepository {
   async createNotification(
     notificationData: CreateNotificationDto,

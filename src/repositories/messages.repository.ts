@@ -1,3 +1,4 @@
+import { injectable } from "inversify";
 import { sqlPool } from "../db/sql.pool";
 import ChatPersonDto from "../dtos/chatDtos/chatPersonDto";
 import { CreateMessageDto } from "../dtos/chatDtos/createMessagesDto";
@@ -5,6 +6,7 @@ import { CurrentUserId } from "../middwares/authMiddleware";
 import { arrayToStringWithQuotes } from "../utils/request.util";
 import { IMessagesRepository } from "./interfaces/message.repository.interface";
 
+@injectable()
 class MessagesRepository implements IMessagesRepository {
   async createMessage(newMessage: CreateMessageDto): Promise<void> {
     const values = [

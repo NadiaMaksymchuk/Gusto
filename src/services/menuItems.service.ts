@@ -6,10 +6,10 @@ import { UpdateMenuItemDto } from "../dtos/restaurantsDtos/menuItemsDtos/updateM
 import { MenuItemsDto } from "../dtos/restaurantsDtos/menuItemsDtos/menuItemsDto";
 import { inject, injectable } from "inversify";
 import { IMenuItemsRepository } from "../repositories/interfaces/menuItems.repository.interface";
-
+import { IMenuItemsService } from "./interfaces/menuItems.service.interface";
 
 @injectable()
-class MenuItemsService {
+class MenuItemsService implements IMenuItemsService{
   constructor(@inject("IMenuItemsRepository")  private readonly menuItemsRepository: IMenuItemsRepository) {
     this.menuItemsRepository = menuItemsRepository;
   }

@@ -1,3 +1,4 @@
+import { injectable } from "inversify";
 import { sqlPool } from "../db/sql.pool";
 import { CreateMenuItemDto } from "../dtos/restaurantsDtos/menuItemsDtos/createMenuDto";
 import { MenuItemsDto } from "../dtos/restaurantsDtos/menuItemsDtos/menuItemsDto";
@@ -5,6 +6,7 @@ import { UpdateMenuItemDto } from "../dtos/restaurantsDtos/menuItemsDtos/updateM
 import { arrayToStringWithQuotes } from "../utils/request.util";
 import { IMenuItemsRepository } from "./interfaces/menuItems.repository.interface";
 
+@injectable()
 export class MenuItemsRepository  implements IMenuItemsRepository {
   async getAllByRestaurantId(restaurantId: number): Promise<MenuItemsDto[]> {
     return new Promise((resolve, reject) => {

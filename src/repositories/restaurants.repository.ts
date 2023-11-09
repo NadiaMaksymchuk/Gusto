@@ -1,3 +1,4 @@
+import { injectable } from "inversify";
 import { sqlPool } from "../db/sql.pool";
 import { CreateRestaurantDto } from "../dtos/restaurantsDtos/createRestaurantDto";
 import { RestaurantDto } from "../dtos/restaurantsDtos/restaurantDto";
@@ -5,6 +6,7 @@ import { UpdateRestaurantDto } from "../dtos/restaurantsDtos/updateRestorauntDto
 import { arrayToStringWithQuotes } from "../utils/request.util";
 import IRestaurantsRepository from "./interfaces/restorants.repository.interface";
 
+@injectable()
 class RestaurantsRepository implements IRestaurantsRepository {
   async createRestaurant(newRestaurant: CreateRestaurantDto) {
     const values = [...Object.values(newRestaurant)];
