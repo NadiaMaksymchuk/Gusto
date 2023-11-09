@@ -10,8 +10,13 @@ import {
   createCourierValidator,
   loginCourierValidator,
 } from "../validator/courier.validator";
+import container from "../config/inversify.config";
+import { IUserService } from "../services/interfaces/user.service.interface";
 
-const userController = new UserController();
+const userService = container.get<IUserService>("IUserService");
+
+const userController = new UserController(userService);
+
 const courierController = new CouriersController();
 const router = Router();
 

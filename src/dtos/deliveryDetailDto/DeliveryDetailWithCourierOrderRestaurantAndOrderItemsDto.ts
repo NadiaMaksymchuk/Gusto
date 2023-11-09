@@ -1,18 +1,18 @@
 export class DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto {
-  id: number; 
+  id: number;
   courierFirstName: string;
   courierLastName: string;
-  orders: OrderWithRestaurantAndOrderItemsDto[]
+  orders: OrderWithRestaurantAndOrderItemsDto[];
 }
 
 class OrderWithRestaurantAndOrderItemsDto {
-  id: number; 
-  orderUserId: number; 
+  id: number;
+  orderUserId: number;
   orderRestaurantId: number;
   orderStatus: number;
-  orderDate: Date; 
+  orderDate: Date;
   restaurant: RestaurantDto;
-  orderItems: OrderItemWithMenuItemImageDto[]; 
+  orderItems: OrderItemWithMenuItemImageDto[];
 }
 
 class RestaurantDto {
@@ -23,8 +23,8 @@ class RestaurantDto {
 }
 
 class OrderItemWithMenuItemImageDto {
-  id: number; 
-  menuItemId: number; 
+  id: number;
+  menuItemId: number;
   orderItemQuantity: number;
   orderItemTotalPrice: number;
   menuItem: MenuItemWithImageDto;

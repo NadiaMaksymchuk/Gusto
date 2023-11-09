@@ -3,8 +3,12 @@ import { CreateUserDto } from "../dtos/userDtos/createUserDto";
 import { UpdateUserDto } from "../dtos/userDtos/updateUserDto";
 import { UserDto } from "../dtos/userDtos/user.dto";
 import { arrayToStringWithQuotes } from "../utils/request.util";
+import { IUserRepository } from "./interfaces/user.repository.interface";
+import { injectable, inject } from "inversify";
+import "reflect-metadata";
 
-export class UserRepository {
+@injectable()
+export class UserRepository implements IUserRepository {
   async getAll(): Promise<UserDto[]> {
     return new Promise((resolve, reject) => {
       sqlPool.query("Select * from users;", function (err: any, res: any) {
@@ -29,16 +33,15 @@ export class UserRepository {
       sqlPool.query(
         `Select * from users WHERE email = "${email}";`,
         function (err: any, res: any) {
-          sqlPool.end();
           if (err) {
             reject(err);
           } else {
-            let user = {} as UserDto;
+            let user = null;
             if (res) {
               user = { ...res[0] };
             }
 
-            resolve(user);
+            resolve(user as UserDto);
           }
         },
       );
@@ -84,6 +87,26 @@ export class UserRepository {
         }
         resolve();
       });
+    });
+  }
+
+  async getUserById(id: number): Promise<UserDto> {
+    return new Promise((resolve, reject) => {
+      sqlPool.query(
+        `Select * from users WHERE id = ${id};`,
+        function (err: any, res: any) {
+          if (err) {
+            reject(err);
+          } else {
+            let user = null;
+            if (res) {
+              user = { ...res[0] };
+            }
+
+            resolve(user as UserDto);
+          }
+        },
+      );
     });
   }
 }

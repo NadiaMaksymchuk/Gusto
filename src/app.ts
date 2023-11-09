@@ -52,7 +52,7 @@ app.use(bodyParser.json());
 
 createDbIfDontExist();
 
-app.use("/api/v1/users", requireJwtMiddleware, userRouter);
+app.use("/api/v1/users",requireJwtMiddleware, userRouter);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/photo", requireJwtMiddleware, uploadPhotoRoutes);
 app.use("/api/v1/restaurants", requireJwtMiddleware, restaurantsRouter);

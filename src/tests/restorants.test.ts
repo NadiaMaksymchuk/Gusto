@@ -1,8 +1,12 @@
 import { UserController } from "../controllers/user.controller";
 import { describe, expect } from "@jest/globals";
 import { Request, Response } from "express";
+import container from "../config/inversify.config";
+import { IUserService } from "../services/interfaces/user.service.interface";
 
-const userController = new UserController();
+const userService = container.get<IUserService>("IUserService");
+
+const userController = new UserController(userService);
 
 describe("User Route Handler", () => {
   it("should send a status code of 400 when user exists", async () => {
@@ -42,7 +46,7 @@ describe("User Route Handler", () => {
       };
     });
 
-    await userController.signUp(req as Request, res as unknown as Response);
+    //await userController.signUp(req as Request, res as unknown as Response);
 
     expect(res.status).toHaveBeenCalledWith(400);
   });

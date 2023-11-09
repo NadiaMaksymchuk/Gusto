@@ -10,123 +10,76 @@ import { LoginUserDto } from "../dtos/userDtos/loginUser";
 import { UpdateUserDto } from "../dtos/userDtos/updateUserDto";
 import { validationResult } from "express-validator";
 import { convertErrorsToLowerCase } from "../utils/errors.util";
+import { IUserService } from "../services/interfaces/user.service.interface";
+import { injectable, inject } from "inversify";
+import "reflect-metadata";
+import ApiResponse from "../handlers/apiResponce.util";
+import { HttpStatusCode } from "../dtos/enums/status.code.enum";
 
+@injectable()
 export class UserController {
-  private userRepository = new UserRepository();
+  constructor(
+    @inject("IUserRepository") private readonly userService: IUserService,
+  ) {}
 
   getUsers = async (req: Request, res: Response) => {
-    const users = await this.userRepository.getAll();
-    if (!users.length) {
-      return ResponseHandler.notFound(res, "Users not found");
-    }
-    return ResponseHandler.success<UserDto[]>(res, users, "User found");
-  };
-
-  createUser = async (req: Request, res: Response) => {
-    const userdto = req.body as CreateUserDto;
-    try {
-      await this.userRepository.addUser(userdto);
-      return ResponseHandler.created(res, "User created");
-    } catch (err) {
-      return ResponseHandler.error(res, `Error in creating user ${err}`);
-    }
+    const response = await this.userService.getAll();
+    return res.status(response.status).json(response);
   };
 
   signUp = async (req: Request, res: Response) => {
     const errors = validationResult(req);
+
     if (errors.isEmpty()) {
       const userdto = req.body as CreateUserDto;
-      let user = await this.userRepository.getUserByEmail(userdto.email);
 
-      if (Object.keys(user).length !== 0) {
-        return res.status(400);
-      }
+      const response = await this.userService.signUp(userdto);
 
-      const { salt, hashedPassword } = await hashPassword(userdto.password);
-
-      userdto.password = hashedPassword;
-      userdto.salt = salt;
-      await this.userRepository.addUser(userdto);
-
-      user = await this.userRepository.getUserByEmail(userdto.email);
-
-      const partialSession: Session = {
-        id: user.id,
-        email: user.email,
-        dateCreated: Number(new Date()),
-        issued: 0,
-        expires: 0,
-        isCourier: false,
-      };
-
-      const { token, issued, expires } = encodeSession(
-        process.env.TOKEN_SECRET!,
-        partialSession,
-      );
-
-      return ResponseHandler.success<string>(res, token, "Registered");
+      return res.status(response.status).json(response);
     }
-    return ResponseHandler.badRequest(
-      res,
+
+    const response = new ApiResponse(
+      HttpStatusCode.BadRequest,
+      null,
       `Invalid request: ${convertErrorsToLowerCase(errors)}`,
     );
+
+    return res.status(response.status).json(response);
   };
 
   signIn = async (req: Request, res: Response) => {
     const errors = validationResult(req);
-    const loginUserDto = req.body as LoginUserDto;
     if (errors.isEmpty()) {
-      let user = await this.userRepository.getUserByEmail(loginUserDto.email);
+      const loginUserDto = req.body as LoginUserDto;
 
-      if (!user) {
-        return ResponseHandler.badRequest(res, "User don`t exist");
-      }
+      const response = await this.userService.signIn(loginUserDto);
 
-      if (
-        !(await verifyPassword(loginUserDto.password, user.salt, user.password))
-      ) {
-        return ResponseHandler.badRequest(res, "Invalid request: ");
-      }
-
-      const partialSession: Session = {
-        id: user.id,
-        email: user.email,
-        dateCreated: Number(new Date()),
-        issued: 0,
-        expires: 0,
-        isCourier: false,
-      };
-
-      const { token, issued, expires } = encodeSession(
-        process.env.TOKEN_SECRET!,
-        partialSession,
-      );
-
-      return ResponseHandler.success<string>(res, token, "Entered");
+      return res.status(response.status).json(response);
     }
-    return ResponseHandler.badRequest(
-      res,
+    const response = new ApiResponse(
+      HttpStatusCode.BadRequest,
+      null,
       `Invalid request: ${convertErrorsToLowerCase(errors)}`,
     );
+
+    return res.status(response.status).json(response);
   };
 
   deleteUser = async (req: Request, res: Response) => {
     const id = +req.params.id;
-    try {
-      await this.userRepository.deleteUser(id);
-      return ResponseHandler.noContent(res, "User deleted");
-    } catch (err) {
-      return ResponseHandler.error(res, `Error in deleting user ${err}`);
-    }
+    const response = await this.userService.deleteUser(id);
+
+    return res.status(response.status).json(response);
   };
 
   updateUser = async (req: Request, res: Response) => {
     const id = +req.params.id;
-    try {
-      await this.userRepository.updateUser(id, req.body as UpdateUserDto);
-      return ResponseHandler.updated(res, `User updated`);
-    } catch (err) {
-      return ResponseHandler.error(res, `Error in updating user ${err}`);
-    }
+
+    const response = await this.userService.updateUser(
+      id,
+      req.body as UpdateUserDto,
+    );
+
+    return res.status(response.status).json(response);
   };
 }
