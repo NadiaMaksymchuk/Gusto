@@ -1,19 +1,52 @@
+import { injectable, inject } from "inversify";
 import { v2 as cloudinary } from "cloudinary";
 import { UploadResult } from "../dtos/cloundinaryDtos/uploadResult";
 import { ImageRepository } from "../repositories/image.repository";
-import { ImageDto } from "../dtos/imagesDtos/imageDto";
 import { CreateImageDto } from "../dtos/imagesDtos/createImageDto";
+import ApiResponse from "../handlers/apiResponce.util";
+import { HttpStatusCode } from "../dtos/enums/status.code.enum";
+import { ImageDto } from "../dtos/imagesDtos/imageDto";
 
+@injectable()
 export class CloundinaryService {
-  private imageRepository = new ImageRepository();
+  constructor(@inject("IImageRepository") private readonly imageRepository: ImageRepository){}
 
-  async getPhotoById(photoId: string) {
-    return await this.imageRepository.getImageById(photoId);
+  async getPhotoById(photoId: string): Promise<ApiResponse<ImageDto>> {
+    const image = await this.imageRepository.getImageById(photoId);
+
+    if (Object.keys(image).length !== 0) {
+      return new ApiResponse(
+        HttpStatusCode.BadRequest,
+        null,
+        `Photo by email ${photoId} not found`,
+        );
+    }
+
+    return new ApiResponse(
+      HttpStatusCode.OK,
+      image,
+      "Photo get successfully"
+    );
   }
 
   async deletePhoto(photoId: string) {
+    const photo = await this.imageRepository.getImageById(photoId);
+
+    if (Object.keys(photo).length !== 0) {
+      return new ApiResponse(
+        HttpStatusCode.BadRequest,
+        null,
+        `Photo by email ${photoId} not found`,
+      );
+    }
+    await this.deletePhotoCloudionary(photoId);
     await this.imageRepository.deleteImageById(photoId);
-    return await cloudinary.uploader.destroy(photoId);
+
+    return new ApiResponse(
+      HttpStatusCode.NoContent,
+      null,
+      "Photo updated successfully"
+    );
   }
 
   async uploadPhoto(file: Express.Multer.File) {
@@ -63,4 +96,16 @@ export class CloundinaryService {
       quality: "auto",
     });
   };
+
+  private async deletePhotoCloudionary(publicId: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      cloudinary.uploader.destroy(publicId, (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
 }

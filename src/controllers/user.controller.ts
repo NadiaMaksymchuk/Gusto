@@ -1,11 +1,5 @@
 import { Request, Response } from "express";
-import { UserRepository } from "../repositories/user.repository";
-import { ResponseHandler } from "../handlers/response.handler";
-import { hashPassword, verifyPassword } from "../handlers/password.handles";
-import { Session } from "../models/jwt/session";
-import { encodeSession } from "../utils/jwtUtils/jwt.crafter.util";
 import { CreateUserDto } from "../dtos/userDtos/createUserDto";
-import { UserDto } from "../dtos/userDtos/user.dto";
 import { LoginUserDto } from "../dtos/userDtos/loginUser";
 import { UpdateUserDto } from "../dtos/userDtos/updateUserDto";
 import { validationResult } from "express-validator";

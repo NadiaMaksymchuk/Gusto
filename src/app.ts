@@ -22,6 +22,7 @@ import { CreateMessageDto } from "./dtos/chatDtos/createMessagesDto";
 import MessagesRepository from "./repositories/messages.repository";
 import NotificationsRepository from "./repositories/notification.repository";
 import { CreateNotificationDto } from "./dtos/notificationDtos/createNotificationDto";
+import { errorMiddleware } from "./middwares/errorMiddleware";
 
 const messagesRepository = new MessagesRepository();
 const notificationRepository = new NotificationsRepository();
@@ -49,10 +50,11 @@ app.use(
 app.use(express.json());
 app.use(passport.initialize());
 app.use(bodyParser.json());
+app.use(errorMiddleware);
 
 createDbIfDontExist();
 
-app.use("/api/v1/users",requireJwtMiddleware, userRouter);
+app.use("/api/v1/users", userRouter);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/photo", requireJwtMiddleware, uploadPhotoRoutes);
 app.use("/api/v1/restaurants", requireJwtMiddleware, restaurantsRouter);
