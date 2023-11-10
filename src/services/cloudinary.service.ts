@@ -67,7 +67,11 @@ export class CloundinaryService implements IImageService {
     };
 
     this.imageRepository.addImage(createdImage);
-    return createdImage;
+    return new ApiResponse(
+      HttpStatusCode.OK,
+      createdImage,
+      "Image upload successfully"
+    );
   }
 
   private uploadImage = async (fileStream: any, fileName: string) => {

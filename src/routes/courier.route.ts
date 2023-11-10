@@ -1,11 +1,14 @@
 import { Router } from "express";
 import { CouriersController } from "../controllers/couriers.controller";
+import container from "../config/inversify.config";
+import { ICouriersService } from "../services/interfaces/couriers.service.interface";
 
-const couriersController = new CouriersController();
+const courierService = container.get<ICouriersService>("ICouriersService");
+
+const couriersController = new CouriersController(courierService);
 
 const router = Router();
 
-router.post("/", couriersController.createCourier);
 router.get("/", couriersController.getAllCouriers);
 router.get("/:id", couriersController.getCourierById);
 router.get(

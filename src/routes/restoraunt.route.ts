@@ -1,8 +1,12 @@
 import { Router } from "express";
 import { RestaurantsController } from "../controllers/restaurant.controller";
 import { createRestaurantValidator } from "../validator/restauranta.validator";
+import container from "../config/inversify.config";
+import { IRestaurantService } from "../services/interfaces/restaraunts.service.interface";
 
-const restaurantsController = new RestaurantsController();
+const restaurantsService = container.get<IRestaurantService>("IRestaurantService");
+
+const restaurantsController = new RestaurantsController(restaurantsService);
 
 const router = Router();
 

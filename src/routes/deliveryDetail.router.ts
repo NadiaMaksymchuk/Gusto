@@ -1,8 +1,12 @@
 import { Router } from "express";
 import { DeliveryDetailsController } from "../controllers/deliveryDetails.controller";
 import { createDeliveryDetailValidator } from "../validator/deliveryDetail.validator";
+import container from "../config/inversify.config";
+import { IDeliveryDetailsService } from "../services/interfaces/deliveryDetails.service.interface";
 
-const deliveryDetailsController = new DeliveryDetailsController();
+const deliveryDetailsService = container.get<IDeliveryDetailsService>("IDeliveryDetailsService");
+
+const deliveryDetailsController = new DeliveryDetailsController(deliveryDetailsService);
 
 const router = Router();
 

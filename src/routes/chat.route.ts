@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { ChatsController } from "../controllers/chatController";
+import container from "../config/inversify.config";
+import { IChatService } from "../services/interfaces/chat.service.interface";
 
-const chatsController = new ChatsController();
+const chatService = container.get<IChatService>("IChatService");
+
+const chatsController = new ChatsController(chatService);
 const router = Router();
 
 router.get(

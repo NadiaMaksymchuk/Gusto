@@ -12,12 +12,15 @@ import {
 } from "../validator/courier.validator";
 import container from "../config/inversify.config";
 import { IUserService } from "../services/interfaces/user.service.interface";
+import { ICouriersService } from "../services/interfaces/couriers.service.interface";
 
 const userService = container.get<IUserService>("IUserService");
 
 const userController = new UserController(userService);
 
-const courierController = new CouriersController();
+const courierService = container.get<ICouriersService>("ICouriersService");
+
+const courierController = new CouriersController(courierService);
 const router = Router();
 
 router.get("/google", passport.authenticate("google"), (req, res) =>

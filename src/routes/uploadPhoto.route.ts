@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { CloudinaryController } from "../controllers/cloudinary.controller";
+import container from "../config/inversify.config";
+import { IImageService } from "../services/interfaces/image.service";
 
-const cloudionaryController = new CloudinaryController();
+const cloudionaryService = container.get<IImageService>("IImageService");
+
+const cloudionaryController = new CloudinaryController(cloudionaryService);
 
 const router = Router();
 

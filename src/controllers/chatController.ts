@@ -3,141 +3,90 @@ import { ResponseHandler } from "../handlers/response.handler";
 import MessagesRepository from "../repositories/messages.repository";
 import { CreateMessageDto } from "../dtos/chatDtos/createMessagesDto";
 import { ChatsRepository } from "../repositories/chat.repository";
+import { injectable, inject } from "inversify";
+import "reflect-metadata";
+import { IChatService } from "../services/interfaces/chat.service.interface";
 
+@injectable()
 export class ChatsController {
-  private chatsRepository = new ChatsRepository();
-  private messagesRepository = new MessagesRepository();
+  constructor(
+    @inject("IUserRepository") private readonly chatsService: IChatService,
+  ) {}
 
   createChat = async (req: Request, res: Response) => {
     const name = req.body.name;
 
-    try {
-      await this.chatsRepository.createChat(name);
-      ResponseHandler.created(res, "Chat created");
-    } catch (err) {
-      ResponseHandler.error(res, `Error in creating chat: ${err}`);
-    }
+    const response = await this.chatsService.createChat(name);
+    return res.status(response.status).json(response);
   };
 
   getChatById = async (req: Request, res: Response) => {
     const chatId = +req.params.chatId;
 
-    try {
-      const chat = await this.chatsRepository.getChatById(chatId);
-
-      if (chat) {
-        ResponseHandler.success(res, chat, "Chat found");
-      } else {
-        ResponseHandler.notFound(res, "Chat not found");
-      }
-    } catch (err) {
-      ResponseHandler.error(res, `Error in retrieving chat: ${err}`);
-    }
+      const response = await this.chatsService.getChatById(chatId);
+      return res.status(response.status).json(response);
   };
 
   getNumberOfUnreadMessages = async (req: Request, res: Response) => {
     const chatId = +req.params.chatId;
 
-    try {
-      const unreadMessageCount =
-        await this.chatsRepository.getNumberOfUnreadMessages(chatId);
-      ResponseHandler.success<number>(
-        res,
-        unreadMessageCount,
-        "Chats retrieved",
-      );
-    } catch (err) {
-      ResponseHandler.error(res, `Error in retrieving chats: ${err}`);
-    }
+      const response =
+        await this.chatsService.getNumberOfUnreadMessages(chatId);
+
+        return res.status(response.status).json(response);
   };
 
   getChatsByUserId = async (req: Request, res: Response) => {
-    try {
-      const messages = await this.chatsRepository.getChatsByUserId();
-      ResponseHandler.success(res, messages, "Unread messages count retrieved");
-    } catch (err) {
-      ResponseHandler.error(
-        res,
-        `Error in retrieving unread messages count: ${err}`,
-      );
-    }
+      const response = await this.chatsService.getChatsByUserId();
+      return res.status(response.status).json(response);
   };
 
   deleteChat = async (req: Request, res: Response) => {
     const chatId = +req.params.chatId;
 
-    try {
-      await this.chatsRepository.deleteChat(chatId);
-      ResponseHandler.noContent(res, "Chat deleted");
-    } catch (err) {
-      ResponseHandler.error(res, `Error in deleting chat: ${err}`);
-    }
+    const response = await this.chatsService.deleteChat(chatId);
+    return res.status(response.status).json(response);
   };
 
   createMessage = async (req: Request, res: Response) => {
     const messageDto = req.body as CreateMessageDto;
 
-    try {
-      await this.messagesRepository.createMessage(messageDto);
-      ResponseHandler.created(res, "Message created");
-    } catch (err) {
-      ResponseHandler.error(res, `Error in creating message: ${err}`);
-    }
+    const response =  await this.chatsService.createMessage(messageDto);
+
+    return res.status(response.status).json(response);
+
   };
 
   updateMessage = async (req: Request, res: Response) => {
     const messageId = +req.params.messageId;
     const { text } = req.body as { text: string };
 
-    try {
-      await this.messagesRepository.updateMessage(messageId, text);
-      ResponseHandler.updated(res, "Message updated");
-    } catch (err) {
-      ResponseHandler.error(res, `Error in updating message: ${err}`);
-    }
+    const response =  await this.chatsService.updateMessage(messageId, text);
+
+    return res.status(response.status).json(response);
   };
 
   getFirst30MessagesByChatId = async (req: Request, res: Response) => {
     const chatId = +req.params.chatId;
 
-    try {
-      const chatPersons =
-        await this.messagesRepository.getFirst30MessagesByChatId(chatId);
-      ResponseHandler.success(res, chatPersons, "Messages retrieved");
-    } catch (err) {
-      ResponseHandler.error(
-        res,
-        `Error in retrieving unread and last messages: ${err}`,
-      );
-    }
+      const response =
+        await this.chatsService.getFirst30MessagesByChatId(chatId);
+
+        return res.status(response.status).json(response);
   };
 
   getUnreadAndLastMessagesAsync = async (req: Request, res: Response) => {
     const chatId = +req.params.chatId;
 
-    try {
-      const chatPersons = await this.messagesRepository.getLastMessage(chatId);
-      ResponseHandler.success(
-        res,
-        chatPersons,
-        "Unread and last messages retrieved",
-      );
-    } catch (err) {
-      ResponseHandler.error(
-        res,
-        `Error in retrieving unread and last messages: ${err}`,
-      );
-    }
+      const response = await this.chatsService.getLastMessage(chatId);
+      return res.status(response.status).json(response);
   };
 
   deleteMessage = async (req: Request, res: Response) => {
     const messageId = +req.params.messageId;
 
-    try {
-      await this.messagesRepository.deleteMessage(messageId);
-      ResponseHandler.noContent(res, "Message deleted");
-    } catch (err) {
-      ResponseHandler.error(res, `Error in deleting message: ${err}`);
-    }
+    const response = await this.chatsService.deleteMessage(messageId);
+
+    return res.status(response.status).json(response);
   };
 }

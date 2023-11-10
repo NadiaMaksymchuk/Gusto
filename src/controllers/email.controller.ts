@@ -4,12 +4,13 @@ import { EmailDto } from "../dtos/emailsDtos/emailDto";
 import { ResponseHandler } from "../handlers/response.handler";
 import { convertErrorsToLowerCase } from "../utils/errors.util";
 import { validationResult } from "express-validator";
+import ApiResponse from "../handlers/apiResponce.util";
+import { HttpStatusCode } from "../dtos/enums/status.code.enum";
 
 export class EmailController {
   sendEmail = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
-      try {
         const email = req.body as EmailDto;
 
         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -21,14 +22,21 @@ export class EmailController {
 
         await sgMail.send(message);
 
-        return ResponseHandler.created(res, "The email was sent");
-      } catch (error) {
-        return ResponseHandler.error(res, `The email was not sent`);
-      }
+        const response = new ApiResponse(
+        HttpStatusCode.Created,
+        null,
+        `Email was sended`,
+        );
+
+        return res.status(response.status).json(response);
     }
-    return ResponseHandler.badRequest(
-      res,
+   
+    const response = new ApiResponse(
+      HttpStatusCode.BadRequest,
+      null,
       `Invalid request: ${convertErrorsToLowerCase(errors)}`,
     );
+
+    return res.status(response.status).json(response);
   };
 }

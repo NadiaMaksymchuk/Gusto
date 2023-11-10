@@ -1,85 +1,67 @@
 import { Request, Response } from "express";
 import { ResponseHandler } from "../handlers/response.handler";
 import { CreateDeliveryDetailDto } from "../dtos/deliveryDetailDto/createDeliveryDetailDto";
-import { DeliveryDetailsRepository } from "../repositories/deliveryDetails.repository";
 import { DeliveryDetailWithCourierAndOrderDto } from "../dtos/deliveryDetailDto/deliveryDetailDto";
 import { DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto } from "../dtos/deliveryDetailDto/DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto";
 import { validationResult } from "express-validator";
 import { convertErrorsToLowerCase } from "../utils/errors.util";
+import ApiResponse from "../handlers/apiResponce.util";
+import { HttpStatusCode } from "../dtos/enums/status.code.enum";
+import { injectable, inject } from "inversify";
+import "reflect-metadata";
+import { IDeliveryDetailsService } from "../services/interfaces/deliveryDetails.service.interface";
 
+@injectable()
 export class DeliveryDetailsController {
-  private deliveryDetailsRepository = new DeliveryDetailsRepository();
+  constructor(
+    @inject("IDeliveryDetailsService") private readonly deliveryDetailsService: IDeliveryDetailsService,
+  ) { }
 
   createDeliveryDetail = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       const newDeliveryDetail = req.body as CreateDeliveryDetailDto;
 
-      try {
-        await this.deliveryDetailsRepository.createDeliveryDetail(
-          newDeliveryDetail,
-        );
-        return ResponseHandler.created(res, "Delivery detail created");
-      } catch (err) {
-        return ResponseHandler.error(
-          res,
-          `Error in creating delivery detail: ${err}`,
-        );
-      }
+      const response = await this.deliveryDetailsService.createDeliveryDetail(
+        newDeliveryDetail,
+      );
+      return res.status(response.status).json(response);
     }
-    return ResponseHandler.badRequest(
-      res,
-      `Invalid request: ${convertErrorsToLowerCase(errors)}`,
+  const response = new ApiResponse(
+    HttpStatusCode.BadRequest,
+    null,
+    `Invalid request: ${convertErrorsToLowerCase(errors)}`,
+  );
+
+    return res.status(response.status).json(response);
+  };
+
+deleteDeliveryDetail = async (req: Request, res: Response) => {
+  const deliveryDetailId = +req.params.id;
+
+    const response = await this.deliveryDetailsService.deleteDeliveryDetail(
+      deliveryDetailId,
     );
+    return res.status(response.status).json(response);
   };
 
-  deleteDeliveryDetail = async (req: Request, res: Response) => {
-    const deliveryDetailId = +req.params.id;
+getDeliveryDetailsByCourierId = async (req: Request, res: Response) => {
+  const courierId = +req.params.courierId;
 
-    try {
-      await this.deliveryDetailsRepository.deleteDeliveryDetail(
-        deliveryDetailId,
-      );
-      return ResponseHandler.noContent(res, "Delivery detail deleted");
-    } catch (err) {
-      return ResponseHandler.error(
-        res,
-        `Error in deleting delivery detail: ${err}`,
-      );
-    }
-  };
-
-  getDeliveryDetailsByCourierId = async (req: Request, res: Response) => {
-    const courierId = +req.params.courierId;
-
-    const deliveryDetails =
-      await this.deliveryDetailsRepository.getDeliveryDetailsByCourierId(
-        courierId,
-      );
-
-    if (!deliveryDetails.length) {
-      return ResponseHandler.notFound(res, "Delivery details not found");
-    }
-
-    return ResponseHandler.success<
-      DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto[]
-    >(res, deliveryDetails, "Delivery details found");
-  };
-
-  getDeliveryDetailsByOrderId = async (req: Request, res: Response) => {
-    const orderId = +req.params.orderId;
-
-    const deliveryDetails =
-      await this.deliveryDetailsRepository.getDeliveryDetailsByOrderId(orderId);
-
-    if (!deliveryDetails.length) {
-      return ResponseHandler.notFound(res, "Delivery details not found");
-    }
-
-    return ResponseHandler.success<DeliveryDetailWithCourierAndOrderDto[]>(
-      res,
-      deliveryDetails,
-      "Delivery details found",
+  const response =
+    await this.deliveryDetailsService.getDeliveryDetailsByCourierId(
+      courierId,
     );
-  };
+
+    return res.status(response.status).json(response);
+};
+
+getDeliveryDetailsByOrderId = async (req: Request, res: Response) => {
+  const orderId = +req.params.orderId;
+
+  const response =
+    await this.deliveryDetailsService.getDeliveryDetailsByOrderId(orderId);
+
+    return res.status(response.status).json(response);
+};
 }
