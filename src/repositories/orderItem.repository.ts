@@ -4,6 +4,7 @@ import { CreateOrderItemDto } from "../dtos/orderItemsDtos/createOrderItemDto";
 import { UpdateOrderItemDto } from "../dtos/orderItemsDtos/updateOrderItemDto";
 import { arrayToStringWithQuotes } from "../utils/request.util";
 import { IOrderItemsRepository } from "./interfaces/orderItems.repository.interface";
+import { OrderItemDto } from "../dtos/orderItemsDtos/orderItemsDto";
 
 @injectable()
 export class OrderItemsRepository implements IOrderItemsRepository {
@@ -21,6 +22,26 @@ export class OrderItemsRepository implements IOrderItemsRepository {
         }
         resolve();
       });
+    });
+  }
+
+  async getById(id: number): Promise<OrderItemDto> {
+    return new Promise((resolve, reject) => {
+      sqlPool.query(
+        `Select * from OrderItems WHERE id = ${id};`,
+        function (err: any, res: any) {
+          if (err) {
+            reject(err);
+          } else {
+            let orderItem = null;
+            if (res) {
+              orderItem = { ...res[0] };
+            }
+
+            resolve(orderItem as OrderItemDto);
+          }
+        },
+      );
     });
   }
 

@@ -19,11 +19,31 @@ export class OrderItemsService implements IOrderItemsService {
   }
 
   async updateOrderItem(orderItemId: number, updatedOrderItemData: UpdateOrderItemDto): Promise<ApiResponse<void>> {
+    const orderItem = await this.orderItemsRepository.getById(orderItemId);
+
+    if (Object.keys(orderItem).length === 0) {
+      return new ApiResponse(
+        HttpStatusCode.NotFound,
+        null,
+        `Order item by id ${orderItemId} not found`,
+      );
+    }
+
     await this.orderItemsRepository.updateOrderItem(orderItemId, updatedOrderItemData);
     return new ApiResponse(HttpStatusCode.OK, null, "Order item updated successfully");
   }
 
   async deleteOrderItem(orderItemId: number): Promise<ApiResponse<void>> {
+    const orderItem = await this.orderItemsRepository.getById(orderItemId);
+
+    if (Object.keys(orderItem).length === 0) {
+      return new ApiResponse(
+        HttpStatusCode.NotFound,
+        null,
+        `Order item by id ${orderItemId} not found`,
+      );
+    }
+    
     await this.orderItemsRepository.deleteOrderItem(orderItemId);
     return new ApiResponse(HttpStatusCode.NoContent, null, "Order item deleted successfully");
   }
