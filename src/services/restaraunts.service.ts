@@ -26,6 +26,15 @@ export class RestaurantService implements IRestaurantService {
 
   async getRestaurantById(restaurantId: number): Promise<ApiResponse<RestaurantDto | null>> {
     const restaurant = await this.restaurantRepository.getRestaurantById(restaurantId);
+
+    if (Object.keys(restaurant).length === 0) {
+      return new ApiResponse(
+        HttpStatusCode.NotFound,
+        null,
+        `Restaurant by id ${restaurantId} not found`,
+      );
+    }
+
     return new ApiResponse(HttpStatusCode.OK, restaurant, "Restaurant retrieved successfully");
   }
 
