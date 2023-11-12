@@ -46,6 +46,26 @@ export class MenuItemsRepository  implements IMenuItemsRepository {
     });
   }
 
+  async getById(id: number): Promise<MenuItemsDto> {
+    return new Promise((resolve, reject) => {
+      sqlPool.query(
+        `Select * from MenuItems WHERE id = ${id};`,
+        function (err: any, res: any) {
+          if (err) {
+            reject(err);
+          } else {
+            let menuItem: MenuItemsDto;
+            if (res) {
+              menuItem = { ...res[0] };
+            }
+
+            resolve(menuItem);
+          }
+        },
+      );
+    });
+  }
+
   async getMenuById(menuItemId: number): Promise<MenuItemsDto | null> {
     return new Promise((resolve, reject) => {
       sqlPool.query(

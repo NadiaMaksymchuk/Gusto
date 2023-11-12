@@ -1,4 +1,5 @@
 import { inject, injectable } from "inversify";
+import "reflect-metadata";
 import { IDeliveryDetailsRepository } from "../repositories/interfaces/deliveryDetails.repository.interface";
 import { CreateDeliveryDetailDto } from "../dtos/deliveryDetailDto/createDeliveryDetailDto";
 import ApiResponse from "../handlers/apiResponce.util";

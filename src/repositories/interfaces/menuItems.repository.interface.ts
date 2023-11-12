@@ -8,4 +8,5 @@ export interface IMenuItemsRepository {
     addMenuItem(newMenuItem: CreateMenuItemDto): Promise<void>;
     updateMenuItem(menuItemId: number, updatedMenuItemData: UpdateMenuItemDto): Promise<void>;
     deleteMenuItem(menuItemId: number): Promise<void>;
+    getById(id: number): Promise<MenuItemsDto>
   }

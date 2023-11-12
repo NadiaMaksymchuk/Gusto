@@ -1,4 +1,5 @@
 import { injectable, inject } from "inversify";
+import "reflect-metadata";
 import { v2 as cloudinary } from "cloudinary";
 import { UploadResult } from "../dtos/cloundinaryDtos/uploadResult";
 import { ImageRepository } from "../repositories/image.repository";
@@ -15,7 +16,7 @@ export class CloundinaryService implements IImageService {
   async getPhotoById(photoId: string): Promise<ApiResponse<ImageDto>> {
     const image = await this.imageRepository.getImageById(photoId);
 
-    if (Object.keys(image).length !== 0) {
+    if (Object.keys(image).length === 0) {
       return new ApiResponse(
         HttpStatusCode.BadRequest,
         null,
@@ -33,7 +34,7 @@ export class CloundinaryService implements IImageService {
   async deletePhoto(photoId: string) {
     const photo = await this.imageRepository.getImageById(photoId);
 
-    if (Object.keys(photo).length !== 0) {
+    if (Object.keys(photo).length === 0) {
       return new ApiResponse(
         HttpStatusCode.BadRequest,
         null,
@@ -46,7 +47,7 @@ export class CloundinaryService implements IImageService {
     return new ApiResponse(
       HttpStatusCode.NoContent,
       null,
-      "Photo updated successfully"
+      "Photo deleted successfully"
     );
   }
 
