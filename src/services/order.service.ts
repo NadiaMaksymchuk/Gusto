@@ -1,19 +1,18 @@
-import { inject, injectable } from "inversify";
 import { OrderWithItemsImagesAndRestaurantDto } from "../dtos/orderItemsDtos/orderWithItemsAndImagesDto";
 import { CreateOrderDto } from "../dtos/ordersDto/createOrderDto";
 import ApiResponse from "../handlers/apiResponce.util";
 import { HttpStatusCode } from "../dtos/enums/status.code.enum";
 import { IOrdersRepository } from "../repositories/interfaces/order.repository.interface";
 import { IOrderService } from "./interfaces/order.service";
+import { injectable, inject } from "inversify";
+import "reflect-metadata";
 
 @injectable()
 export class OrderService implements IOrderService{
   constructor(
     @inject("IOrdersRepository")
     private readonly ordersRepository: IOrdersRepository
-  ) {
-    this.ordersRepository = ordersRepository;
-  }
+  ) {}
 
   async createOrder(newOrder: CreateOrderDto): Promise<ApiResponse<void>> {
     await this.ordersRepository.createOrder(newOrder);
@@ -40,6 +39,16 @@ export class OrderService implements IOrderService{
   }
 
   async deleteOrder(orderId: number): Promise<ApiResponse<void>> {
+    const order = await this.ordersRepository.getById(orderId);
+
+    if (Object.keys(order).length === 0) {
+      return new ApiResponse(
+        HttpStatusCode.NotFound,
+        null,
+        `Order by id ${orderId} not found`,
+      );
+    }
+
     await this.ordersRepository.deleteOrder(orderId);
     return new ApiResponse(
       HttpStatusCode.NoContent,
@@ -52,6 +61,16 @@ export class OrderService implements IOrderService{
     orderId: number,
     newStatus: number
   ): Promise<ApiResponse<void>> {
+    const order = await this.ordersRepository.getById(orderId);
+
+    if (Object.keys(order).length === 0) {
+      return new ApiResponse(
+        HttpStatusCode.NotFound,
+        null,
+        `Order by id ${orderId} not found`,
+      );
+    }
+
     await this.ordersRepository.updateOrderStatus(orderId, newStatus);
     return new ApiResponse(
       HttpStatusCode.NoContent,
@@ -64,6 +83,16 @@ export class OrderService implements IOrderService{
     orderId: number,
     newDeliveryTime: string
   ): Promise<ApiResponse<void>> {
+    const order = await this.ordersRepository.getById(orderId);
+
+    if (Object.keys(order).length === 0) {
+      return new ApiResponse(
+        HttpStatusCode.NotFound,
+        null,
+        `Order by id ${orderId} not found`,
+      );
+    }
+
     await this.ordersRepository.updateDeliveryTime(orderId, newDeliveryTime);
     return new ApiResponse(
       HttpStatusCode.NoContent,

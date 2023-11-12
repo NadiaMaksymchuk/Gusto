@@ -4,6 +4,7 @@ import { OrderWithItemsImagesAndRestaurantDto } from "../dtos/orderItemsDtos/ord
 import { CreateOrderDto } from "../dtos/ordersDto/createOrderDto";
 import { arrayToStringWithQuotes } from "../utils/request.util";
 import { IOrdersRepository } from "./interfaces/order.repository.interface";
+import { OrderDto } from "../dtos/ordersDto/orderDto";
 
 @injectable()
 export class OrdersRepository  implements IOrdersRepository {
@@ -21,6 +22,26 @@ export class OrdersRepository  implements IOrdersRepository {
         }
         resolve();
       });
+    });
+  }
+
+  async getById(id: number): Promise<OrderDto> {
+    return new Promise((resolve, reject) => {
+      sqlPool.query(
+        `Select * from OrderItems WHERE id = ${id};`,
+        function (err: any, res: any) {
+          if (err) {
+            reject(err);
+          } else {
+            let order = null;
+            if (res) {
+              order = { ...res[0] };
+            }
+
+            resolve(order as OrderDto);
+          }
+        },
+      );
     });
   }
 
