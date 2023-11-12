@@ -28,7 +28,7 @@ const messagesRepository = new MessagesRepository();
 const notificationRepository = new NotificationsRepository();
 
 dotenv.config();
-require("./strategies/google");
+// require("./strategies/google");
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -48,7 +48,8 @@ app.use(
   }),
 );
 app.use(express.json());
-app.use(passport.initialize());
+// app.use(passport.initialize());
+// app.use(passport.session());
 app.use(bodyParser.json());
 app.use(errorMiddleware);
 

@@ -32,7 +32,7 @@ export class UserService implements IUserService {
   async getUserByEmail(email: string): Promise<ApiResponse<UserDto>> {
     const user = await this.userRepository.getUserByEmail(email);
 
-    if (user) {
+    if (Object.keys(user).length === 0) {
       return new ApiResponse(
         HttpStatusCode.NotFound,
         null,
@@ -72,7 +72,7 @@ export class UserService implements IUserService {
     };
 
     const { token, issued, expires } = encodeSession(
-      process.env.TOKEN_SECRET!,
+      "mysecretkey",
       partialSession,
     );
 
@@ -110,7 +110,7 @@ export class UserService implements IUserService {
     };
 
     const { token, issued, expires } = encodeSession(
-      process.env.TOKEN_SECRET!,
+      "mysecretkey",
       partialSession,
     );
 
