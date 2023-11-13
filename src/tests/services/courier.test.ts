@@ -200,7 +200,7 @@ describe('Courier sign in', () => {
 
       const response = await courierService.getCourierById(courierId);
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(HttpStatusCode.OK);
       expect(response.data).toEqual(expectedCourier);
       expect(response.message).toBe('Courier retrieved successfully');
     });
@@ -212,7 +212,7 @@ describe('Courier sign in', () => {
 
       const response = await courierService.getCourierById(nonExistentCourierId);
 
-      expect(response.status).toBe(404);
+      expect(response.status).toBe(HttpStatusCode.NotFound);
       expect(response.data).toBeNull();
       expect(response.message).toBe(`Courier by id ${nonExistentCourierId} not found`);
     });
@@ -248,7 +248,7 @@ describe('Courier sign in', () => {
 
       const response = await courierService.updateCourier(courierId, updatedCourierData);
 
-      expect(response.status).toBe(204);
+      expect(response.status).toBe(HttpStatusCode.OK);
       expect(response.data).toBeNull();
       expect(response.message).toBe('Courier updated successfully');
 
@@ -268,7 +268,7 @@ describe('Courier sign in', () => {
 
       const response = await courierService.updateCourier(nonExistentCourierId, updatedCourierData);
 
-      expect(response.status).toBe(404);
+      expect(response.status).toBe(HttpStatusCode.NotFound);
       expect(response.data).toBeNull();
       expect(response.message).toBe(`Courier by id ${nonExistentCourierId} not found`);
 
@@ -315,7 +315,7 @@ describe('Courier sign in', () => {
 
       const response = await courierService.setAvailabilityStatus(nonExistentCourierId, availabilityStatus);
 
-      expect(response.status).toBe(404);
+      expect(response.status).toBe(HttpStatusCode.NotFound);
       expect(response.data).toBeNull();
       expect(response.message).toBe(`Courier by id ${nonExistentCourierId} not found`);
     
@@ -346,7 +346,7 @@ describe('Courier sign in', () => {
 
       const response = await courierService.deleteCourier(courierId);
 
-      expect(response.status).toBe(204);
+      expect(response.status).toBe(HttpStatusCode.NoContent);
       expect(response.data).toBeNull();
       expect(response.message).toBe('Courier deleted successfully');
 
@@ -360,7 +360,7 @@ describe('Courier sign in', () => {
 
       const response = await courierService.deleteCourier(nonExistentCourierId);
 
-      expect(response.status).toBe(404);
+      expect(response.status).toBe(HttpStatusCode.NotFound);
       expect(response.data).toBeNull();
       expect(response.message).toBe(`Courier by id ${nonExistentCourierId} not found`);
       expect(mockCouriersRepository.deleteCourier).not.toHaveBeenCalled();

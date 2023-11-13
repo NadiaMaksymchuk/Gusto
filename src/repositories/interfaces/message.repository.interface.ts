@@ -7,4 +7,5 @@ export interface IMessagesRepository {
   getLastMessage(chatId: number): Promise<ChatPersonDto[]>;
   getFirst30MessagesByChatId(chatId: number);
   deleteMessage(messageId: number): Promise<void>;
+  getById(messageId: number);
 }

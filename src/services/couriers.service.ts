@@ -147,7 +147,7 @@ export class CouriersService implements ICouriersService{
 
         await this.couriersRepository.updateCourier(courierId, updatedCourierData);
         return new ApiResponse(
-          HttpStatusCode.NoContent,
+          HttpStatusCode.OK,
           null,
           "Courier updated successfully"
         );

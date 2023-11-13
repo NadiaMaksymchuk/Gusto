@@ -23,10 +23,19 @@ export class ChatService implements IChatService{
 
   async getChatById(chatId: number): Promise<ApiResponse<ChatDto | null>> {
     const chat = await this.chatsRepository.getChatById(chatId);
+
+    if (Object.keys(chat).length === 0) {
+      return new ApiResponse(
+        HttpStatusCode.NotFound,
+        null,
+        `Chat by id ${chatId} not found`,
+      );
+    }
+
     return new ApiResponse(HttpStatusCode.OK, chat, "Chat retrieved successfully");
   }
 
-  async getChatsByUserId(): Promise<ApiResponse<any[]>> {
+  async getChatsByUserId() {
     const chats = await this.chatsRepository.getChatsByUserId();
     return new ApiResponse(HttpStatusCode.OK, chats, "Chats retrieved successfully");
   }
@@ -37,6 +46,16 @@ export class ChatService implements IChatService{
   }
 
   async deleteChat(chatId: number): Promise<ApiResponse<void>> {
+    const chat = await this.chatsRepository.getChatById(chatId);
+
+    if (Object.keys(chat).length === 0) {
+      return new ApiResponse(
+        HttpStatusCode.NotFound,
+        null,
+        `Chat by id ${chatId} not found`,
+      );
+    }
+
     await this.chatsRepository.deleteChat(chatId);
     return new ApiResponse(HttpStatusCode.NoContent, null, "Chat deleted successfully");
   }
@@ -47,6 +66,16 @@ export class ChatService implements IChatService{
   }
 
   async updateMessage(messageId: number, text: string): Promise<ApiResponse<void>> {
+    const message = await this.messagesRepository.getById(messageId);
+
+    if (Object.keys(message).length === 0) {
+      return new ApiResponse(
+        HttpStatusCode.NotFound,
+        null,
+        `Message by id ${messageId} not found`,
+      );
+    }
+
     await this.messagesRepository.updateMessage(messageId, text);
     return new ApiResponse(HttpStatusCode.OK, null, "Message updated successfully");
   }
@@ -62,6 +91,16 @@ export class ChatService implements IChatService{
   }
 
   async deleteMessage(messageId: number): Promise<ApiResponse<void>> {
+    const message = await this.messagesRepository.getById(messageId);
+
+    if (Object.keys(message).length === 0) {
+      return new ApiResponse(
+        HttpStatusCode.NotFound,
+        null,
+        `Message by id ${messageId} not found`,
+      );
+    }
+
     await this.messagesRepository.deleteMessage(messageId);
     return new ApiResponse(HttpStatusCode.NoContent, null, "Message deleted successfully");
   }

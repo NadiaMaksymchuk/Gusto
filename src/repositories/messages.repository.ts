@@ -5,6 +5,7 @@ import { CreateMessageDto } from "../dtos/chatDtos/createMessagesDto";
 import { CurrentUserId } from "../middwares/authMiddleware";
 import { arrayToStringWithQuotes } from "../utils/request.util";
 import { IMessagesRepository } from "./interfaces/message.repository.interface";
+import { MessageDto } from "../dtos/chatDtos/messagesDto";
 
 @injectable()
 class MessagesRepository implements IMessagesRepository {
@@ -134,6 +135,25 @@ class MessagesRepository implements IMessagesRepository {
           reject(err);
         }
         resolve();
+      });
+    });
+  }
+
+  async getById(messageId: number) {
+    const queryText = `SELECT * FROM Messages WHERE id = ${messageId};`;
+
+    return new Promise<MessageDto | null>((resolve, reject) => {
+      sqlPool.query(queryText, function (err: any, res: any) {
+        if (err) {
+          reject(err);
+        }
+
+        if (res && res.length > 0) {
+          const chat = res[0] as MessageDto;
+          resolve(chat);
+        } else {
+          resolve(null);
+        }
       });
     });
   }
