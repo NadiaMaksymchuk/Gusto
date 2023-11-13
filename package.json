@@ -7,6 +7,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cloudinary": "^1.41.0",
+    "codecov": "^3.8.3",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
@@ -45,8 +46,7 @@
     "prettier": "3.0.3",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1",
-    "typescript": "^5.2.2",
-    "codecov": "^3.11.0"
+    "typescript": "^5.2.2"
   },
   "name": "gusto",
   "description": "Gusto is an online web platform for food delivery from your favorite restaurant or cafe in your city. The site effectively allows you to order from the restaurant, calculate the time and price of delivery, track the courier and contact if necessary.",
