@@ -19,7 +19,7 @@ export class RestaurantsController {
   ) {}
 
   createRestaurant = async (req: Request, res: Response) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req.body);
     if (errors.isEmpty()) {
       const restorauntDto = req.body as CreateRestaurantDto;
 

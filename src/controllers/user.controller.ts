@@ -13,7 +13,7 @@ import { HttpStatusCode } from "../dtos/enums/status.code.enum";
 @injectable()
 export class UserController {
   constructor(
-    @inject("IUserRepository") private readonly userService: IUserService,
+    @inject("IUserService") private readonly userService: IUserService,
   ) {}
 
   getUsers = async (req: Request, res: Response) => {
