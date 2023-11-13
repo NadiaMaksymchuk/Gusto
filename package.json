@@ -45,7 +45,8 @@
     "prettier": "3.0.3",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "codecov": "^3.11.0"
   },
   "name": "gusto",
   "description": "Gusto is an online web platform for food delivery from your favorite restaurant or cafe in your city. The site effectively allows you to order from the restaurant, calculate the time and price of delivery, track the courier and contact if necessary.",

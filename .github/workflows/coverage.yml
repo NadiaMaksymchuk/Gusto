@@ -1,4 +1,4 @@
-name: Run Unit Tests
+name: Run Unit Tests with Coverage
 
 on: [pull_request]
 
@@ -22,5 +22,11 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run tests
-      run: npm test
+    - name: Run tests with coverage
+      run: npm test -- src/ --coverage
+
+    - name: Upload coverage results
+      if: always()
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}  
