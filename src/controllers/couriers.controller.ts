@@ -1,12 +1,7 @@
 import { Request, Response } from "express";
 import { ResponseHandler } from "../handlers/response.handler";
-import CouriersRepository from "../repositories/couries.repository";
 import { CreateCourierDto } from "../dtos/courierDto/createCourierDto";
-import { CourierDto } from "../dtos/courierDto/courierDto";
 import { UpdateCourierDto } from "../dtos/courierDto/updateCourierDto";
-import { hashPassword, verifyPassword } from "../handlers/password.handles";
-import { encodeSession } from "../utils/jwtUtils/jwt.crafter.util";
-import { Session } from "../models/jwt/session";
 import { LoginCourierDto } from "../dtos/courierDto/loginCourierDto";
 import { validationResult } from "express-validator";
 import { convertErrorsToLowerCase } from "../utils/errors.util";
@@ -17,7 +12,7 @@ import { ICouriersService } from "../services/interfaces/couriers.service.interf
 @injectable()
 export class CouriersController {
   constructor(
-    @inject("IUserRepository")
+    @inject("ICouriersService")
     private readonly couriersService: ICouriersService,
   ) {}
 

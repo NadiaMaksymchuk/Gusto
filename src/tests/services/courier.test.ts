@@ -142,6 +142,31 @@ describe("Courier sign in", () => {
     );
   });
 
+  test("should sign in successfully", async () => {
+    const salt = "$2b$10$TXX7YiWym3X6rvu4dWbpGO";
+
+    const loginCourierDto: LoginCourierDto = {
+      email: "existinguser@example.com",
+      password: "validpassword",
+    };
+
+    const existingCourier = {
+      id: 1,
+      email: "existinguser@example.com",
+      password: "$2b$10$TXX7YiWym3X6rvu4dWbpGORedHO6wpICIH8dTXeSjz4LSbaxXiFn6",
+      salt: salt,
+    };
+
+    (
+      mockCouriersRepository.getCourierByEmail as jest.Mock
+    ).mockResolvedValueOnce(existingCourier);
+
+    const response = await courierService.signIn(loginCourierDto);
+
+    expect(response.status).toBe(HttpStatusCode.OK);
+    expect(response.message).toBe("Courier entered");
+  });
+
   test("should return 400 for invalid password", async () => {
     const salt = "$2b$10$TXX7YiWym3X6rvu4dWbpGO";
 
@@ -344,7 +369,7 @@ describe("setAvailabilityStatus", () => {
       availabilityStatus,
     );
 
-    expect(response.status).toBe(204);
+    expect(response.status).toBe(HttpStatusCode.OK);
     expect(response.data).toBeNull();
     expect(response.message).toBe(
       "Courier availability status updated successfully",

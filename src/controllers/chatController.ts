@@ -10,7 +10,7 @@ import { IChatService } from "../services/interfaces/chat.service.interface";
 @injectable()
 export class ChatsController {
   constructor(
-    @inject("IUserRepository") private readonly chatsService: IChatService,
+    @inject("IChatService") private readonly chatsService: IChatService,
   ) {}
 
   createChat = async (req: Request, res: Response) => {

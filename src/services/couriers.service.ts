@@ -183,7 +183,7 @@ export class CouriersService implements ICouriersService {
       availabilityStatus,
     );
     return new ApiResponse(
-      HttpStatusCode.NoContent,
+      HttpStatusCode.OK,
       null,
       "Courier availability status updated successfully",
     );
