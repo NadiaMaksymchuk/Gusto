@@ -176,7 +176,7 @@ describe("OrderService", () => {
 
     const mockOrder = {
       id: orderId,
-      userId: "user123",
+      userId: 1,
       restaurantId: 101,
       orderStatus: 1,
       orderDate: "2023-11-12T08:30:00",
