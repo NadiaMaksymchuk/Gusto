@@ -1,4 +1,5 @@
 import { injectable, inject } from "inversify";
+import "reflect-metadata";
 import { ICouriersRepository } from "../repositories/interfaces/couries.repository.interface";
 import ApiResponse from "../handlers/apiResponce.util";
 import { HttpStatusCode } from "../dtos/enums/status.code.enum";
@@ -45,7 +46,7 @@ export class CouriersService implements ICouriersService{
         };
     
         const { token, issued, expires } = encodeSession(
-          process.env.TOKEN_SECRET!,
+          "secretkey",
           partialSession,
         );
     
@@ -83,7 +84,7 @@ export class CouriersService implements ICouriersService{
         };
     
         const { token, issued, expires } = encodeSession(
-          process.env.TOKEN_SECRET!,
+          "secretkey",
           partialSession,
         );
     
