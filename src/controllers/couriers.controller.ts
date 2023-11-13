@@ -17,8 +17,9 @@ import { ICouriersService } from "../services/interfaces/couriers.service.interf
 @injectable()
 export class CouriersController {
   constructor(
-    @inject("IUserRepository") private readonly couriersService: ICouriersService,
-  ) { }
+    @inject("IUserRepository")
+    private readonly couriersService: ICouriersService,
+  ) {}
 
   getAllCouriers = async (req: Request, res: Response) => {
     const response = await this.couriersService.getAllCouriers();
@@ -37,7 +38,7 @@ export class CouriersController {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       const newCourier = req.body as CreateCourierDto;
-      
+
       const response = await this.couriersService.signUp(newCourier);
 
       return res.status(response.status).json(response);
@@ -52,7 +53,7 @@ export class CouriersController {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       const loginUserDto = req.body as LoginCourierDto;
-     
+
       const response = await this.couriersService.signIn(loginUserDto);
 
       return res.status(response.status).json(response);
@@ -64,7 +65,7 @@ export class CouriersController {
     const response =
       await this.couriersService.getCouriersByAvailabilityStatus(status);
 
-      return res.status(response.status).json(response);
+    return res.status(response.status).json(response);
   };
 
   updateCourier = async (req: Request, res: Response) => {
@@ -72,28 +73,28 @@ export class CouriersController {
     const updatedCourierData = req.body as UpdateCourierDto;
 
     const response = await this.couriersService.updateCourier(
-        courierId,
-        updatedCourierData,
-      );
-      return res.status(response.status).json(response);
-    };
+      courierId,
+      updatedCourierData,
+    );
+    return res.status(response.status).json(response);
+  };
 
   setAvailabilityStatus = async (req: Request, res: Response) => {
     const courierId = +req.params.id;
     const availabilityStatus = +req.params.status;
 
     const response = await this.couriersService.setAvailabilityStatus(
-        courierId,
-        availabilityStatus,
-      );
+      courierId,
+      availabilityStatus,
+    );
 
-      return res.status(response.status).json(response);
+    return res.status(response.status).json(response);
   };
 
   deleteCourier = async (req: Request, res: Response) => {
     const courierId = +req.params.id;
 
-    const response =  await this.couriersService.deleteCourier(courierId);
+    const response = await this.couriersService.deleteCourier(courierId);
     return res.status(response.status).json(response);
   };
 }

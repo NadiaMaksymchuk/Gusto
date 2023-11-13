@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   # MySQL database
   db:
@@ -19,6 +19,6 @@ services:
       - "3000:3000"
     environment:
       DB_HOST: db
-      DB_USER: root  # Match the username used in the MySQL service
+      DB_USER: root # Match the username used in the MySQL service
       DB_PASSWORD: canon2003
       DB_NAME: gustodb

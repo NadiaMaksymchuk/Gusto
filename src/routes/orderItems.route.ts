@@ -4,7 +4,8 @@ import { createOrderItemValidator } from "../validator/orderItem.validator";
 import { IOrderItemsService } from "../services/interfaces/orderItems.service.interface";
 import container from "../config/inversify.config";
 
-const orderItemsService = container.get<IOrderItemsService>("IOrderItemsService");
+const orderItemsService =
+  container.get<IOrderItemsService>("IOrderItemsService");
 
 const orderItemsController = new OrderItemsController(orderItemsService);
 

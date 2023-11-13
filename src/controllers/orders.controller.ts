@@ -12,7 +12,7 @@ import { convertErrorsToLowerCase } from "../utils/errors.util";
 export class OrdersController {
   constructor(
     @inject("IOrderService")
-    private readonly orderService: IOrderService
+    private readonly orderService: IOrderService,
   ) {}
 
   createOrder = async (req: Request, res: Response) => {
@@ -35,15 +35,16 @@ export class OrdersController {
 
   getOrdersWithOrderItemsAndImagesByUserAndStatus = async (
     req: Request,
-    res: Response
+    res: Response,
   ) => {
     const userId = +req.params.userId;
     const orderStatus = +req.params.orderStatus;
 
-    const response = await this.orderService.getOrdersWithOrderItemsAndImagesByUserAndStatus(
-      userId,
-      orderStatus
-    );
+    const response =
+      await this.orderService.getOrdersWithOrderItemsAndImagesByUserAndStatus(
+        userId,
+        orderStatus,
+      );
 
     return res.status(response.status).json(response);
   };
@@ -61,7 +62,7 @@ export class OrdersController {
 
     const response = await this.orderService.updateOrderStatus(
       orderId,
-      newStatus
+      newStatus,
     );
 
     return res.status(response.status).json(response);
@@ -73,7 +74,7 @@ export class OrdersController {
 
     const response = await this.orderService.updateDeliveryTime(
       orderId,
-      newDeliveryTime
+      newDeliveryTime,
     );
 
     return res.status(response.status).json(response);

@@ -1,15 +1,10 @@
-
 import { CreateUserDto } from "../../dtos/userDtos/createUserDto";
 import { HttpStatusCode } from "../../dtos/enums/status.code.enum";
 import { IUserRepository } from "../../repositories/interfaces/user.repository.interface";
 import { UserDto } from "../../dtos/userDtos/user.dto";
-import { Container } from 'inversify';
+import { Container } from "inversify";
 import { UserService } from "../../services/user.service";
-import { decodeSession, encodeSession } from "../../utils/jwtUtils/jwt.crafter.util";
-import { DecodeResult } from "../../models/jwt/decodeResult";
-import { Session } from "../../models/jwt/session";
 import { LoginUserDto } from "../../dtos/userDtos/loginUser";
-import * as bcrypt from "bcrypt";
 import { UpdateUserDto } from "../../dtos/userDtos/updateUserDto";
 
 const mockUserRepository: IUserRepository = {
@@ -22,9 +17,11 @@ const mockUserRepository: IUserRepository = {
 };
 
 const container = new Container();
-container.bind<IUserRepository>('IUserRepository').toConstantValue(mockUserRepository);
+container
+  .bind<IUserRepository>("IUserRepository")
+  .toConstantValue(mockUserRepository);
 
-describe('sign up', () => {
+describe("sign up", () => {
   let userService: UserService;
 
   beforeEach(() => {
@@ -35,8 +32,7 @@ describe('sign up', () => {
     jest.clearAllMocks();
   });
 
-  test('should send a status code of 400 when user exists', async () => {
-
+  test("should send a status code of 400 when user exists", async () => {
     const userDto: UserDto = {
       city: 1,
       language: 2,
@@ -49,7 +45,7 @@ describe('sign up', () => {
       password: "secretpassword",
       salt: "somesaltvalue",
       id: 1,
-      imagePath: ""
+      imagePath: "",
     };
 
     const createUserDto: CreateUserDto = {
@@ -65,18 +61,20 @@ describe('sign up', () => {
       salt: "somesaltvalue",
     };
 
-    (mockUserRepository.getUserByEmail as jest.Mock).mockResolvedValueOnce(userDto);
-
+    (mockUserRepository.getUserByEmail as jest.Mock).mockResolvedValueOnce(
+      userDto,
+    );
 
     const response = await userService.signUp(createUserDto);
 
     expect(response.status).toBe(HttpStatusCode.BadRequest);
     expect(response.status).toBeNull;
-    expect(response.message).toBe(`User by email ${userDto.email} alredy exist`);
+    expect(response.message).toBe(
+      `User by email ${userDto.email} alredy exist`,
+    );
   });
 
-  test('should signUp', async () => {
-
+  test("should signUp", async () => {
     const userDto: UserDto = {
       city: 1,
       language: 2,
@@ -89,7 +87,7 @@ describe('sign up', () => {
       password: "secretpassword",
       salt: "somesaltvalue",
       id: 1,
-      imagePath: ""
+      imagePath: "",
     };
 
     const createUserDto: CreateUserDto = {
@@ -106,19 +104,19 @@ describe('sign up', () => {
     };
 
     (mockUserRepository.getUserByEmail as jest.Mock).mockResolvedValueOnce({});
-    (mockUserRepository.getUserByEmail as jest.Mock).mockResolvedValueOnce(userDto);
+    (mockUserRepository.getUserByEmail as jest.Mock).mockResolvedValueOnce(
+      userDto,
+    );
 
     const response = await userService.signUp(createUserDto);
-
 
     expect(mockUserRepository.addUser).toHaveBeenCalledTimes(1);
     expect(response.status).toBe(HttpStatusCode.Created);
     expect(response.message).toBe(`User created`);
   });
-
 });
 
-describe('sign in', () => {
+describe("sign in", () => {
   let userService: UserService;
 
   beforeEach(() => {
@@ -129,7 +127,7 @@ describe('sign in', () => {
     jest.clearAllMocks();
   });
 
-  test('should return 404 when user is not found', async () => {
+  test("should return 404 when user is not found", async () => {
     const loginUserDto: LoginUserDto = {
       email: "nonexistentuser@example.com",
       password: "password",
@@ -141,11 +139,13 @@ describe('sign in', () => {
 
     expect(response.status).toBe(HttpStatusCode.NotFound);
     expect(response.data).toBeNull();
-    expect(response.message).toBe(`User by email ${loginUserDto.email} not found`);
+    expect(response.message).toBe(
+      `User by email ${loginUserDto.email} not found`,
+    );
   });
 
-  test('should return 400 for invalid password', async () => {
-    const salt = "$2b$10$TXX7YiWym3X6rvu4dWbpGO"
+  test("should return 400 for invalid password", async () => {
+    const salt = "$2b$10$TXX7YiWym3X6rvu4dWbpGO";
 
     const loginUserDto: LoginUserDto = {
       email: "existinguser@example.com",
@@ -157,10 +157,10 @@ describe('sign in', () => {
       password: "$2b$10$TXX7YiWym3X6rvu4dWbpGORedHO6wpICIH8dTXeSjz4LSbaxXiFn6",
       salt: salt,
     };
-    
 
-    (mockUserRepository.getUserByEmail as jest.Mock).mockResolvedValueOnce(existingUser);
-
+    (mockUserRepository.getUserByEmail as jest.Mock).mockResolvedValueOnce(
+      existingUser,
+    );
 
     const response = await userService.signIn(loginUserDto);
 
@@ -169,8 +169,8 @@ describe('sign in', () => {
     expect(response.message).toBe(`Invalid password`);
   });
 
-  test('should sign in successfully', async () => {
-    const salt = "$2b$10$TXX7YiWym3X6rvu4dWbpGO"
+  test("should sign in successfully", async () => {
+    const salt = "$2b$10$TXX7YiWym3X6rvu4dWbpGO";
 
     const loginUserDto: LoginUserDto = {
       email: "existinguser@example.com",
@@ -184,7 +184,9 @@ describe('sign in', () => {
       salt: salt,
     };
 
-    (mockUserRepository.getUserByEmail as jest.Mock).mockResolvedValueOnce(existingUser);
+    (mockUserRepository.getUserByEmail as jest.Mock).mockResolvedValueOnce(
+      existingUser,
+    );
 
     const response = await userService.signIn(loginUserDto);
 
@@ -193,7 +195,7 @@ describe('sign in', () => {
   });
 });
 
-describe('get all users', () => {
+describe("get all users", () => {
   let userService: UserService;
 
   beforeEach(() => {
@@ -204,7 +206,7 @@ describe('get all users', () => {
     jest.clearAllMocks();
   });
 
-  test('should return all users', async () => {
+  test("should return all users", async () => {
     const users: UserDto[] = [
       {
         city: 1,
@@ -218,7 +220,7 @@ describe('get all users', () => {
         password: "secretpassword",
         salt: "somesaltvalue",
         id: 1,
-        imagePath: ""
+        imagePath: "",
       },
       {
         city: 1,
@@ -232,7 +234,7 @@ describe('get all users', () => {
         password: "secretpassword",
         salt: "somesaltvalue",
         id: 2,
-        imagePath: ""
+        imagePath: "",
       },
       ,
       {
@@ -247,9 +249,8 @@ describe('get all users', () => {
         password: "secretpassword",
         salt: "somesaltvalue",
         id: 3,
-        imagePath: ""
+        imagePath: "",
       },
-
     ];
 
     (mockUserRepository.getAll as jest.Mock).mockResolvedValueOnce(users);
@@ -264,7 +265,7 @@ describe('get all users', () => {
   });
 });
 
-describe('get user by email', () => {
+describe("get user by email", () => {
   let userService: UserService;
 
   beforeEach(() => {
@@ -275,7 +276,7 @@ describe('get user by email', () => {
     jest.clearAllMocks();
   });
 
-  test('should return user by email', async () => {
+  test("should return user by email", async () => {
     const userEmail = "john.doe@example.com";
     const user: UserDto = {
       id: 1,
@@ -289,10 +290,12 @@ describe('get user by email', () => {
       imagePath: "",
       sex: 0,
       password: "",
-      salt: ""
+      salt: "",
     };
 
-    (mockUserRepository.getUserByEmail as jest.Mock).mockResolvedValueOnce(user);
+    (mockUserRepository.getUserByEmail as jest.Mock).mockResolvedValueOnce(
+      user,
+    );
 
     const response = await userService.getUserByEmail(userEmail);
 
@@ -304,7 +307,7 @@ describe('get user by email', () => {
     expect(mockUserRepository.getUserByEmail).toHaveBeenCalledWith(userEmail);
   });
 
-  test('should handle user not found', async () => {
+  test("should handle user not found", async () => {
     const userEmail = "nonexistentuser@example.com";
 
     (mockUserRepository.getUserByEmail as jest.Mock).mockResolvedValueOnce({});
@@ -320,7 +323,7 @@ describe('get user by email', () => {
   });
 });
 
-describe('update user', () => {
+describe("update user", () => {
   let userService: UserService;
 
   beforeEach(() => {
@@ -331,7 +334,7 @@ describe('update user', () => {
     jest.clearAllMocks();
   });
 
-  test('should update user', async () => {
+  test("should update user", async () => {
     const userId = 1;
     const updatedUserData: UpdateUserDto = {
       firstName: "UpdatedFirstName",
@@ -339,7 +342,7 @@ describe('update user', () => {
       city: 0,
       language: 0,
       numberPhone: "",
-      idImage: ""
+      idImage: "",
     };
 
     const existingUser = {
@@ -349,7 +352,9 @@ describe('update user', () => {
       email: "john.doe@example.com",
     };
 
-    (mockUserRepository.getUserById as jest.Mock).mockResolvedValueOnce(existingUser);
+    (mockUserRepository.getUserById as jest.Mock).mockResolvedValueOnce(
+      existingUser,
+    );
 
     const response = await userService.updateUser(userId, updatedUserData);
 
@@ -360,10 +365,13 @@ describe('update user', () => {
     expect(mockUserRepository.getUserById).toHaveBeenCalledTimes(1);
     expect(mockUserRepository.getUserById).toHaveBeenCalledWith(userId);
     expect(mockUserRepository.updateUser).toHaveBeenCalledTimes(1);
-    expect(mockUserRepository.updateUser).toHaveBeenCalledWith(userId, updatedUserData);
+    expect(mockUserRepository.updateUser).toHaveBeenCalledWith(
+      userId,
+      updatedUserData,
+    );
   });
 
-  test('should handle user not found', async () => {
+  test("should handle user not found", async () => {
     const userId = 1;
     const updatedUserData: UpdateUserDto = {
       firstName: "UpdatedFirstName",
@@ -371,7 +379,7 @@ describe('update user', () => {
       city: 0,
       language: 0,
       numberPhone: "",
-      idImage: ""
+      idImage: "",
     };
 
     (mockUserRepository.getUserById as jest.Mock).mockResolvedValueOnce({});
@@ -388,7 +396,7 @@ describe('update user', () => {
   });
 });
 
-describe('delete user', () => {
+describe("delete user", () => {
   let userService: UserService;
 
   beforeEach(() => {
@@ -399,7 +407,7 @@ describe('delete user', () => {
     jest.clearAllMocks();
   });
 
-  test('should delete user', async () => {
+  test("should delete user", async () => {
     const userId = 1;
 
     const existingUser = {
@@ -409,7 +417,9 @@ describe('delete user', () => {
       email: "john.doe@example.com",
     };
 
-    (mockUserRepository.getUserById as jest.Mock).mockResolvedValueOnce(existingUser);
+    (mockUserRepository.getUserById as jest.Mock).mockResolvedValueOnce(
+      existingUser,
+    );
 
     const response = await userService.deleteUser(userId);
 
@@ -423,7 +433,7 @@ describe('delete user', () => {
     expect(mockUserRepository.deleteUser).toHaveBeenCalledWith(userId);
   });
 
-  test('should handle user not found', async () => {
+  test("should handle user not found", async () => {
     const userId = 1;
 
     (mockUserRepository.getUserById as jest.Mock).mockResolvedValueOnce({});

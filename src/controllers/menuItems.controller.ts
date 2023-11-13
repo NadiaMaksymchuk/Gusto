@@ -13,13 +13,14 @@ import { convertErrorsToLowerCase } from "../utils/errors.util";
 class MenuItemsController {
   constructor(
     @inject("IMenuItemsService")
-    private readonly menuItemsService: IMenuItemsService
+    private readonly menuItemsService: IMenuItemsService,
   ) {}
 
   getAllByRestaurantId = async (req: Request, res: Response) => {
     const restaurantId = +req.params.restaurantId;
 
-    const response = await this.menuItemsService.getAllByRestaurantId(restaurantId);
+    const response =
+      await this.menuItemsService.getAllByRestaurantId(restaurantId);
 
     return res.status(response.status).json(response);
   };
@@ -56,7 +57,7 @@ class MenuItemsController {
 
     const response = await this.menuItemsService.updateMenuItem(
       menuItemId,
-      updatedMenuItemData
+      updatedMenuItemData,
     );
 
     return res.status(response.status).json(response);

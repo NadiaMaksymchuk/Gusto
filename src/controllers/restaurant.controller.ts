@@ -15,7 +15,8 @@ import { IRestaurantService } from "../services/interfaces/restaraunts.service.i
 @injectable()
 export class RestaurantsController {
   constructor(
-    @inject("IRestaurantService") private readonly restorauntService: IRestaurantService,
+    @inject("IRestaurantService")
+    private readonly restorauntService: IRestaurantService,
   ) {}
 
   createRestaurant = async (req: Request, res: Response) => {
@@ -23,7 +24,8 @@ export class RestaurantsController {
     if (errors.isEmpty()) {
       const restorauntDto = req.body as CreateRestaurantDto;
 
-      const response = await this.restorauntService.createRestaurant(restorauntDto);
+      const response =
+        await this.restorauntService.createRestaurant(restorauntDto);
 
       return res.status(response.status).json(response);
     }
@@ -56,7 +58,10 @@ export class RestaurantsController {
 
   updateRestaurant = async (req: Request, res: Response) => {
     const id = +req.params.id;
-    const response = await this.restorauntService.updateRestaurant(id, req.body as UpdateRestaurantDto);
+    const response = await this.restorauntService.updateRestaurant(
+      id,
+      req.body as UpdateRestaurantDto,
+    );
     return res.status(response.status).json(response);
   };
 }

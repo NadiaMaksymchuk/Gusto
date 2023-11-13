@@ -13,70 +13,82 @@ const mockOrderItemsRepository = {
 };
 
 const container = new Container();
-container.bind<IOrderItemsRepository>('IOrderItemsRepository').toConstantValue(mockOrderItemsRepository);
+container
+  .bind<IOrderItemsRepository>("IOrderItemsRepository")
+  .toConstantValue(mockOrderItemsRepository);
 
-describe('OrderItemsService', () => {
-    let orderItemsService: OrderItemsService;
+describe("OrderItemsService", () => {
+  let orderItemsService: OrderItemsService;
 
-
-    beforeEach(() => {
-        orderItemsService = container.resolve(OrderItemsService);
-      });
+  beforeEach(() => {
+    orderItemsService = container.resolve(OrderItemsService);
+  });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('createOrderItem should return ApiResponse with status 201', async () => {
+  test("createOrderItem should return ApiResponse with status 201", async () => {
     const newOrderItem: CreateOrderItemDto = {
-        orderId: 1,
-        menuItemId: 101,
-        quantity: 2,
-        totalPrice: 25,
+      orderId: 1,
+      menuItemId: 101,
+      quantity: 2,
+      totalPrice: 25,
     };
 
     await orderItemsService.createOrderItem(newOrderItem);
 
     expect(mockOrderItemsRepository.createOrderItem).toHaveBeenCalledTimes(1);
-    expect(mockOrderItemsRepository.createOrderItem).toHaveBeenCalledWith(newOrderItem);
+    expect(mockOrderItemsRepository.createOrderItem).toHaveBeenCalledWith(
+      newOrderItem,
+    );
   });
 
-  test('updateOrderItem should return ApiResponse with status 200 for existing order item', async () => {
+  test("updateOrderItem should return ApiResponse with status 200 for existing order item", async () => {
     const orderItemId = 1;
     const updatedOrderItemData: UpdateOrderItemDto = {
-        quantity: 1,
-        totalPrice: 12
+      quantity: 1,
+      totalPrice: 12,
     };
 
     const mockOrderItem = {
-        id: orderItemId,
-        orderId: 1,
-        menuItemId: 101,
-        quantity: 2,
-        totalPrice: 25,
+      id: orderItemId,
+      orderId: 1,
+      menuItemId: 101,
+      quantity: 2,
+      totalPrice: 25,
     };
 
     mockOrderItemsRepository.getById.mockResolvedValueOnce(mockOrderItem);
 
-    const response = await orderItemsService.updateOrderItem(orderItemId, updatedOrderItemData);
+    const response = await orderItemsService.updateOrderItem(
+      orderItemId,
+      updatedOrderItemData,
+    );
 
     expect(response.status).toBe(HttpStatusCode.OK);
     expect(response.data).toBeNull();
     expect(response.message).toBe("Order item updated successfully");
     expect(mockOrderItemsRepository.updateOrderItem).toHaveBeenCalledTimes(1);
-    expect(mockOrderItemsRepository.updateOrderItem).toHaveBeenCalledWith(orderItemId, updatedOrderItemData);
+    expect(mockOrderItemsRepository.updateOrderItem).toHaveBeenCalledWith(
+      orderItemId,
+      updatedOrderItemData,
+    );
   });
 
-  test('updateOrderItem should return ApiResponse with status 404 for non-existing order item', async () => {
+  test("updateOrderItem should return ApiResponse with status 404 for non-existing order item", async () => {
     const orderItemId = 1;
     const updatedOrderItemData: UpdateOrderItemDto = {
-        quantity: 1,
-        totalPrice: 12
+      quantity: 1,
+      totalPrice: 12,
     };
 
     mockOrderItemsRepository.getById.mockResolvedValueOnce({});
 
-    const response = await orderItemsService.updateOrderItem(orderItemId, updatedOrderItemData);
+    const response = await orderItemsService.updateOrderItem(
+      orderItemId,
+      updatedOrderItemData,
+    );
 
     expect(response.status).toBe(HttpStatusCode.NotFound);
     expect(response.data).toBeNull();
@@ -84,15 +96,15 @@ describe('OrderItemsService', () => {
     expect(mockOrderItemsRepository.updateOrderItem).not.toHaveBeenCalled();
   });
 
-  test('deleteOrderItem should return ApiResponse with status 204 for existing order item', async () => {
+  test("deleteOrderItem should return ApiResponse with status 204 for existing order item", async () => {
     const orderItemId = 1;
 
     const mockOrderItem = {
-        id: orderItemId,
-        orderId: 1,
-        menuItemId: 101,
-        quantity: 2,
-        totalPrice: 25,
+      id: orderItemId,
+      orderId: 1,
+      menuItemId: 101,
+      quantity: 2,
+      totalPrice: 25,
     };
 
     mockOrderItemsRepository.getById.mockResolvedValueOnce(mockOrderItem);
@@ -103,10 +115,12 @@ describe('OrderItemsService', () => {
     expect(response.data).toBeNull();
     expect(response.message).toBe("Order item deleted successfully");
     expect(mockOrderItemsRepository.deleteOrderItem).toHaveBeenCalledTimes(1);
-    expect(mockOrderItemsRepository.deleteOrderItem).toHaveBeenCalledWith(orderItemId);
+    expect(mockOrderItemsRepository.deleteOrderItem).toHaveBeenCalledWith(
+      orderItemId,
+    );
   });
 
-  test('deleteOrderItem should return ApiResponse with status 404 for non-existing order item', async () => {
+  test("deleteOrderItem should return ApiResponse with status 404 for non-existing order item", async () => {
     const orderItemId = 1;
 
     mockOrderItemsRepository.getById.mockResolvedValueOnce({});

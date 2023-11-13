@@ -11,26 +11,26 @@ export class EmailController {
   sendEmail = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
-        const email = req.body as EmailDto;
+      const email = req.body as EmailDto;
 
-        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-        const message = {
-          ...email,
-          from: process.env.FROM_EMAIL,
-        };
+      const message = {
+        ...email,
+        from: process.env.FROM_EMAIL,
+      };
 
-        await sgMail.send(message);
+      await sgMail.send(message);
 
-        const response = new ApiResponse(
+      const response = new ApiResponse(
         HttpStatusCode.Created,
         null,
         `Email was sended`,
-        );
+      );
 
-        return res.status(response.status).json(response);
+      return res.status(response.status).json(response);
     }
-   
+
     const response = new ApiResponse(
       HttpStatusCode.BadRequest,
       null,

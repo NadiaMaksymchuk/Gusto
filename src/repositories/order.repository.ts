@@ -7,7 +7,7 @@ import { IOrdersRepository } from "./interfaces/order.repository.interface";
 import { OrderDto } from "../dtos/ordersDto/orderDto";
 
 @injectable()
-export class OrdersRepository  implements IOrdersRepository {
+export class OrdersRepository implements IOrdersRepository {
   async createOrder(newOrder: CreateOrderDto) {
     const values = [...Object.values(newOrder)];
 

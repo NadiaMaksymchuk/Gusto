@@ -12,16 +12,15 @@ import { convertErrorsToLowerCase } from "../utils/errors.util";
 export class NotificationsController {
   constructor(
     @inject("INotificationsService")
-    private readonly notificationsService: INotificationsService
+    private readonly notificationsService: INotificationsService,
   ) {}
 
   createNotification = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       const notificationData = req.body as CreateNotificationDto;
-      const response = await this.notificationsService.createNotification(
-        notificationData
-      );
+      const response =
+        await this.notificationsService.createNotification(notificationData);
 
       return res.status(response.status).json(response);
     }
@@ -37,23 +36,22 @@ export class NotificationsController {
 
   deleteNotification = async (req: Request, res: Response) => {
     const notificationId = +req.params.notificationId;
-    const response = await this.notificationsService.deleteNotification(
-      notificationId
-    );
+    const response =
+      await this.notificationsService.deleteNotification(notificationId);
 
     return res.status(response.status).json(response);
   };
 
   getUnreadNotificationsByUserId = async (req: Request, res: Response) => {
-    const response = await this.notificationsService.getUnreadNotificationsByUserId();
+    const response =
+      await this.notificationsService.getUnreadNotificationsByUserId();
     return res.status(response.status).json(response);
   };
 
   readNotificationStatus = async (req: Request, res: Response) => {
     const notificationId = +req.params.notificationId;
-    const response = await this.notificationsService.readNotificationStatus(
-      notificationId
-    );
+    const response =
+      await this.notificationsService.readNotificationStatus(notificationId);
 
     return res.status(response.status).json(response);
   };

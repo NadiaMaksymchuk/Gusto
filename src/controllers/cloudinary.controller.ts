@@ -19,27 +19,27 @@ export class CloudinaryController {
       if (err) {
         return ResponseHandler.badRequest(res, err.message);
       }
-        if (req.file) {
-          const response = await this.cloudinaryService.uploadPhoto(req.file);
+      if (req.file) {
+        const response = await this.cloudinaryService.uploadPhoto(req.file);
 
-          return res.status(response.status).json(response);
-        } else {
-          return ResponseHandler.badRequest(res, "No file uploaded");
-        }
+        return res.status(response.status).json(response);
+      } else {
+        return ResponseHandler.badRequest(res, "No file uploaded");
+      }
     });
   };
 
   deleteImageById = async (req: Request, res: Response) => {
     const id = req.params.id;
-      const response = await this.cloudinaryService.deletePhoto(id);
-      
-      return res.status(response.status).json(response);
-    };
+    const response = await this.cloudinaryService.deletePhoto(id);
+
+    return res.status(response.status).json(response);
+  };
 
   getById = async (req: Request, res: Response) => {
     const id = req.params.id;
-      const response = await this.cloudinaryService.getPhotoById(id);
+    const response = await this.cloudinaryService.getPhotoById(id);
 
-      return res.status(response.status).json(response);
+    return res.status(response.status).json(response);
   };
 }

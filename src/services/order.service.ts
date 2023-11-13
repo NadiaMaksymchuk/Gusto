@@ -8,10 +8,10 @@ import { injectable, inject } from "inversify";
 import "reflect-metadata";
 
 @injectable()
-export class OrderService implements IOrderService{
+export class OrderService implements IOrderService {
   constructor(
     @inject("IOrdersRepository")
-    private readonly ordersRepository: IOrdersRepository
+    private readonly ordersRepository: IOrdersRepository,
   ) {}
 
   async createOrder(newOrder: CreateOrderDto): Promise<ApiResponse<void>> {
@@ -19,22 +19,23 @@ export class OrderService implements IOrderService{
     return new ApiResponse(
       HttpStatusCode.Created,
       null,
-      "Order created successfully"
+      "Order created successfully",
     );
   }
 
   async getOrdersWithOrderItemsAndImagesByUserAndStatus(
     userId: number,
-    orderStatus: number
+    orderStatus: number,
   ): Promise<ApiResponse<OrderWithItemsImagesAndRestaurantDto[]>> {
-    const orders = await this.ordersRepository.getOrdersWithOrderItemsAndImagesByUserAndStatus(
-      userId,
-      orderStatus
-    );
+    const orders =
+      await this.ordersRepository.getOrdersWithOrderItemsAndImagesByUserAndStatus(
+        userId,
+        orderStatus,
+      );
     return new ApiResponse(
       HttpStatusCode.OK,
       orders,
-      "Orders retrieved successfully"
+      "Orders retrieved successfully",
     );
   }
 
@@ -53,13 +54,13 @@ export class OrderService implements IOrderService{
     return new ApiResponse(
       HttpStatusCode.NoContent,
       null,
-      "Order deleted successfully"
+      "Order deleted successfully",
     );
   }
 
   async updateOrderStatus(
     orderId: number,
-    newStatus: number
+    newStatus: number,
   ): Promise<ApiResponse<void>> {
     const order = await this.ordersRepository.getById(orderId);
 
@@ -73,15 +74,15 @@ export class OrderService implements IOrderService{
 
     await this.ordersRepository.updateOrderStatus(orderId, newStatus);
     return new ApiResponse(
-      HttpStatusCode.NoContent,
+      HttpStatusCode.OK,
       null,
-      "Order status updated successfully"
+      "Order status updated successfully",
     );
   }
 
   async updateDeliveryTime(
     orderId: number,
-    newDeliveryTime: string
+    newDeliveryTime: string,
   ): Promise<ApiResponse<void>> {
     const order = await this.ordersRepository.getById(orderId);
 
@@ -95,9 +96,9 @@ export class OrderService implements IOrderService{
 
     await this.ordersRepository.updateDeliveryTime(orderId, newDeliveryTime);
     return new ApiResponse(
-      HttpStatusCode.NoContent,
+      HttpStatusCode.OK,
       null,
-      "Delivery time updated successfully"
+      "Delivery time updated successfully",
     );
   }
 }

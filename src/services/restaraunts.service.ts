@@ -11,21 +11,35 @@ import { IRestaurantService } from "./interfaces/restaraunts.service.interface";
 @injectable()
 export class RestaurantService implements IRestaurantService {
   constructor(
-    @inject("IRestaurantsRepository") private readonly restaurantRepository: IRestaurantsRepository,
+    @inject("IRestaurantsRepository")
+    private readonly restaurantRepository: IRestaurantsRepository,
   ) {}
 
-  async createRestaurant(newRestaurant: CreateRestaurantDto): Promise<ApiResponse<void>> {
+  async createRestaurant(
+    newRestaurant: CreateRestaurantDto,
+  ): Promise<ApiResponse<void>> {
     await this.restaurantRepository.createRestaurant(newRestaurant);
-    return new ApiResponse(HttpStatusCode.Created, null, "Restaurant created successfully");
+    return new ApiResponse(
+      HttpStatusCode.Created,
+      null,
+      "Restaurant created successfully",
+    );
   }
 
   async getAllRestaurants(): Promise<ApiResponse<RestaurantDto[]>> {
     const restaurants = await this.restaurantRepository.getAllRestaurants();
-    return new ApiResponse(HttpStatusCode.OK, restaurants, "Restaurants retrieved successfully");
+    return new ApiResponse(
+      HttpStatusCode.OK,
+      restaurants,
+      "Restaurants retrieved successfully",
+    );
   }
 
-  async getRestaurantById(restaurantId: number): Promise<ApiResponse<RestaurantDto | null>> {
-    const restaurant = await this.restaurantRepository.getRestaurantById(restaurantId);
+  async getRestaurantById(
+    restaurantId: number,
+  ): Promise<ApiResponse<RestaurantDto | null>> {
+    const restaurant =
+      await this.restaurantRepository.getRestaurantById(restaurantId);
 
     if (Object.keys(restaurant).length === 0) {
       return new ApiResponse(
@@ -35,28 +49,56 @@ export class RestaurantService implements IRestaurantService {
       );
     }
 
-    return new ApiResponse(HttpStatusCode.OK, restaurant, "Restaurant retrieved successfully");
+    return new ApiResponse(
+      HttpStatusCode.OK,
+      restaurant,
+      "Restaurant retrieved successfully",
+    );
   }
 
-  async updateRestaurant(restaurantId: number, updatedRestaurantData: UpdateRestaurantDto): Promise<ApiResponse<void>> {
-    const restaurant = await this.restaurantRepository.getRestaurantById(restaurantId);
+  async updateRestaurant(
+    restaurantId: number,
+    updatedRestaurantData: UpdateRestaurantDto,
+  ): Promise<ApiResponse<void>> {
+    const restaurant =
+      await this.restaurantRepository.getRestaurantById(restaurantId);
 
     if (Object.keys(restaurant).length === 0) {
-        return new ApiResponse(HttpStatusCode.NotFound, null, "Restaurant not found");
+      return new ApiResponse(
+        HttpStatusCode.NotFound,
+        null,
+        "Restaurant not found",
+      );
     }
 
-    await this.restaurantRepository.updateRestaurant(restaurantId, updatedRestaurantData);
-    return new ApiResponse(HttpStatusCode.OK, null, "Restaurant updated successfully");
+    await this.restaurantRepository.updateRestaurant(
+      restaurantId,
+      updatedRestaurantData,
+    );
+    return new ApiResponse(
+      HttpStatusCode.OK,
+      null,
+      "Restaurant updated successfully",
+    );
   }
 
   async deleteRestaurant(restaurantId: number): Promise<ApiResponse<void>> {
-    const restaurant = await this.restaurantRepository.getRestaurantById(restaurantId);
+    const restaurant =
+      await this.restaurantRepository.getRestaurantById(restaurantId);
 
     if (Object.keys(restaurant).length === 0) {
-        return new ApiResponse(HttpStatusCode.NotFound, null, "Restaurant not found");
+      return new ApiResponse(
+        HttpStatusCode.NotFound,
+        null,
+        "Restaurant not found",
+      );
     }
 
     await this.restaurantRepository.deleteRestaurant(restaurantId);
-    return new ApiResponse(HttpStatusCode.NoContent, null, "Restaurant deleted successfully");
+    return new ApiResponse(
+      HttpStatusCode.NoContent,
+      null,
+      "Restaurant deleted successfully",
+    );
   }
 }

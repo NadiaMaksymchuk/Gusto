@@ -4,9 +4,14 @@ import { UpdateMenuItemDto } from "../../dtos/restaurantsDtos/menuItemsDtos/upda
 import ApiResponse from "../../handlers/apiResponce.util";
 
 export interface IMenuItemsService {
-    getAllByRestaurantId(restaurantId: number): Promise<ApiResponse<MenuItemsDto[]>>;
-    getMenuById(menuItemId: number): Promise<ApiResponse<MenuItemsDto | null>>;
-    addMenuItem(newMenuItem: CreateMenuItemDto): Promise<ApiResponse<void>>;
-    updateMenuItem(menuItemId: number, updatedMenuItemData: UpdateMenuItemDto): Promise<ApiResponse<void>>;
-    deleteMenuItem(menuItemId: number): Promise<ApiResponse<void>>;
-  }
+  getAllByRestaurantId(
+    restaurantId: number,
+  ): Promise<ApiResponse<MenuItemsDto[]>>;
+  getMenuById(menuItemId: number): Promise<ApiResponse<MenuItemsDto | null>>;
+  addMenuItem(newMenuItem: CreateMenuItemDto): Promise<ApiResponse<void>>;
+  updateMenuItem(
+    menuItemId: number,
+    updatedMenuItemData: UpdateMenuItemDto,
+  ): Promise<ApiResponse<void>>;
+  deleteMenuItem(menuItemId: number): Promise<ApiResponse<void>>;
+}

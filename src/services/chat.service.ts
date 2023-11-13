@@ -10,15 +10,21 @@ import { ChatDto } from "../dtos/chatDtos/chatDto";
 import { IChatService } from "./interfaces/chat.service.interface";
 
 @injectable()
-export class ChatService implements IChatService{
+export class ChatService implements IChatService {
   constructor(
-    @inject("IMessagesRepository") private readonly messagesRepository: IMessagesRepository,
-    @inject("IChatsRepository") private readonly chatsRepository: IChatsRepository,
+    @inject("IMessagesRepository")
+    private readonly messagesRepository: IMessagesRepository,
+    @inject("IChatsRepository")
+    private readonly chatsRepository: IChatsRepository,
   ) {}
 
   async createChat(name: string): Promise<ApiResponse<void>> {
     await this.chatsRepository.createChat(name);
-    return new ApiResponse(HttpStatusCode.Created, null, "Chat created successfully");
+    return new ApiResponse(
+      HttpStatusCode.Created,
+      null,
+      "Chat created successfully",
+    );
   }
 
   async getChatById(chatId: number): Promise<ApiResponse<ChatDto | null>> {
@@ -32,17 +38,32 @@ export class ChatService implements IChatService{
       );
     }
 
-    return new ApiResponse(HttpStatusCode.OK, chat, "Chat retrieved successfully");
+    return new ApiResponse(
+      HttpStatusCode.OK,
+      chat,
+      "Chat retrieved successfully",
+    );
   }
 
   async getChatsByUserId() {
     const chats = await this.chatsRepository.getChatsByUserId();
-    return new ApiResponse(HttpStatusCode.OK, chats, "Chats retrieved successfully");
+    return new ApiResponse(
+      HttpStatusCode.OK,
+      chats,
+      "Chats retrieved successfully",
+    );
   }
 
-  async getNumberOfUnreadMessages(chatId: number): Promise<ApiResponse<number>> {
-    const unreadMessageCount = await this.chatsRepository.getNumberOfUnreadMessages(chatId);
-    return new ApiResponse(HttpStatusCode.OK, unreadMessageCount, "Unread message count retrieved successfully");
+  async getNumberOfUnreadMessages(
+    chatId: number,
+  ): Promise<ApiResponse<number>> {
+    const unreadMessageCount =
+      await this.chatsRepository.getNumberOfUnreadMessages(chatId);
+    return new ApiResponse(
+      HttpStatusCode.OK,
+      unreadMessageCount,
+      "Unread message count retrieved successfully",
+    );
   }
 
   async deleteChat(chatId: number): Promise<ApiResponse<void>> {
@@ -57,15 +78,28 @@ export class ChatService implements IChatService{
     }
 
     await this.chatsRepository.deleteChat(chatId);
-    return new ApiResponse(HttpStatusCode.NoContent, null, "Chat deleted successfully");
+    return new ApiResponse(
+      HttpStatusCode.NoContent,
+      null,
+      "Chat deleted successfully",
+    );
   }
 
-  async createMessage(newMessage: CreateMessageDto): Promise<ApiResponse<void>> {
+  async createMessage(
+    newMessage: CreateMessageDto,
+  ): Promise<ApiResponse<void>> {
     await this.messagesRepository.createMessage(newMessage);
-    return new ApiResponse(HttpStatusCode.Created, null, "Message created successfully");
+    return new ApiResponse(
+      HttpStatusCode.Created,
+      null,
+      "Message created successfully",
+    );
   }
 
-  async updateMessage(messageId: number, text: string): Promise<ApiResponse<void>> {
+  async updateMessage(
+    messageId: number,
+    text: string,
+  ): Promise<ApiResponse<void>> {
     const message = await this.messagesRepository.getById(messageId);
 
     if (Object.keys(message).length === 0) {
@@ -77,17 +111,30 @@ export class ChatService implements IChatService{
     }
 
     await this.messagesRepository.updateMessage(messageId, text);
-    return new ApiResponse(HttpStatusCode.OK, null, "Message updated successfully");
+    return new ApiResponse(
+      HttpStatusCode.OK,
+      null,
+      "Message updated successfully",
+    );
   }
 
   async getLastMessage(chatId: number): Promise<ApiResponse<ChatPersonDto[]>> {
     const lastMessage = await this.messagesRepository.getLastMessage(chatId);
-    return new ApiResponse(HttpStatusCode.OK, lastMessage, "Last message retrieved successfully");
+    return new ApiResponse(
+      HttpStatusCode.OK,
+      lastMessage,
+      "Last message retrieved successfully",
+    );
   }
 
   async getFirst30MessagesByChatId(chatId: number) {
-    const messages = await this.messagesRepository.getFirst30MessagesByChatId(chatId);
-    return new ApiResponse(HttpStatusCode.OK, messages, "First 30 messages retrieved successfully");
+    const messages =
+      await this.messagesRepository.getFirst30MessagesByChatId(chatId);
+    return new ApiResponse(
+      HttpStatusCode.OK,
+      messages,
+      "First 30 messages retrieved successfully",
+    );
   }
 
   async deleteMessage(messageId: number): Promise<ApiResponse<void>> {
@@ -102,6 +149,10 @@ export class ChatService implements IChatService{
     }
 
     await this.messagesRepository.deleteMessage(messageId);
-    return new ApiResponse(HttpStatusCode.NoContent, null, "Message deleted successfully");
+    return new ApiResponse(
+      HttpStatusCode.NoContent,
+      null,
+      "Message deleted successfully",
+    );
   }
 }

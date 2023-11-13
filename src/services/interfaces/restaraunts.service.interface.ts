@@ -4,9 +4,16 @@ import { UpdateRestaurantDto } from "../../dtos/restaurantsDtos/updateRestoraunt
 import ApiResponse from "../../handlers/apiResponce.util";
 
 export interface IRestaurantService {
-  createRestaurant(newRestaurant: CreateRestaurantDto): Promise<ApiResponse<void>>;
+  createRestaurant(
+    newRestaurant: CreateRestaurantDto,
+  ): Promise<ApiResponse<void>>;
   getAllRestaurants(): Promise<ApiResponse<RestaurantDto[]>>;
-  getRestaurantById(restaurantId: number): Promise<ApiResponse<RestaurantDto | null>>;
-  updateRestaurant(restaurantId: number, updatedRestaurantData: UpdateRestaurantDto): Promise<ApiResponse<void>>;
+  getRestaurantById(
+    restaurantId: number,
+  ): Promise<ApiResponse<RestaurantDto | null>>;
+  updateRestaurant(
+    restaurantId: number,
+    updatedRestaurantData: UpdateRestaurantDto,
+  ): Promise<ApiResponse<void>>;
   deleteRestaurant(restaurantId: number): Promise<ApiResponse<void>>;
 }

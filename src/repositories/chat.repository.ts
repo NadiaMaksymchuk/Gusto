@@ -5,7 +5,7 @@ import { CurrentUserId, IsCourier } from "../middwares/authMiddleware";
 import { IChatsRepository } from "./interfaces/chat.repository.interface";
 
 @injectable()
-export class ChatsRepository implements IChatsRepository{
+export class ChatsRepository implements IChatsRepository {
   async createChat(name: string): Promise<void> {
     const queryText = `
       INSERT INTO Chats (name)

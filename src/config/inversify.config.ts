@@ -48,32 +48,49 @@ const container = new Container();
 container.bind<IUserRepository>("IUserRepository").to(UserRepository);
 container.bind<IUserService>("IUserService").to(UserService);
 
-container.bind<IRestaurantsRepository>("IRestaurantsRepository").to(RestaurantsRepository);
+container
+  .bind<IRestaurantsRepository>("IRestaurantsRepository")
+  .to(RestaurantsRepository);
 container.bind<IRestaurantService>("IRestaurantService").to(RestaurantService);
 
-container.bind<IOrderItemsRepository>("IOrderItemsRepository").to(OrderItemsRepository);
+container
+  .bind<IOrderItemsRepository>("IOrderItemsRepository")
+  .to(OrderItemsRepository);
 container.bind<IOrderItemsService>("IOrderItemsService").to(OrderItemsService);
 
 container.bind<IOrdersRepository>("IOrdersRepository").to(OrdersRepository);
 container.bind<IOrderService>("IOrderService").to(OrderService);
 
-container.bind<INotificationsRepository>("INotificationsRepository").to(NotificationsRepository);
-container.bind<INotificationsService>("INotificationsService").to(NotificationsService);
+container
+  .bind<INotificationsRepository>("INotificationsRepository")
+  .to(NotificationsRepository);
+container
+  .bind<INotificationsService>("INotificationsService")
+  .to(NotificationsService);
 
-container.bind<IMessagesRepository>("IMessagesRepository").to(MessagesRepository);
+container
+  .bind<IMessagesRepository>("IMessagesRepository")
+  .to(MessagesRepository);
 container.bind<IChatService>("IChatService").to(ChatService);
 
-container.bind<IMenuItemsRepository>("IMenuItemsRepository").to(MenuItemsRepository);
+container
+  .bind<IMenuItemsRepository>("IMenuItemsRepository")
+  .to(MenuItemsRepository);
 container.bind<IMenuItemsService>("IMenuItemsService").to(MenuItemsService);
-
 
 container.bind<IImageRepository>("IImageRepository").to(ImageRepository);
 container.bind<IImageService>("IImageService").to(CloundinaryService);
 
-container.bind<IDeliveryDetailsRepository>("IDeliveryDetailsRepository").to(DeliveryDetailsRepository);
-container.bind<IDeliveryDetailsService>("IDeliveryDetailsService").to(DeliveryDetailsService);
+container
+  .bind<IDeliveryDetailsRepository>("IDeliveryDetailsRepository")
+  .to(DeliveryDetailsRepository);
+container
+  .bind<IDeliveryDetailsService>("IDeliveryDetailsService")
+  .to(DeliveryDetailsService);
 
-container.bind<ICouriersRepository>("ICouriersRepository").to(CouriersRepository);
+container
+  .bind<ICouriersRepository>("ICouriersRepository")
+  .to(CouriersRepository);
 container.bind<ICouriersService>("ICouriersService").to(CouriersService);
 
 container.bind<IChatsRepository>("IChatsRepository").to(ChatsRepository);

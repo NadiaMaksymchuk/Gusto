@@ -7,7 +7,7 @@ import { arrayToStringWithQuotes } from "../utils/request.util";
 import { IMenuItemsRepository } from "./interfaces/menuItems.repository.interface";
 
 @injectable()
-export class MenuItemsRepository  implements IMenuItemsRepository {
+export class MenuItemsRepository implements IMenuItemsRepository {
   async getAllByRestaurantId(restaurantId: number): Promise<MenuItemsDto[]> {
     return new Promise((resolve, reject) => {
       const query = `

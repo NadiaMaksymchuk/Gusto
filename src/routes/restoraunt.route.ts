@@ -4,7 +4,8 @@ import { createRestaurantValidator } from "../validator/restauranta.validator";
 import container from "../config/inversify.config";
 import { IRestaurantService } from "../services/interfaces/restaraunts.service.interface";
 
-const restaurantsService = container.get<IRestaurantService>("IRestaurantService");
+const restaurantsService =
+  container.get<IRestaurantService>("IRestaurantService");
 
 const restaurantsController = new RestaurantsController(restaurantsService);
 

@@ -11,7 +11,10 @@ import { IImageService } from "./interfaces/image.service";
 
 @injectable()
 export class CloundinaryService implements IImageService {
-  constructor(@inject("IImageRepository") private readonly imageRepository: ImageRepository){}
+  constructor(
+    @inject("IImageRepository")
+    private readonly imageRepository: ImageRepository,
+  ) {}
 
   async getPhotoById(photoId: string): Promise<ApiResponse<ImageDto>> {
     const image = await this.imageRepository.getImageById(photoId);
@@ -21,14 +24,10 @@ export class CloundinaryService implements IImageService {
         HttpStatusCode.BadRequest,
         null,
         `Photo by email ${photoId} not found`,
-        );
+      );
     }
 
-    return new ApiResponse(
-      HttpStatusCode.OK,
-      image,
-      "Photo get successfully"
-    );
+    return new ApiResponse(HttpStatusCode.OK, image, "Photo get successfully");
   }
 
   async deletePhoto(photoId: string) {
@@ -47,7 +46,7 @@ export class CloundinaryService implements IImageService {
     return new ApiResponse(
       HttpStatusCode.NoContent,
       null,
-      "Photo deleted successfully"
+      "Photo deleted successfully",
     );
   }
 
@@ -71,7 +70,7 @@ export class CloundinaryService implements IImageService {
     return new ApiResponse(
       HttpStatusCode.OK,
       createdImage,
-      "Image upload successfully"
+      "Image upload successfully",
     );
   }
 

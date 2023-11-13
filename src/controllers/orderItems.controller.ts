@@ -13,14 +13,15 @@ import { convertErrorsToLowerCase } from "../utils/errors.util";
 export class OrderItemsController {
   constructor(
     @inject("IOrderItemsService")
-    private readonly orderItemsService: IOrderItemsService
+    private readonly orderItemsService: IOrderItemsService,
   ) {}
 
   createOrderItem = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
       const newOrderItem = req.body as CreateOrderItemDto;
-      const response = await this.orderItemsService.createOrderItem(newOrderItem);
+      const response =
+        await this.orderItemsService.createOrderItem(newOrderItem);
 
       return res.status(response.status).json(response);
     }
@@ -40,7 +41,7 @@ export class OrderItemsController {
 
     const response = await this.orderItemsService.updateOrderItem(
       orderItemId,
-      updatedOrderItemData
+      updatedOrderItemData,
     );
 
     return res.status(response.status).json(response);

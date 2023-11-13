@@ -4,9 +4,13 @@ import { createDeliveryDetailValidator } from "../validator/deliveryDetail.valid
 import container from "../config/inversify.config";
 import { IDeliveryDetailsService } from "../services/interfaces/deliveryDetails.service.interface";
 
-const deliveryDetailsService = container.get<IDeliveryDetailsService>("IDeliveryDetailsService");
+const deliveryDetailsService = container.get<IDeliveryDetailsService>(
+  "IDeliveryDetailsService",
+);
 
-const deliveryDetailsController = new DeliveryDetailsController(deliveryDetailsService);
+const deliveryDetailsController = new DeliveryDetailsController(
+  deliveryDetailsService,
+);
 
 const router = Router();
 
