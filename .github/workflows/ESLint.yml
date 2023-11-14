@@ -1,4 +1,4 @@
-name: Run Unit Tests with Coverage
+name: ESLint
 
 on:
   pull_request:
