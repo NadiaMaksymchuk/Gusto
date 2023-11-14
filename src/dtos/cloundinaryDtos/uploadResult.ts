@@ -1,4 +1,4 @@
 export class UploadResult {
-  url: string;
-  public_id: string;
+  url: string
+  public_id: string
 }

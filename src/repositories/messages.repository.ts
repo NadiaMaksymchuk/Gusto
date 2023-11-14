@@ -1,11 +1,11 @@
-import { injectable } from "inversify";
-import { sqlPool } from "../db/sql.pool";
-import ChatPersonDto from "../dtos/chatDtos/chatPersonDto";
-import { CreateMessageDto } from "../dtos/chatDtos/createMessagesDto";
-import { CurrentUserId } from "../middwares/authMiddleware";
-import { arrayToStringWithQuotes } from "../utils/request.util";
-import { IMessagesRepository } from "./interfaces/message.repository.interface";
-import { MessageDto } from "../dtos/chatDtos/messagesDto";
+import { injectable } from 'inversify'
+import { sqlPool } from '../db/sql.pool'
+import ChatPersonDto from '../dtos/chatDtos/chatPersonDto'
+import { CreateMessageDto } from '../dtos/chatDtos/createMessagesDto'
+import { CurrentUserId } from '../middwares/authMiddleware'
+import { arrayToStringWithQuotes } from '../utils/request.util'
+import { IMessagesRepository } from './interfaces/message.repository.interface'
+import { MessageDto } from '../dtos/chatDtos/messagesDto'
 
 @injectable()
 class MessagesRepository implements IMessagesRepository {
@@ -14,37 +14,37 @@ class MessagesRepository implements IMessagesRepository {
       CurrentUserId,
       newMessage.chatId,
       newMessage.text,
-      new Date().toISOString().replace("T", " ").replace("Z", ""),
-    ];
+      new Date().toISOString().replace('T', ' ').replace('Z', ''),
+    ]
 
     const queryText = `
       INSERT INTO Messages (createdBy, chatId, text, createdAt, isRead)
       VALUES (${arrayToStringWithQuotes(values)}, false);
-    `;
+    `
 
     return new Promise<void>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err) {
         if (err) {
-          reject(err);
+          reject(err)
         }
-        resolve();
-      });
-    });
+        resolve()
+      })
+    })
   }
 
   async updateMessage(messageId: number, text: string): Promise<void> {
     const queryText = `
       UPDATE Messages SET text = '${text}' WHERE id = ${messageId};
-    `;
+    `
 
     return new Promise<void>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err) {
         if (err) {
-          reject(err);
+          reject(err)
         }
-        resolve();
-      });
-    });
+        resolve()
+      })
+    })
   }
 
   async getLastMessage(chatId: number): Promise<ChatPersonDto[]> {
@@ -70,14 +70,14 @@ class MessagesRepository implements IMessagesRepository {
         WHERE M2.chatId = C.id
       )
       AND C.id = ${chatId};
-    `;
+    `
 
     return new Promise<ChatPersonDto[]>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err, res) {
         if (err) {
-          reject(err);
+          reject(err)
         } else {
-          const chatPersons: ChatPersonDto[] = [];
+          const chatPersons: ChatPersonDto[] = []
           for (const row of res) {
             chatPersons.push({
               Email: row.Email,
@@ -89,12 +89,12 @@ class MessagesRepository implements IMessagesRepository {
               NumberOfUnreadMessages: row.NumberOfUnreadMessages,
               ChatId: row.ChatId,
               ImageUrl: row.ImageUrl,
-            });
+            })
           }
-          resolve(chatPersons);
+          resolve(chatPersons)
         }
-      });
-    });
+      })
+    })
   }
 
   async getFirst30MessagesByChatId(chatId: number) {
@@ -113,50 +113,50 @@ class MessagesRepository implements IMessagesRepository {
       WHERE M.chatId = ${chatId}
       ORDER BY M.createdAt DESC
       LIMIT 30;
-    `;
+    `
 
     return new Promise((resolve, reject) => {
       sqlPool.query(query, (error, results) => {
         if (error) {
-          reject(error);
+          reject(error)
         } else {
-          resolve(results);
+          resolve(results)
         }
-      });
-    });
+      })
+    })
   }
 
   async deleteMessage(messageId: number): Promise<void> {
-    const queryText = `DELETE FROM Messages WHERE id = ${messageId};`;
+    const queryText = `DELETE FROM Messages WHERE id = ${messageId};`
 
     return new Promise<void>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err) {
         if (err) {
-          reject(err);
+          reject(err)
         }
-        resolve();
-      });
-    });
+        resolve()
+      })
+    })
   }
 
   async getById(messageId: number) {
-    const queryText = `SELECT * FROM Messages WHERE id = ${messageId};`;
+    const queryText = `SELECT * FROM Messages WHERE id = ${messageId};`
 
     return new Promise<MessageDto | null>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err, res) {
         if (err) {
-          reject(err);
+          reject(err)
         }
 
         if (res && res.length > 0) {
-          const chat = res[0] as MessageDto;
-          resolve(chat);
+          const chat = res[0] as MessageDto
+          resolve(chat)
         } else {
-          resolve(null);
+          resolve(null)
         }
-      });
-    });
+      })
+    })
   }
 }
 
-export default MessagesRepository;
+export default MessagesRepository

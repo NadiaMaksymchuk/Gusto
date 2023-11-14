@@ -1,136 +1,123 @@
-import { Container } from "inversify";
-import { OrdersController } from "../../controllers/orders.controller";
-import { IOrderItemsService } from "../../services/interfaces/orderItems.service.interface";
-import { CreateOrderItemDto } from "../../dtos/orderItemsDtos/createOrderItemDto";
-import { UpdateOrderItemDto } from "../../dtos/orderItemsDtos/updateOrderItemDto";
-import { OrderItemsController } from "../../controllers/orderItems.controller";
-import { HttpStatusCode } from "../../dtos/enums/status.code.enum";
-import { Request, Response } from "express";
+import { Container } from 'inversify'
+import { IOrderItemsService } from '../../services/interfaces/orderItems.service.interface'
+import { CreateOrderItemDto } from '../../dtos/orderItemsDtos/createOrderItemDto'
+import { UpdateOrderItemDto } from '../../dtos/orderItemsDtos/updateOrderItemDto'
+import { OrderItemsController } from '../../controllers/orderItems.controller'
+import { HttpStatusCode } from '../../dtos/enums/status.code.enum'
+import { Request, Response } from 'express'
 
 const mockOrderItemsService: IOrderItemsService = {
   createOrderItem: jest.fn(),
   updateOrderItem: jest.fn(),
   deleteOrderItem: jest.fn(),
-};
+}
 
-const container = new Container();
-container
-  .bind<IOrderItemsService>("IOrderItemsService")
-  .toConstantValue(mockOrderItemsService);
+const container = new Container()
+container.bind<IOrderItemsService>('IOrderItemsService').toConstantValue(mockOrderItemsService)
 
-describe("order items controller", () => {
-  let orderItemsController: OrderItemsController;
+describe('order items controller', () => {
+  let orderItemsController: OrderItemsController
 
   beforeEach(() => {
-    orderItemsController = container.resolve(OrderItemsController);
-  });
+    orderItemsController = container.resolve(OrderItemsController)
+  })
 
   afterEach(() => {
-    jest.clearAllMocks();
-  });
+    jest.clearAllMocks()
+  })
 
-  test("createOrderItem should return ApiResponse with status 201", async () => {
+  test('createOrderItem should return ApiResponse with status 201', async () => {
     const newOrderItem: CreateOrderItemDto = {
       orderId: 1,
       menuItemId: 101,
       quantity: 2,
       totalPrice: 25,
-    };
+    }
 
-    (mockOrderItemsService.createOrderItem as jest.Mock).mockResolvedValueOnce({
+    ;(mockOrderItemsService.createOrderItem as jest.Mock).mockResolvedValueOnce({
       status: HttpStatusCode.Created,
       data: null,
-      message: "Order item created successfully",
-    });
+      message: 'Order item created successfully',
+    })
 
     const mockRequest = {
       body: newOrderItem,
-    } as unknown as Request;
+    } as unknown as Request
 
     const mockResponse = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
-    } as unknown as Response;
+    } as unknown as Response
 
-    await orderItemsController.createOrderItem(mockRequest, mockResponse);
+    await orderItemsController.createOrderItem(mockRequest, mockResponse)
 
-    expect(mockResponse.status).toHaveBeenCalledWith(HttpStatusCode.Created);
+    expect(mockResponse.status).toHaveBeenCalledWith(HttpStatusCode.Created)
     expect(mockResponse.json).toHaveBeenCalledWith({
       status: HttpStatusCode.Created,
       data: null,
-      message: "Order item created successfully",
-    });
-    expect(mockOrderItemsService.createOrderItem).toHaveBeenCalledWith(
-      newOrderItem,
-    );
-  });
+      message: 'Order item created successfully',
+    })
+    expect(mockOrderItemsService.createOrderItem).toHaveBeenCalledWith(newOrderItem)
+  })
 
-  test("updateOrderItem should return ApiResponse with status 200 for existing order item", async () => {
-    const orderItemId = 1;
+  test('updateOrderItem should return ApiResponse with status 200 for existing order item', async () => {
+    const orderItemId = 1
     const updatedOrderItemData: UpdateOrderItemDto = {
       quantity: 1,
       totalPrice: 12,
-    };
+    }
 
-    const mockOrderItem = {
-      id: orderItemId,
-      orderId: 1,
-      menuItemId: 101,
-      quantity: 2,
-      totalPrice: 25,
-    };
-
-    (mockOrderItemsService.updateOrderItem as jest.Mock).mockResolvedValueOnce({
+    ;(mockOrderItemsService.updateOrderItem as jest.Mock).mockResolvedValueOnce({
       status: HttpStatusCode.OK,
       data: null,
-      message: "Order item updated successfully",
-    });
+      message: 'Order item updated successfully',
+    })
 
     const mockRequest = {
       params: { id: orderItemId },
       body: updatedOrderItemData,
-    } as unknown as Request;
+    } as unknown as Request
 
     const mockResponse = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
-    } as unknown as Response;
+    } as unknown as Response
 
-    await orderItemsController.updateOrderItem(mockRequest, mockResponse);
+    await orderItemsController.updateOrderItem(mockRequest, mockResponse)
 
-    expect(mockResponse.status).toHaveBeenCalledWith(HttpStatusCode.OK);
+    expect(mockResponse.status).toHaveBeenCalledWith(HttpStatusCode.OK)
     expect(mockResponse.json).toHaveBeenCalledWith({
       status: HttpStatusCode.OK,
       data: null,
-      message: "Order item updated successfully",
-    });
-  });
+      message: 'Order item updated successfully',
+    })
+  })
 
-  test("deleteOrderItem should return ApiResponse with status 204 for existing order item", async () => {
-    const orderItemId = 1;
+  test('deleteOrderItem should return ApiResponse with status 204 for existing order item', async () => {
+    const orderItemId = 1
 
-    (mockOrderItemsService.deleteOrderItem as jest.Mock).mockResolvedValueOnce({
+    ;(mockOrderItemsService.deleteOrderItem as jest.Mock).mockResolvedValueOnce({
       status: HttpStatusCode.NoContent,
       data: null,
-      message: "Order item deleted successfully",
-    });
+      message: 'Order item deleted successfully',
+    })
 
     const mockRequest = {
       params: { id: orderItemId },
-    } as unknown as Request;
+    } as unknown as Request
 
     const mockResponse = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
-    } as unknown as Response;
+    } as unknown as Response
 
-    await orderItemsController.deleteOrderItem(mockRequest, mockResponse);
+    await orderItemsController.deleteOrderItem(mockRequest, mockResponse)
 
-    expect(mockResponse.status).toHaveBeenCalledWith(HttpStatusCode.NoContent);
+    expect(mockResponse.status).toHaveBeenCalledWith(HttpStatusCode.NoContent)
     expect(mockResponse.json).toHaveBeenCalledWith({
       status: HttpStatusCode.NoContent,
       data: null,
-      message: "Order item deleted successfully",
-    });
-  });
-});
+      message: 'Order item deleted successfully',
+    })
+  })
+})

@@ -5,28 +5,28 @@ on: [pull_request]
 jobs:
   test:
     runs-on: windows-2022
-  
+
     strategy:
       matrix:
         node-version: [18.x]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Run tests with coverage
-      run: npm test -- src/ --coverage
+      - name: Run tests with coverage
+        run: npm test -- src/ --coverage
 
-    - name: Upload coverage results
-      if: always()
-      uses: codecov/codecov-action@v2
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}  
+      - name: Upload coverage results
+        if: always()
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

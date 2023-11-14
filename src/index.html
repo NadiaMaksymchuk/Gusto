@@ -30,7 +30,7 @@
         margin-bottom: 5px;
       }
 
-      input[type="text"] {
+      input[type='text'] {
         padding: 5px;
         margin-bottom: 10px;
         border: 1px solid #ccc;
@@ -63,42 +63,42 @@
     <script src="/socket.io/socket.io.js"></script>
 
     <script>
-      const joinRoomButton = document.getElementById("send-chat");
-      const messageInput = document.getElementById("user-input");
-      const roomInput = document.getElementById("user-chat");
-      const form = document.getElementById("form");
+      const joinRoomButton = document.getElementById('send-chat')
+      const messageInput = document.getElementById('user-input')
+      const roomInput = document.getElementById('user-chat')
+      const form = document.getElementById('form')
 
-      const socket = io();
+      const socket = io()
 
-      socket.on("connect", () => {
-        displayMessage(`You connected with id: ${socket.id}`);
-      });
+      socket.on('connect', () => {
+        displayMessage(`You connected with id: ${socket.id}`)
+      })
 
-      socket.on("receive-message", (message) => {
-        displayMessage(message);
-      });
+      socket.on('receive-message', (message) => {
+        displayMessage(message)
+      })
 
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const message = messageInput.value;
-        const room = roomInput.value;
+      form.addEventListener('submit', (e) => {
+        e.preventDefault()
+        const message = messageInput.value
+        const room = roomInput.value
 
-        if (message === "") return;
-        displayMessage(message);
-        socket.emit("send-message", message, room);
+        if (message === '') return
+        displayMessage(message)
+        socket.emit('send-message', message, room)
 
-        messageInput.value = "";
-      });
+        messageInput.value = ''
+      })
 
-      joinRoomButton.addEventListener("click", () => {
-        const room = roomInput.value;
-        socket.emit("join-room", room);
-      });
+      joinRoomButton.addEventListener('click', () => {
+        const room = roomInput.value
+        socket.emit('join-room', room)
+      })
 
       function displayMessage(message) {
-        const div = document.createElement("div");
-        div.textContent = message;
-        document.getElementById("message-container").append(div);
+        const div = document.createElement('div')
+        div.textContent = message
+        document.getElementById('message-container').append(div)
       }
     </script>
   </body>

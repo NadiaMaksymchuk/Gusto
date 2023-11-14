@@ -1,22 +1,17 @@
-import { Router } from "express";
-import { OrderItemsController } from "../controllers/orderItems.controller";
-import { createOrderItemValidator } from "../validator/orderItem.validator";
-import { IOrderItemsService } from "../services/interfaces/orderItems.service.interface";
-import container from "../config/inversify.config";
+import { Router } from 'express'
+import { OrderItemsController } from '../controllers/orderItems.controller'
+import { createOrderItemValidator } from '../validator/orderItem.validator'
+import { IOrderItemsService } from '../services/interfaces/orderItems.service.interface'
+import container from '../config/inversify.config'
 
-const orderItemsService =
-  container.get<IOrderItemsService>("IOrderItemsService");
+const orderItemsService = container.get<IOrderItemsService>('IOrderItemsService')
 
-const orderItemsController = new OrderItemsController(orderItemsService);
+const orderItemsController = new OrderItemsController(orderItemsService)
 
-const router = Router();
+const router = Router()
 
-router.post(
-  "/",
-  createOrderItemValidator,
-  orderItemsController.createOrderItem,
-);
-router.put("/:id", orderItemsController.updateOrderItem);
-router.delete("/:id", orderItemsController.deleteOrderItem);
+router.post('/', createOrderItemValidator, orderItemsController.createOrderItem)
+router.put('/:id', orderItemsController.updateOrderItem)
+router.delete('/:id', orderItemsController.deleteOrderItem)
 
-export default router;
+export default router

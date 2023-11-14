@@ -1,56 +1,54 @@
-import { injectable } from "inversify";
-import { sqlPool } from "../db/sql.pool";
-import { CreateImageDto } from "../dtos/imagesDtos/createImageDto";
-import { ImageDto } from "../dtos/imagesDtos/imageDto";
-import { arrayToStringWithQuotes } from "../utils/request.util";
-import { IImageRepository } from "./interfaces/image.repository.interface";
+import { injectable } from 'inversify'
+import { sqlPool } from '../db/sql.pool'
+import { CreateImageDto } from '../dtos/imagesDtos/createImageDto'
+import { ImageDto } from '../dtos/imagesDtos/imageDto'
+import { arrayToStringWithQuotes } from '../utils/request.util'
+import { IImageRepository } from './interfaces/image.repository.interface'
 
 @injectable()
 export class ImageRepository implements IImageRepository {
   async addImage(newImage: CreateImageDto) {
-    const values = [...Object.values(newImage)];
+    const values = [...Object.values(newImage)]
 
-    const queryText = `INSERT INTO Images (id, url, urlMin) VALUES (${arrayToStringWithQuotes(
-      values,
-    )});`;
+    const queryText = `INSERT INTO Images (id, url, urlMin) VALUES (${arrayToStringWithQuotes(values)});`
 
     return new Promise<void>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err) {
         if (err) {
-          reject(err);
+          reject(err)
         }
-        resolve();
-      });
-    });
+        resolve()
+      })
+    })
   }
 
   async getImageById(imageId: string) {
-    const queryText = `SELECT * FROM Images WHERE id = '${imageId}';`;
+    const queryText = `SELECT * FROM Images WHERE id = '${imageId}';`
 
     return new Promise<ImageDto | null>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err, res) {
         if (err) {
-          reject(err);
+          reject(err)
         }
         if (res.length === 0) {
-          resolve(null);
+          resolve(null)
         } else {
-          resolve(res[0]);
+          resolve(res[0])
         }
-      });
-    });
+      })
+    })
   }
 
   async deleteImageById(imageId: string) {
-    const queryText = `DELETE FROM Images WHERE id = '${imageId}';`;
+    const queryText = `DELETE FROM Images WHERE id = '${imageId}';`
 
     return new Promise<void>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err) {
         if (err) {
-          reject(err);
+          reject(err)
         }
-        resolve();
-      });
-    });
+        resolve()
+      })
+    })
   }
 }

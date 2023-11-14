@@ -1,4 +1,4 @@
 export class UpdateOrderItemDto {
-  quantity: number;
-  totalPrice: number;
+  quantity: number
+  totalPrice: number
 }

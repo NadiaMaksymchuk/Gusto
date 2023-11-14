@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   # MySQL database
   db:
@@ -6,7 +6,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: canon2003
       MYSQL_DATABASE: gustodb
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
   # Node.js application
   app:
@@ -16,7 +16,7 @@ services:
     depends_on:
       - db
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       DB_HOST: db
       DB_USER: root # Match the username used in the MySQL service

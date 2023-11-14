@@ -1,48 +1,45 @@
-import { injectable } from "inversify";
-import { sqlPool } from "../db/sql.pool";
-import { OrderWithItemsImagesAndRestaurantDto } from "../dtos/orderItemsDtos/orderWithItemsAndImagesDto";
-import { CreateOrderDto } from "../dtos/ordersDto/createOrderDto";
-import { arrayToStringWithQuotes } from "../utils/request.util";
-import { IOrdersRepository } from "./interfaces/order.repository.interface";
-import { OrderDto } from "../dtos/ordersDto/orderDto";
+import { injectable } from 'inversify'
+import { sqlPool } from '../db/sql.pool'
+import { OrderWithItemsImagesAndRestaurantDto } from '../dtos/orderItemsDtos/orderWithItemsAndImagesDto'
+import { CreateOrderDto } from '../dtos/ordersDto/createOrderDto'
+import { arrayToStringWithQuotes } from '../utils/request.util'
+import { IOrdersRepository } from './interfaces/order.repository.interface'
+import { OrderDto } from '../dtos/ordersDto/orderDto'
 
 @injectable()
 export class OrdersRepository implements IOrdersRepository {
   async createOrder(newOrder: CreateOrderDto) {
-    const values = [...Object.values(newOrder)];
+    const values = [...Object.values(newOrder)]
 
     const queryText = `INSERT INTO Orders (userId, restaurantId, orderStatus, orderDate) VALUES (${arrayToStringWithQuotes(
       values,
-    )});`;
+    )});`
 
     return new Promise<void>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err) {
         if (err) {
-          reject(err);
+          reject(err)
         }
-        resolve();
-      });
-    });
+        resolve()
+      })
+    })
   }
 
   async getById(id: number): Promise<OrderDto> {
     return new Promise((resolve, reject) => {
-      sqlPool.query(
-        `Select * from OrderItems WHERE id = ${id};`,
-        function (err: any, res: any) {
-          if (err) {
-            reject(err);
-          } else {
-            let order = null;
-            if (res) {
-              order = { ...res[0] };
-            }
-
-            resolve(order as OrderDto);
+      sqlPool.query(`Select * from OrderItems WHERE id = ${id};`, function (err, res) {
+        if (err) {
+          reject(err)
+        } else {
+          let order = null
+          if (res) {
+            order = { ...res[0] }
           }
-        },
-      );
-    });
+
+          resolve(order as OrderDto)
+        }
+      })
+    })
   }
 
   async getOrdersWithOrderItemsAndImagesByUserAndStatus(
@@ -64,18 +61,15 @@ export class OrdersRepository implements IOrdersRepository {
         LEFT JOIN Restaurants AS r ON o.restaurantId = r.id
         WHERE o.userId = ${userId} AND o.orderStatus = ${orderStatus};
         `,
-        function (err: any, res: any) {
+        function (err, res) {
           if (err) {
-            reject(err);
+            reject(err)
           }
 
-          const ordersWithItemsImagesAndRestaurant = new Map<
-            number,
-            OrderWithItemsImagesAndRestaurantDto
-          >();
+          const ordersWithItemsImagesAndRestaurant = new Map<number, OrderWithItemsImagesAndRestaurantDto>()
           if (res) {
             for (const row of res) {
-              const orderId = row.orderId;
+              const orderId = row.orderId
               if (!ordersWithItemsImagesAndRestaurant.has(orderId)) {
                 ordersWithItemsImagesAndRestaurant.set(orderId, {
                   id: orderId,
@@ -90,7 +84,7 @@ export class OrdersRepository implements IOrdersRepository {
                     id: row.id,
                   },
                   orderItems: [],
-                });
+                })
               }
 
               const orderItem = {
@@ -106,53 +100,51 @@ export class OrdersRepository implements IOrdersRepository {
                     url: row.menuItemImageUrl,
                   },
                 },
-              };
+              }
 
-              ordersWithItemsImagesAndRestaurant
-                .get(orderId)
-                ?.orderItems.push(orderItem);
+              ordersWithItemsImagesAndRestaurant.get(orderId)?.orderItems.push(orderItem)
             }
           }
 
-          resolve([...ordersWithItemsImagesAndRestaurant.values()]);
+          resolve([...ordersWithItemsImagesAndRestaurant.values()])
         },
-      );
-    });
+      )
+    })
   }
 
   async deleteOrder(orderId: number) {
-    const queryText = `DELETE FROM Orders WHERE id = ${orderId};`;
+    const queryText = `DELETE FROM Orders WHERE id = ${orderId};`
     return new Promise<void>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err) {
         if (err) {
-          reject(err);
+          reject(err)
         }
-        resolve();
-      });
-    });
+        resolve()
+      })
+    })
   }
 
   async updateOrderStatus(orderId: number, newStatus: number) {
-    const queryText = `UPDATE Orders SET orderStatus = ${newStatus} WHERE id = ${orderId};`;
+    const queryText = `UPDATE Orders SET orderStatus = ${newStatus} WHERE id = ${orderId};`
     return new Promise<void>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err) {
         if (err) {
-          reject(err);
+          reject(err)
         }
-        resolve();
-      });
-    });
+        resolve()
+      })
+    })
   }
 
   async updateDeliveryTime(orderId: number, newDeliveryTime: string) {
-    const queryText = `UPDATE Orders SET deliveryTime = "${newDeliveryTime}" WHERE id = ${orderId};`;
+    const queryText = `UPDATE Orders SET deliveryTime = "${newDeliveryTime}" WHERE id = ${orderId};`
     return new Promise<void>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err) {
         if (err) {
-          reject(err);
+          reject(err)
         }
-        resolve();
-      });
-    });
+        resolve()
+      })
+    })
   }
 }

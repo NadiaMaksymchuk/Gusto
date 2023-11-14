@@ -1,12 +1,12 @@
-import mysql from "mysql";
+import mysql from 'mysql'
 
-var pool = mysql.createPool({
+const pool = mysql.createPool({
   multipleStatements: true,
   connectionLimit: 10,
-  host: "localhost",
-  user: "root",
-  password: "canon2003",
-  database: "gustodb",
-});
+  host: 'localhost',
+  user: 'root',
+  password: 'canon2003',
+  database: 'gustodb',
+})
 
-export const sqlPool = pool;
+export const sqlPool = pool

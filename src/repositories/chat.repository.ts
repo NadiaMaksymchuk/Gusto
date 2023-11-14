@@ -1,8 +1,8 @@
-import { injectable } from "inversify";
-import { sqlPool } from "../db/sql.pool";
-import { ChatDto } from "../dtos/chatDtos/chatDto";
-import { CurrentUserId, IsCourier } from "../middwares/authMiddleware";
-import { IChatsRepository } from "./interfaces/chat.repository.interface";
+import { injectable } from 'inversify'
+import { sqlPool } from '../db/sql.pool'
+import { ChatDto } from '../dtos/chatDtos/chatDto'
+import { CurrentUserId, IsCourier } from '../middwares/authMiddleware'
+import { IChatsRepository } from './interfaces/chat.repository.interface'
 
 @injectable()
 export class ChatsRepository implements IChatsRepository {
@@ -10,35 +10,35 @@ export class ChatsRepository implements IChatsRepository {
     const queryText = `
       INSERT INTO Chats (name)
       VALUES ('${name}');
-    `;
+    `
 
     return new Promise<void>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err) {
         if (err) {
-          reject(err);
+          reject(err)
         }
-        resolve();
-      });
-    });
+        resolve()
+      })
+    })
   }
 
   async getChatById(chatId: number): Promise<ChatDto | null> {
-    const queryText = `SELECT * FROM Chats WHERE id = ${chatId};`;
+    const queryText = `SELECT * FROM Chats WHERE id = ${chatId};`
 
     return new Promise<ChatDto | null>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err, res) {
         if (err) {
-          reject(err);
+          reject(err)
         }
 
         if (res && res.length > 0) {
-          const chat = res[0] as ChatDto;
-          resolve(chat);
+          const chat = res[0] as ChatDto
+          resolve(chat)
         } else {
-          resolve(null);
+          resolve(null)
         }
-      });
-    });
+      })
+    })
   }
 
   async getChatsByUserId() {
@@ -53,21 +53,21 @@ export class ChatsRepository implements IChatsRepository {
       )
       GROUP BY C.id
       ORDER BY LastMessageDate DESC;
-    `;
+    `
 
     return new Promise((resolve, reject) => {
       sqlPool.query(query, (error, results) => {
         if (error) {
-          reject(error);
+          reject(error)
         } else {
-          resolve(results);
+          resolve(results)
         }
-      });
-    });
+      })
+    })
   }
 
   async getNumberOfUnreadMessages(chatId: number): Promise<number> {
-    let queryText = "";
+    let queryText = ''
 
     if (!IsCourier) {
       queryText = `
@@ -77,7 +77,7 @@ export class ChatsRepository implements IChatsRepository {
       JOIN Couriers AS cu ON m.createdBy = ch.Id
       WHERE ch.id = ${chatId}
         AND m.isRead = 0;
-    `;
+    `
     } else {
       queryText = `
       SELECT COUNT(*) AS unreadMessageCount
@@ -86,35 +86,35 @@ export class ChatsRepository implements IChatsRepository {
       JOIN Users AS cu ON m.createdBy = ch.Id
       WHERE ch.id = ${chatId}
         AND m.isRead = 0;
-    `;
+    `
     }
 
     return new Promise<number>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err, res) {
         if (err) {
-          reject(err);
+          reject(err)
         }
 
         if (res && res.length > 0) {
-          const unreadMessageCount = res[0].UnreadMessageCount;
-          resolve(unreadMessageCount);
+          const unreadMessageCount = res[0].UnreadMessageCount
+          resolve(unreadMessageCount)
         } else {
-          resolve(0);
+          resolve(0)
         }
-      });
-    });
+      })
+    })
   }
 
   async deleteChat(chatId: number): Promise<void> {
-    const queryText = `DELETE FROM Chats WHERE id = ${chatId};`;
+    const queryText = `DELETE FROM Chats WHERE id = ${chatId};`
 
     return new Promise<void>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err) {
         if (err) {
-          reject(err);
+          reject(err)
         }
-        resolve();
-      });
-    });
+        resolve()
+      })
+    })
   }
 }

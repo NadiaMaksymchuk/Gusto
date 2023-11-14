@@ -1,1 +1,1 @@
-export type ExpirationStatus = "expired" | "active" | "grace";
+export type ExpirationStatus = 'expired' | 'active' | 'grace'

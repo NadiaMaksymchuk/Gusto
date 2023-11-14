@@ -1,40 +1,40 @@
-import { injectable } from "inversify";
-import { sqlPool } from "../db/sql.pool";
-import { DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto } from "../dtos/deliveryDetailDto/DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto";
-import { CreateDeliveryDetailDto } from "../dtos/deliveryDetailDto/createDeliveryDetailDto";
-import { DeliveryDetailWithCourierAndOrderDto } from "../dtos/deliveryDetailDto/deliveryDetailDto";
-import { arrayToStringWithQuotes } from "../utils/request.util";
-import { IDeliveryDetailsRepository } from "./interfaces/deliveryDetails.repository.interface";
+import { injectable } from 'inversify'
+import { sqlPool } from '../db/sql.pool'
+import { DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto } from '../dtos/deliveryDetailDto/DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto'
+import { CreateDeliveryDetailDto } from '../dtos/deliveryDetailDto/createDeliveryDetailDto'
+import { DeliveryDetailWithCourierAndOrderDto } from '../dtos/deliveryDetailDto/deliveryDetailDto'
+import { arrayToStringWithQuotes } from '../utils/request.util'
+import { IDeliveryDetailsRepository } from './interfaces/deliveryDetails.repository.interface'
 
 @injectable()
 export class DeliveryDetailsRepository implements IDeliveryDetailsRepository {
   async createDeliveryDetail(newDeliveryDetail: CreateDeliveryDetailDto) {
-    const values = [...Object.values(newDeliveryDetail)];
+    const values = [...Object.values(newDeliveryDetail)]
 
     const queryText = `INSERT INTO DeliveryDetails (orderId, courierId, quantity, totalPrice, status) VALUES (${arrayToStringWithQuotes(
       values,
-    )});`;
+    )});`
 
     return new Promise<void>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err) {
         if (err) {
-          reject(err);
+          reject(err)
         }
-        resolve();
-      });
-    });
+        resolve()
+      })
+    })
   }
 
   async deleteDeliveryDetail(deliveryDetailId: number) {
-    const queryText = `DELETE FROM DeliveryDetails WHERE id = ${deliveryDetailId};`;
+    const queryText = `DELETE FROM DeliveryDetails WHERE id = ${deliveryDetailId};`
     return new Promise<void>((resolve, reject) => {
-      sqlPool.query(queryText, function (err: any, res: any) {
+      sqlPool.query(queryText, function (err) {
         if (err) {
-          reject(err);
+          reject(err)
         }
-        resolve();
-      });
-    });
+        resolve()
+      })
+    })
   }
 
   async getDeliveryDetailsByCourierId(
@@ -59,25 +59,22 @@ export class DeliveryDetailsRepository implements IDeliveryDetailsRepository {
         LEFT JOIN Images AS i ON m.imageId = i.id
         WHERE dd.courierId = ${courierId};
         `,
-        function (err: any, res: any) {
+        function (err, res) {
           if (err) {
-            reject(err);
+            reject(err)
           }
 
-          const deliveryDetails = new Map<
-            number,
-            DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto
-          >();
+          const deliveryDetails = new Map<number, DeliveryDetailWithCourierOrderRestaurantAndOrderItemsDto>()
           if (res) {
             for (const row of res) {
-              const deliveryDetailId = row.id;
+              const deliveryDetailId = row.id
               if (!deliveryDetails.has(deliveryDetailId)) {
                 deliveryDetails.set(deliveryDetailId, {
                   id: deliveryDetailId,
                   courierFirstName: row.courierFirstName,
                   courierLastName: row.courierLastName,
                   orders: [],
-                });
+                })
               }
 
               const order = {
@@ -93,7 +90,7 @@ export class DeliveryDetailsRepository implements IDeliveryDetailsRepository {
                   contacts: row.contacts,
                 },
                 orderItems: [],
-              };
+              }
 
               const orderItem = {
                 id: row.orderItemId,
@@ -108,22 +105,20 @@ export class DeliveryDetailsRepository implements IDeliveryDetailsRepository {
                     url: row.menuItemImageUrl,
                   },
                 },
-              };
+              }
 
-              deliveryDetails.get(deliveryDetailId)?.orders.push(order);
-              order.orderItems.push(orderItem);
+              deliveryDetails.get(deliveryDetailId)?.orders.push(order)
+              order.orderItems.push(orderItem)
             }
           }
 
-          resolve([...deliveryDetails.values()]);
+          resolve([...deliveryDetails.values()])
         },
-      );
-    });
+      )
+    })
   }
 
-  async getDeliveryDetailsByOrderId(
-    orderId: number,
-  ): Promise<DeliveryDetailWithCourierAndOrderDto[]> {
+  async getDeliveryDetailsByOrderId(orderId: number): Promise<DeliveryDetailWithCourierAndOrderDto[]> {
     return new Promise((resolve, reject) => {
       sqlPool.query(
         `
@@ -133,23 +128,21 @@ export class DeliveryDetailsRepository implements IDeliveryDetailsRepository {
         LEFT JOIN Orders AS o ON dd.orderId = o.id
         WHERE dd.orderId = ${orderId};
         `,
-        function (err: any, res: any) {
+        function (err, res) {
           if (err) {
-            reject(err);
+            reject(err)
           }
 
-          let deliveryDetails = [];
+          let deliveryDetails = []
           if (res) {
-            deliveryDetails = res.map(
-              (row: DeliveryDetailWithCourierAndOrderDto) => ({
-                ...row,
-              }),
-            );
+            deliveryDetails = res.map((row: DeliveryDetailWithCourierAndOrderDto) => ({
+              ...row,
+            }))
           }
 
-          resolve(deliveryDetails);
+          resolve(deliveryDetails)
         },
-      );
-    });
+      )
+    })
   }
 }

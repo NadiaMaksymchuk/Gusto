@@ -1,5 +1,5 @@
 export class CreateImageDto {
-  id: string;
-  url: string;
-  urlMin: string;
+  id: string
+  url: string
+  urlMin: string
 }

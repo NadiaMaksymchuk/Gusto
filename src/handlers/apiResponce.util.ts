@@ -6,4 +6,4 @@ class ApiResponse<T> {
   ) {}
 }
 
-export default ApiResponse;
+export default ApiResponse

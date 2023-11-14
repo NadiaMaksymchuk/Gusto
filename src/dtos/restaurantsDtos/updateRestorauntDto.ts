@@ -1,4 +1,4 @@
 export class UpdateRestaurantDto {
-  address: string;
-  contacts: string;
+  address: string
+  contacts: string
 }

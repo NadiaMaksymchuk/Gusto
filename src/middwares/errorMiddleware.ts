@@ -1,6 +1,6 @@
-import { HttpStatusCode } from "../dtos/enums/status.code.enum";
-import { Request, Response } from "express";
+import { HttpStatusCode } from '../dtos/enums/status.code.enum'
+import { Response } from 'express'
 
 export const errorMiddleware = (error, res: Response) => {
-  res.status(HttpStatusCode.InternalServerError).json(error);
-};
+  res.status(HttpStatusCode.InternalServerError).json(error)
+}
