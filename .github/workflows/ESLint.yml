@@ -1,0 +1,15 @@
+name: Run Unit Tests with Coverage
+
+on: [pull_request]
+
+jobs:
+  test:
+    runs-on: windows-2022
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Lint Action
+        uses: wearerequired/lint-action@v2.3.0
