@@ -1,13 +1,16 @@
-import { Router } from "express";
-import { UserController } from "../controllers/user.controller";
+import { Router } from 'express'
+import { UserController } from '../controllers/user.controller'
+import container from '../config/inversify.config'
+import { IUserService } from '../services/interfaces/user.service.interface'
 
-const userController = new UserController();
+const userService = container.get<IUserService>('IUserService')
 
-const router = Router();
+const userController = new UserController(userService)
 
-router.get("/", userController.getUsers);
-router.post("/", userController.createUser);
-router.delete("/:id", userController.deleteUser);
-router.put("/:id", userController.updateUser);
+const router = Router()
 
-export default router;
+router.get('/', userController.getUsers)
+router.delete('/:id', userController.deleteUser)
+router.put('/:id', userController.updateUser)
+
+export default router

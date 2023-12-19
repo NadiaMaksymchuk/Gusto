@@ -1,6 +1,7 @@
 # Gusto | Documentation | API Documentation
 
 ## Description <a name="go-up"></a>
+
 Gusto is an online web platform for food delivery from your favorite restaurant or cafe in your city. The site effectively allows you to order from the restaurant, calculate the time and price of delivery, track the courier and contact if necessary.
 
 ## Content:
@@ -14,11 +15,13 @@ Gusto is an online web platform for food delivery from your favorite restaurant 
 4. [Links](#links)
 
 5. [Install:](#install)
-    - [Backend:](#install-backend)
+
+   - [Backend:](#install-backend)
 
 6. [Environment variables:](#environment-variables)
 
 7. [Endpoints:](#endpoints)
+
    - [Endpoints: users](#users)
    - [Endpoints: notifications](#notifications)
    - [Endpoints: restaurants](#restaurants)
@@ -37,27 +40,30 @@ Gusto is an online web platform for food delivery from your favorite restaurant 
 - Task should be implemented on Typescript
 
 Backend:
+
 - Platform: Node.js
-- Network: REST, WebSockets
+- Network: REST, SockedIO
 - Framework: express
 - Database: MySql
 - Cloud: Azure
-- Other: JWT, Firebase, Docker
+- Other: JWT, Cloudinary, SendGrid, Docker
 
 [Go Up](#go-up)
 
 ## Implementation details <a name="implamentetion-details"></a>
 
-Base  Backend
+Base Backend
 
 ```
  http://localhost:5000/api/v1
 ```
 
 ## Extensions for development <a name="extensions"></a>
+
 - ESLint (analysis tool that checks TypeScript\JavaScript code for readability, maintainability, and functionality errors)
 
 ## Links <a name="links"></a>
+
 [Trello Board]()
 
 # Install <a name="install"></a>
@@ -82,7 +88,7 @@ Install dependencies
 npm i
 ```
 
-## Environment variables  <a name="environment-variables"></a>
+## Environment variables <a name="environment-variables"></a>
 
 [Go Up](#go-up)
 
@@ -92,39 +98,40 @@ npm i
 
 - Request: `GET /users`
 
-    - Description: Get a list of all users.  Only admin users can perform this action.
+  - Description: Get a list of all users. Only admin users can perform this action.
 
 - Request: `GET /users/{userId}`
 
-    - Description: Get a user by their ID.
+  - Description: Get a user by their ID.
 
 - Request: `PUT /users/{userId}`
 
-    - Description: Change properties in a user account based on their ID. This is used to update user information.
+  - Description: Change properties in a user account based on their ID. This is used to update user information.
 
 - Request: `POST /users`
-    - Query Parameters
 
-      | Parameter | Type   | Required | Description               |
-      |-----------|--------|----------|---------------------------|
-      | `city`    | int    | Yes      | City information.         |
-      | `language`| int    | Yes      | Language preference.      |
-      |`firstName`| string | Yes      | User's first name.        |
-      | `lastName`| string | Yes      |  User's last name.        |
-      |`dateOfBirth`| datatime | Yes      | User's date of birth. |
-      | `email`    | string | Yes     | User's email address.     |
-      | `numberPhone`| string | Yes   |  User's phone number.     |
-      | `imagePath`| string | Yes      | Path to the user's image.|
-      | `sex `    | int    | Yes      | User's gender.            |
+  - Query Parameters
 
-    - Description: Create a new user.
+    | Parameter     | Type     | Required | Description               |
+    | ------------- | -------- | -------- | ------------------------- |
+    | `city`        | int      | Yes      | City information.         |
+    | `language`    | int      | Yes      | Language preference.      |
+    | `firstName`   | string   | Yes      | User's first name.        |
+    | `lastName`    | string   | Yes      | User's last name.         |
+    | `dateOfBirth` | datatime | Yes      | User's date of birth.     |
+    | `email`       | string   | Yes      | User's email address.     |
+    | `numberPhone` | string   | Yes      | User's phone number.      |
+    | `imagePath`   | string   | Yes      | Path to the user's image. |
+    | `sex `        | int      | Yes      | User's gender.            |
 
+  - Description: Create a new user.
 
 - Request: `DELETE /users/{userId}`
-    - Query Parameters:
-      userId (string) - The user ID for deleting the account.
 
-    - Description: Delete a user account. Only admin users can perform this action.
+  - Query Parameters:
+    userId (string) - The user ID for deleting the account.
+
+  - Description: Delete a user account. Only admin users can perform this action.
 
 [Go Up](#go-up)
 
@@ -132,44 +139,43 @@ npm i
 
 - Request: `GET /notifications`
 
-    - Query Parameters
-    
-    | Parameter | Type   | Required | Description               |
-    |-----------|--------|----------|---------------------------|
-    | `userId`  | bigint | No      | The ID of the user to whom the notification is associated.|
-    |`courierId`| bigint | No      | The ID of the courier related to the notification.|
-    |`text`     | string | No      | The content of the notification.|
-    | `type`    | int    | No      |  The type of notification.|
-    |`isRead`   | boolean| No      | Indicates whether the notification has been read by the user.|
+  - Query Parameters
 
-    - Description: Retrieve a list of notifications.
+  | Parameter   | Type    | Required | Description                                                   |
+  | ----------- | ------- | -------- | ------------------------------------------------------------- |
+  | `userId`    | bigint  | No       | The ID of the user to whom the notification is associated.    |
+  | `courierId` | bigint  | No       | The ID of the courier related to the notification.            |
+  | `text`      | string  | No       | The content of the notification.                              |
+  | `type`      | int     | No       | The type of notification.                                     |
+  | `isRead`    | boolean | No       | Indicates whether the notification has been read by the user. |
+
+  - Description: Retrieve a list of notifications.
 
 - Request: `GET /notifications/{id}`
 
-    - Description: Retrieve a single notification by its unique identifier.
+  - Description: Retrieve a single notification by its unique identifier.
 
 - Request: `PUT /notifications/{id}`
 
-    - Description: Update an existing notification by its unique identifier.
+  - Description: Update an existing notification by its unique identifier.
 
 - Request: `POST /notifications`
-    - Query Parameters
 
-      | Parameter | Type   | Required | Description               |
-      |-----------|--------|----------|---------------------------|
-      | `userId`  | bigint | Yes      | The ID of the user to whom the notification is associated.|
-      |`courierId`| bigint | Yes      | The ID of the courier related to the notification.|
-      |`text`     | string | Yes      | The content of the notification.|
-      | `type`    | int    | Yes      |  The type of notification.|
-      |`isRead`   | boolean| Yes      | Indicates whether the notification has been read by the user.|
+  - Query Parameters
 
-    - Description: Create a new notification.
+    | Parameter   | Type    | Required | Description                                                   |
+    | ----------- | ------- | -------- | ------------------------------------------------------------- |
+    | `userId`    | bigint  | Yes      | The ID of the user to whom the notification is associated.    |
+    | `courierId` | bigint  | Yes      | The ID of the courier related to the notification.            |
+    | `text`      | string  | Yes      | The content of the notification.                              |
+    | `type`      | int     | Yes      | The type of notification.                                     |
+    | `isRead`    | boolean | Yes      | Indicates whether the notification has been read by the user. |
 
+  - Description: Create a new notification.
 
 - Request: `DELETE /notifications/{id}`
 
-    - Description: Delete a notification by its unique identifier.
-
+  - Description: Delete a notification by its unique identifier.
 
 - Example Request
 
@@ -198,38 +204,38 @@ npm i
       }
     ]
   ```
-[Go Up](#go-up)
+  [Go Up](#go-up)
 
 ## Endpoint `/restaurants`: <a name="restaurants"></a>
+
 - Request: `GET /restaurants`
 
-    - Description: Retrieve a list of restaurants. 
+  - Description: Retrieve a list of restaurants.
 
 - Request: `GET /restaurants/{id}`
 
-    - Description: Retrieve a single restaurant by its unique identifier.
+  - Description: Retrieve a single restaurant by its unique identifier.
 
 - Request: `PUT /restaurants/{id}`
 
-    - Description: Update an existing restaurant by its unique identifier.  Only admin users can perform this action.
+  - Description: Update an existing restaurant by its unique identifier. Only admin users can perform this action.
 
 - Request: `POST /restaurants`
-    - Query Parameters
 
-      | Parameter | Type   | Required | Description               |
-      |-----------|--------|----------|---------------------------|
-      | `name`    | string | Yes      | The name of the restaurant.|
-      |`cuisineType`| int  | Yes      | The type of cuisine offered by the restaurant. This property may refer to another resource or use an identifier for the cuisine type.|
-      |`address`  | string | Yes      | The address of the restaurant.|
-      | `contacts`| string | Yes      |  Contact information for the restaurant.|
+  - Query Parameters
 
-    - Description: Create a new restaurant.  Only admin users can perform this action.
+    | Parameter     | Type   | Required | Description                                                                                                                           |
+    | ------------- | ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+    | `name`        | string | Yes      | The name of the restaurant.                                                                                                           |
+    | `cuisineType` | int    | Yes      | The type of cuisine offered by the restaurant. This property may refer to another resource or use an identifier for the cuisine type. |
+    | `address`     | string | Yes      | The address of the restaurant.                                                                                                        |
+    | `contacts`    | string | Yes      | Contact information for the restaurant.                                                                                               |
 
+  - Description: Create a new restaurant. Only admin users can perform this action.
 
 - Request: `DELETE /restaurants/{id}`
 
-    - Description: Delete a restaurant by its unique identifier.  Only admin users can perform this action.
-
+  - Description: Delete a restaurant by its unique identifier. Only admin users can perform this action.
 
 - Example Request
 
@@ -238,6 +244,7 @@ npm i
   ```
 
 - Example Response
+
   ```
     [
       {
@@ -259,29 +266,29 @@ npm i
 
   [Go Up](#go-up)
 
-## Endpoint `/chats`:  <a name="chats"></a>
+## Endpoint `/chats`: <a name="chats"></a>
+
 - Request: `GET /chats`
 
-    - Description: Retrieve a list of chat rooms or conversations.
+  - Description: Retrieve a list of chat rooms or conversations.
 
 - Request: `GET /chats/{id}`
 
-    - Description: Retrieve a specific chat room by its unique identifier.
+  - Description: Retrieve a specific chat room by its unique identifier.
 
 - Request: `POST /chats`
-    - Query Parameters
 
-      | Parameter | Type   | Required | Description               |
-      |-----------|--------|----------|---------------------------|
-      | `name`    | string | Yes      |The name or title of the chat.|
+  - Query Parameters
 
-    - Description: Create a new restaurant.
+    | Parameter | Type   | Required | Description                    |
+    | --------- | ------ | -------- | ------------------------------ |
+    | `name`    | string | Yes      | The name or title of the chat. |
 
+  - Description: Create a new restaurant.
 
 - Request: `DELETE /chats/{id}`
 
-    - Description: Delete a chat room or conversation by its unique identifier.
-
+  - Description: Delete a chat room or conversation by its unique identifier.
 
 - Example Request
 
@@ -290,6 +297,7 @@ npm i
   ```
 
 - Example Response
+
   ```
     [
       {
@@ -305,37 +313,37 @@ npm i
 
   [Go Up](#go-up)
 
-## Endpoint `/menuitems`:  <a name="menuitems"></a>
+## Endpoint `/menuitems`: <a name="menuitems"></a>
+
 - Request: `GET /menuitems`
 
-    - Description: Retrieve a list of menu items.
+  - Description: Retrieve a list of menu items.
 
 - Request: `GET /menuitems/{id}`
 
-    - Description: Retrieve a specific menu item by its unique identifier.
+  - Description: Retrieve a specific menu item by its unique identifier.
 
 - Request: `PUT /menuitems/{id}`
 
-    - Description: Update an existing menu item by its unique identifier. Only admin users can perform this action.
+  - Description: Update an existing menu item by its unique identifier. Only admin users can perform this action.
 
 - Request: `POST /menuitems`
-    - Query Parameters
 
-      | Parameter | Type   | Required | Description               |
-      |-----------|--------|----------|---------------------------|
-      |`restaurantId`| bigint | Yes      | The ID of the restaurant to which the menu item belongs.|
-      |`name`     | string | Yes      | The name of the menu item.|
-      |`description`| string | Yes      | A description of the menu item.|
-      | `price`   | bigint | Yes      |  The price of the menu item.|
-      | `imagePath`| string | Yes      | The path to an image representing the menu item.|
+  - Query Parameters
 
-    - Description: Create a new menu item. Only admin users can perform this action.
+    | Parameter      | Type   | Required | Description                                              |
+    | -------------- | ------ | -------- | -------------------------------------------------------- |
+    | `restaurantId` | bigint | Yes      | The ID of the restaurant to which the menu item belongs. |
+    | `name`         | string | Yes      | The name of the menu item.                               |
+    | `description`  | string | Yes      | A description of the menu item.                          |
+    | `price`        | bigint | Yes      | The price of the menu item.                              |
+    | `imagePath`    | string | Yes      | The path to an image representing the menu item.         |
 
+  - Description: Create a new menu item. Only admin users can perform this action.
 
 - Request: `DELETE /menuitems/{id}`
 
-    - Description: Delete a menu item by its unique identifier.  Only admin users can perform this action.
-
+  - Description: Delete a menu item by its unique identifier. Only admin users can perform this action.
 
 - Example Request
 
@@ -367,41 +375,42 @@ npm i
 
 [Go Up](#go-up)
 
-## Endpoint `/couriers`:  <a name="couriers"></a>
+## Endpoint `/couriers`: <a name="couriers"></a>
+
 - Request: `GET /couriers`
-    - Query Parameter:
 
-    | Parameter | Type    | Required | Description               |
-    |-----------|-------- |----------|---------------------------|
-    |`availabilityStatus `| int | No | Filter couriers by their availability status.|
+  - Query Parameter:
 
-    - Description: Retrieve a list of couriers.
+  | Parameter             | Type | Required | Description                                   |
+  | --------------------- | ---- | -------- | --------------------------------------------- |
+  | `availabilityStatus ` | int  | No       | Filter couriers by their availability status. |
+
+  - Description: Retrieve a list of couriers.
 
 - Request: `GET /couriers/{id}`
 
-    - Description: Retrieve a specific courier by their unique identifier.
+  - Description: Retrieve a specific courier by their unique identifier.
 
 - Request: `PUT /couriers/{id}`
 
-    - Description: Update an existing courier by their unique identifier.
+  - Description: Update an existing courier by their unique identifier.
 
 - Request: `POST /couriers`
-    - Query Parameters
 
-      | Parameter | Type   | Required | Description               |
-      |-----------|--------|----------|---------------------------|
-      |`firstName`| string | Yes      | The first name of the courier.|
-      |`lastName` | string | Yes      | The last name of the courier.|
-      |`numberPhone`| string | Yes    | The phone number of the courier.|
-      | `vehicleNumber`| int | Yes    |  The number associated with the courier's vehicle |
+  - Query Parameters
 
-    - Description: Create a new menu item. Only admin users can perform this action.
+    | Parameter       | Type   | Required | Description                                      |
+    | --------------- | ------ | -------- | ------------------------------------------------ |
+    | `firstName`     | string | Yes      | The first name of the courier.                   |
+    | `lastName`      | string | Yes      | The last name of the courier.                    |
+    | `numberPhone`   | string | Yes      | The phone number of the courier.                 |
+    | `vehicleNumber` | int    | Yes      | The number associated with the courier's vehicle |
 
+  - Description: Create a new menu item. Only admin users can perform this action.
 
 - Request: `DELETE /couriers/{id}`
 
-    - Description: Delete a courier by their unique identifier.  Only admin users can perform this action.
-
+  - Description: Delete a courier by their unique identifier. Only admin users can perform this action.
 
 - Example Request
 
@@ -431,39 +440,39 @@ npm i
     ]
   ```
 
+## Endpoint `/orders`: <a name="orders"></a>
 
-## Endpoint `/orders`:  <a name="orders"></a>
 - Request: `GET /orders`
-    - Query Parameter:
 
-    | Parameter | Type    | Required | Description               |
-    |-----------|-------- |----------|---------------------------|
-    |`userId `  | bigint  | No       | Filter orders by the user's ID.|
-    |`restaurantId`|bigint| No       | Filter orders by the restaurant's ID.|
-    |`orderStatus`| int   | No       | Filter orders by their status.|
+  - Query Parameter:
 
-    - Description: Retrieve a list of orders.
+  | Parameter      | Type   | Required | Description                           |
+  | -------------- | ------ | -------- | ------------------------------------- |
+  | `userId `      | bigint | No       | Filter orders by the user's ID.       |
+  | `restaurantId` | bigint | No       | Filter orders by the restaurant's ID. |
+  | `orderStatus`  | int    | No       | Filter orders by their status.        |
+
+  - Description: Retrieve a list of orders.
 
 - Request: `GET /orders/{id}`
 
-    - Description: Retrieve a specific order by its unique identifier.
+  - Description: Retrieve a specific order by its unique identifier.
 
 - Request: `POST /orders`
-    - Query Parameters
 
-      | Parameter | Type    | Required | Description               |
-      |-----------|-------- |----------|---------------------------|
-      |`userId `  | bigint  | Yes      | Filter orders by the user's ID.|
-      |`restaurantId`|bigint| Yes      | Filter orders by the restaurant's ID.|
-      |`orderStatus`| int   | Yes      | Filter orders by their status.|
+  - Query Parameters
 
-    - Description: Place a new order.
+    | Parameter      | Type   | Required | Description                           |
+    | -------------- | ------ | -------- | ------------------------------------- |
+    | `userId `      | bigint | Yes      | Filter orders by the user's ID.       |
+    | `restaurantId` | bigint | Yes      | Filter orders by the restaurant's ID. |
+    | `orderStatus`  | int    | Yes      | Filter orders by their status.        |
 
+  - Description: Place a new order.
 
 - Request: `DELETE /orders/{id}`
 
-    - Description: Update an existing order by its unique identifier.
-
+  - Description: Update an existing order by its unique identifier.
 
 - Example Request
 
@@ -492,33 +501,34 @@ npm i
       }
     ]
   ```
-[Go Up](#go-up)
+  [Go Up](#go-up)
 
 ## Endpoint `/orderitems`: <a name="orderitems"></a>
+
 - Request: `GET /orderitems`
-    - Description: Retrieve a list of order items.
+
+  - Description: Retrieve a list of order items.
 
 - Request: `GET /orderitems/{id}`
 
-    - Description: Retrieve a specific order item by its unique identifier.
+  - Description: Retrieve a specific order item by its unique identifier.
 
 - Request: `POST /orderitems`
-    - Query Parameters
 
-      | Parameter | Type    | Required | Description               |
-      |-----------|-------- |----------|---------------------------|
-      |`orderId`  | bigint  | Yes      | The ID of the order to which the item belongs.|
-      |`menuItemId`|bigint| Yes      | The ID of the menu item that was ordered.|
-      |`quantity`| int   | Yes      | The quantity of the menu item in the order.|
-      |`totalPrice`| bigint   | Yes      | The total price for the quantity of the menu item.|
+  - Query Parameters
 
-    - Description: Add a new item to an existing order.
+    | Parameter    | Type   | Required | Description                                        |
+    | ------------ | ------ | -------- | -------------------------------------------------- |
+    | `orderId`    | bigint | Yes      | The ID of the order to which the item belongs.     |
+    | `menuItemId` | bigint | Yes      | The ID of the menu item that was ordered.          |
+    | `quantity`   | int    | Yes      | The quantity of the menu item in the order.        |
+    | `totalPrice` | bigint | Yes      | The total price for the quantity of the menu item. |
 
+  - Description: Add a new item to an existing order.
 
 - Request: `DELETE /orderitems/{id}`
 
-    - Description: Delete an order item by its unique identifier.
-
+  - Description: Delete an order item by its unique identifier.
 
 - Example Request
 
@@ -527,6 +537,7 @@ npm i
   ```
 
 - Example Response
+
   ```
     [
       {
@@ -548,38 +559,38 @@ npm i
 
   [Go Up](#go-up)
 
-## Endpoint `/deliverydetails`:  <a name="deliverydetails"></a>
+## Endpoint `/deliverydetails`: <a name="deliverydetails"></a>
+
 - Request: `GET /deliverydetails`
 
-    - Query Parameters
+  - Query Parameters
 
-      | Parameter | Type    | Required | Description               |
-      |-----------|-------- |----------|---------------------------|
-      |`courierId`  | bigint  | No      | The ID of the order to which the item belongs.|
+    | Parameter   | Type   | Required | Description                                    |
+    | ----------- | ------ | -------- | ---------------------------------------------- |
+    | `courierId` | bigint | No       | The ID of the order to which the item belongs. |
 
-    - Description: Retrieve a list of delivery details.
+  - Description: Retrieve a list of delivery details.
 
 - Request: `GET /deliverydetails/{id}`
 
-    - Description: Retrieve a specific delivery detail by its unique identifier.
+  - Description: Retrieve a specific delivery detail by its unique identifier.
 
 - Request: `POST /deliverydetails`
-    - Query Parameters
 
-      | Parameter | Type    | Required | Description               |
-      |-----------|-------- |----------|---------------------------|
-      |`orderId`  | bigint  | Yes      | The ID of the order associated with the delivery detail.|
-      |`courierId`|bigint   | Yes      | The ID of the courier responsible for the delivery.|
-      |`quantity` | int     | Yes      | The quantity of items included in the delivery.|
-      |`totalPrice`| bigint | Yes      |  The total price for the items in the delivery.|
+  - Query Parameters
 
-    - Description: Add a new delivery detail to an existing order.
+    | Parameter    | Type   | Required | Description                                              |
+    | ------------ | ------ | -------- | -------------------------------------------------------- |
+    | `orderId`    | bigint | Yes      | The ID of the order associated with the delivery detail. |
+    | `courierId`  | bigint | Yes      | The ID of the courier responsible for the delivery.      |
+    | `quantity`   | int    | Yes      | The quantity of items included in the delivery.          |
+    | `totalPrice` | bigint | Yes      | The total price for the items in the delivery.           |
 
+  - Description: Add a new delivery detail to an existing order.
 
 - Request: `DELETE /deliverydetails/{id}`
 
-    - Description: Delete a delivery detail by its unique identifier.
-
+  - Description: Delete a delivery detail by its unique identifier.
 
 - Example Request
 
@@ -613,41 +624,42 @@ npm i
 
 [Go Up](#go-up)
 
-## Endpoint `/messages`:  <a name="messages"></a>
+## Endpoint `/messages`: <a name="messages"></a>
+
 - Request: `GET /messages`
-    - Query Parameter:
 
-    | Parameter | Type    | Required | Description               |
-    |-----------|---------|----------|---------------------------|
-    | `chatId`  | bigint  | No       |Retrieve a list of messages.|
+  - Query Parameter:
 
-    - Description: Retrieve a list of messages.
+  | Parameter | Type   | Required | Description                  |
+  | --------- | ------ | -------- | ---------------------------- |
+  | `chatId`  | bigint | No       | Retrieve a list of messages. |
+
+  - Description: Retrieve a list of messages.
 
 - Request: `GET pi/messages/{id}`
 
-    - Description: Retrieve a specific message by its unique identifier.
+  - Description: Retrieve a specific message by its unique identifier.
 
 - Request: `PUT /messages/{id}`
 
-    - Description: Update an existing message by its unique identifier.
+  - Description: Update an existing message by its unique identifier.
 
 - Request: `POST /messages`
-    - Query Parameters
 
-      | Parameter | Type   | Required | Description               |
-      |-----------|--------|----------|---------------------------|
-      |`createdBy`| bigint | Yes      | The ID of the user who created the message.|
-      |`chatId`   | bigint | Yes      | The ID of the chat or conversation to which the message belongs.|
-      |`text`     | string | Yes      | The text content of the message.|
-      |`createdAt`|datatime| Yes      |  The date and time when the message was created. |
+  - Query Parameters
 
-    - Description: Create a new message in a chat or conversation.
+    | Parameter   | Type     | Required | Description                                                      |
+    | ----------- | -------- | -------- | ---------------------------------------------------------------- |
+    | `createdBy` | bigint   | Yes      | The ID of the user who created the message.                      |
+    | `chatId`    | bigint   | Yes      | The ID of the chat or conversation to which the message belongs. |
+    | `text`      | string   | Yes      | The text content of the message.                                 |
+    | `createdAt` | datatime | Yes      | The date and time when the message was created.                  |
 
+  - Description: Create a new message in a chat or conversation.
 
 - Request: `DELETE /messages/{id}`
 
-    - Description: Delete a message by its unique identifier.
-
+  - Description: Delete a message by its unique identifier.
 
 - Example Request
 
@@ -683,7 +695,7 @@ npm i
 
 ```mermaid
 erDiagram
-  
+
   Restaurants ||--|{ MenuItems : restarantId
   Restaurants ||--|{ Orders : restarantId
 
@@ -701,7 +713,7 @@ erDiagram
     bigint id PK
     nvarchar name
   }
-  
+
   MenuItems }| --|{ OrderItems : menuItemId
 
   MenuItems {
@@ -739,7 +751,7 @@ erDiagram
     boolean isAdmin
   }
 
-  
+
   Notifications {
     bigint id PK
     bigint userId FK
@@ -768,7 +780,7 @@ erDiagram
     datetime createdAt
   }
 
-  
+
   Orders }| --|{ OrderItems : orderId
   Orders || --|| DeliveryDetails : orderId
 

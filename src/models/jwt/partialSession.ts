@@ -1,3 +1,3 @@
-import { Session } from "./session";
+import { Session } from './session'
 
-export type PartialSession = Omit<Session, "issued" | "expires">;
+export type PartialSession = Omit<Session, 'issued' | 'expires'>
