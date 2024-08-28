@@ -1,0 +1,12 @@
+node_modules/
+out/
+
+.env
+# .github/
+
+build
+coverage
+
+node_modules
+npm-debug.log
+.git
